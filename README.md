@@ -1,7 +1,7 @@
-# study — 학습 노트 모음
+# TIL — 학습 노트 모음
 
-개인 학습용 저장소. 회사/집 PC 간 git으로 동기화한다.
-저장소: `github.com/chanyoze/study` (비공개)
+개인 학습용 저장소(폴더명은 `C:\study`, GitHub 저장소명은 `TIL`). 회사/집 PC 간 git으로 동기화한다.
+저장소: `github.com/chanyoze/TIL` (비공개)
 
 ## 구성
 - `wordbank/` — 단어장 폴더
@@ -26,4 +26,4 @@
 
 ## 변경 이력
 - **2026-05-21**: 단어장 자동 동기화(commit·push) 기능 추가.
-- **2026-05-21**: 저장소를 `study`로 이름 변경하고, TIL·wordbank를 각각 폴더로 분리. (`wordbank.md` → `wordbank/wordbank.md`)
+- **2026-05-21**: GitHub 저장소명을 `TIL`로 변경하고, TIL·wordbank를 각각 폴더로 분리. (`wordbank.md` → `wordbank/wordbank.md`)
