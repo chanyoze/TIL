@@ -1,11 +1,11 @@
 ---
 name: wordbank
-description: 공부할 단어나 용어를 그 설명과 함께 단어장에 모아두고 싶을 때 사용한다. "단어: 설명" 형식으로 C:\study\wordbank.md 한 파일에 계속 누적한다. 단어 추가, 용어 정리, 단어장에 넣기 같은 요청에 사용.
+description: 공부할 단어나 용어를 그 설명과 함께 단어장에 모아두고 싶을 때 사용한다. "단어: 설명" 형식으로 C:\study\wordbank\wordbank.md 한 파일에 계속 누적한다. 단어 추가, 용어 정리, 단어장에 넣기 같은 요청에 사용.
 ---
 
 # 단어장 (wordbank)
 
-공부할 단어/용어를 `C:\study\wordbank.md` **한 파일에 누적**해 틈틈이 복습할 수 있게 정리하는 스킬이다.
+공부할 단어/용어를 `C:\study\wordbank\wordbank.md` **한 파일에 누적**해 틈틈이 복습할 수 있게 정리하는 스킬이다.
 (날짜별 학습 일지는 til-note 스킬이 담당 — 이건 "쌓아가는 단어장"이다.)
 
 ## 동작 절차
@@ -17,7 +17,7 @@ description: 공부할 단어나 용어를 그 설명과 함께 단어장에 모
 
 2. **저장 위치 준비**
    - **(동기화) 작업 전 최신본 받기**: `git -C "C:\study" pull --no-edit` 를 실행한다. 실패하거나 충돌하면 자동 병합하려 하지 말고 사용자에게 알린 뒤, 로컬 기준으로 계속 진행한다.
-   - `C:\study\wordbank.md` 파일이 없으면 아래 헤더로 새로 만든다.
+   - `C:\study\wordbank\wordbank.md` 파일이 없으면 아래 헤더로 새로 만든다.
      ```markdown
      # 단어장 (wordbank)
 
@@ -46,7 +46,7 @@ description: 공부할 단어나 용어를 그 설명과 함께 단어장에 모
 
 5. **자동 동기화 (git push)** — 단어를 실제로 **추가하거나 갱신해 파일이 바뀐 경우에만** 수행한다. (조회만 했거나 전부 skip한 경우엔 하지 않는다.)
    ```
-   git -C "C:\study" add wordbank.md
+   git -C "C:\study" add wordbank/wordbank.md
    git -C "C:\study" commit -m "<오늘 YYYY-MM-DD> / 이찬호 / - / wordbank: <추가/갱신한 단어>"
    git -C "C:\study" push
    ```
