@@ -47,7 +47,7 @@ description: 공부할 단어나 용어를 그 설명과 함께 단어장에 모
 5. **자동 동기화 (git push)** — 단어를 실제로 **추가하거나 갱신해 파일이 바뀐 경우에만** 수행한다. (조회만 했거나 전부 skip한 경우엔 하지 않는다.)
    ```
    git -C "C:\study" add wordbank.md
-   git -C "C:\study" commit -m "wordbank: <추가/갱신한 단어>"
+   git -C "C:\study" commit -m "<오늘 YYYY-MM-DD> / 이찬호 / - / wordbank: <추가/갱신한 단어>"
    git -C "C:\study" push
    ```
    - push 실패 원인이 non-fast-forward(원격이 앞섬)이면 `git -C "C:\study" pull --no-edit` 후 `push`를 한 번 더 시도한다.
