@@ -8,6 +8,13 @@
 - **GitHub Actions**: GitHub에 내장된 CI/CD 플랫폼. 워크플로(YAML)를 작성해 빌드·테스트·배포를 자동화한다.
 - **Runner**: GitHub Actions 워크플로의 작업(Job)을 실제로 실행하는 머신. GitHub 호스팅형과 self-hosted형이 있다.
 - **YAML**: 들여쓰기로 구조를 표현하는, 사람이 읽기 쉬운 데이터 직렬화 포맷. 워크플로·설정 파일에 많이 쓰인다.
+- **Workflow (워크플로)**: GitHub Actions에서 자동 작업을 정의한 YAML 파일. 트리거·잡(Job)·스텝으로 구성한다(예: ci.yml, release.yml).
+- **Pull Request (PR)**: 변경을 기본 브랜치에 합치기 전에 검토·논의·자동 검사(CI)를 거치는 병합 요청 단위.
+- **Git Tag (태그)**: 특정 커밋에 붙이는 고정 이름표. 버전 릴리스 표시(v1.3.0)에 쓰며, 푸시하면 release 워크플로 트리거로 활용한다.
+- **semver**: Semantic Versioning. 버전을 `major.minor.patch`로 매겨 변경 규모를 약속하는 규칙.
+- **GitHub Pages**: 저장소의 정적 파일(HTML 등)을 무료로 웹 호스팅해 주는 기능. 다운로드/문서 페이지에 사용.
+- **GitHub Releases**: 버전 태그에 맞춰 빌드 산출물(zip 등)을 첨부·배포하는 기능. `/latest/download/` 고정 링크를 제공한다.
+- **재현성 (Reproducibility)**: 사람·PC·환경이 달라도 동일한 빌드 결과가 나오는 성질. toolchain·Wrapper·의존성 고정으로 확보한다.
 
 ## 컨테이너
 - **Docker**: 애플리케이션을 컨테이너로 패키징·실행하는 플랫폼. 환경에 상관없이 동일하게 동작하게 해준다.
@@ -73,3 +80,12 @@
 - **java.awt.Robot**: 표준 Java가 제공하는 키·마우스 입력 시뮬레이션 도구. 이벤트를 시스템에 주입하는 용도(JNativeHook의 이벤트를 받는 용도와 반대).
 - **Class-Path manifest attribute**: jar의 `MANIFEST.MF`에 `Class-Path: other.jar`를 두면 JVM이 같은 폴더의 다른 jar도 클래스패스에 자동 포함하는 기능.
 - **AtomicBoolean.compareAndSet()**: 원자적 비교-치환 연산. 다중 스레드에서 race condition 없이 상태를 안전하게 전환한다.
+- **Dead Code**: 호출되지 않거나 컴파일조차 안 되는, 실행에 무의미한 죽은 코드. 제거 대상.
+- **리팩토링 (Refactoring)**: 외부 동작은 그대로 두고 내부 코드 구조·가독성을 개선하는 작업.
+
+## 테스트
+- **JUnit**: 자바 표준 단위 테스트 프레임워크. `@Test` 메서드로 검증하고 `assertEquals` 등으로 결과를 단언한다(현재 JUnit 5).
+- **단위 테스트 (Unit Test)**: 함수·클래스 같은 작은 단위의 동작을 독립적으로 자동 검증하는 테스트.
+- **순수 함수 (Pure Function)**: 같은 입력에 항상 같은 출력을 내고 화면·파일·전역 상태 같은 부수효과가 없는 함수. 테스트하기 쉬워 CI 검증 대상으로 분리한다.
+- **헤드리스 (Headless)**: 모니터·키보드·마우스가 없는 실행 환경(서버·CI 러너). GUI 작업을 시도하면 예외가 난다.
+- **HeadlessException**: 헤드리스 환경에서 화면·클립보드 등 GUI 기능을 호출할 때 자바가 던지는 예외.
