@@ -1,3 +1,8 @@
+---
+slug: /
+sidebar_label: 단어장
+---
+
 # 단어장 (wordbank)
 
 ## CI/CD
