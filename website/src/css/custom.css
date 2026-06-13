@@ -1,30 +1,59 @@
-/**
- * Any CSS included here will be global. The classic template
- * bundles Infima by default. Infima is a CSS framework designed to
- * work well for content-centric websites.
- */
+/* 웹폰트 — Pretendard(한글) + Inter(라틴) + JetBrains Mono(코드) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-/* You can override the default Infima variables here. */
+/* ===== 비비드 핑크 (라이트) — Tailwind pink scale 기반 ===== */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
-  --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-color-primary: #ec4899;
+  --ifm-color-primary-dark: #db2777;
+  --ifm-color-primary-darker: #be185d;
+  --ifm-color-primary-darkest: #9d174d;
+  --ifm-color-primary-light: #f472b6;
+  --ifm-color-primary-lighter: #f9a8d4;
+  --ifm-color-primary-lightest: #fbcfe8;
+
+  --ifm-font-family-base: "Pretendard Variable", "Inter", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", sans-serif;
+  --ifm-font-family-monospace: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ifm-heading-font-weight: 800;
+  --ifm-code-font-size: 92%;
+  --ifm-code-border-radius: 8px;
+  --ifm-button-border-radius: 10px;
+  --ifm-navbar-link-hover-color: var(--ifm-color-primary);
+  --docusaurus-highlighted-code-line-bg: rgba(236, 72, 153, 0.12);
+
+  --til-pink: #ec4899;
+  --til-pink-2: #a855f7;
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
+/* ===== 비비드 핑크 (다크) — 근-블랙 배경 + 밝은 핑크 ===== */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+  --ifm-color-primary: #f472b6;
+  --ifm-color-primary-dark: #ec4899;
+  --ifm-color-primary-darker: #db2777;
+  --ifm-color-primary-darkest: #be185d;
+  --ifm-color-primary-light: #f9a8d4;
+  --ifm-color-primary-lighter: #fbcfe8;
+  --ifm-color-primary-lightest: #fce7f3;
+
+  --ifm-background-color: #0b0b0d;
+  --ifm-background-surface-color: #161618;
+  --docusaurus-highlighted-code-line-bg: rgba(244, 114, 182, 0.16);
+
+  --til-pink: #f472b6;
 }
+
+/* 선택 영역·네비바 디테일 */
+::selection { background: rgba(236, 72, 153, 0.22); }
+.navbar { backdrop-filter: saturate(1.4) blur(8px); }
+.navbar__title { font-weight: 800; letter-spacing: -0.02em; }
+
+/* 버튼 — 핑크 호버 리프트 */
+.button { font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.button--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(236, 72, 153, 0.32); }
+
+/* 사이드바/TOC active 강조 */
+.menu__link--active:not(.menu__link--sublist) { font-weight: 700; }
+.table-of-contents__link--active { font-weight: 700; }
+
+/* 코드블록 살짝 둥글게 */
+.theme-code-block, pre { border-radius: 12px !important; }

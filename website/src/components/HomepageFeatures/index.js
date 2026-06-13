@@ -1,50 +1,44 @@
 import clsx from 'clsx';
+import Link from '@docusaurus/Link';
 import Heading from '@theme/Heading';
 import styles from './styles.module.css';
 
 const FeatureList = [
   {
-    title: 'Easy to Use',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
-    description: (
-      <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
-      </>
-    ),
+    emoji: '📚',
+    title: 'TIL',
+    to: '/docs/TIL',
+    description: '매일 배운 것을 날짜별로 차곡차곡 기록합니다.',
   },
   {
-    title: 'Focus on What Matters',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
-    description: (
-      <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
-      </>
-    ),
+    emoji: '📖',
+    title: '단어장',
+    to: '/docs/단어장',
+    description: '공부한 용어와 개념을 한곳에 누적해 복습합니다.',
   },
   {
-    title: 'Powered by React',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
-    description: (
-      <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
-      </>
-    ),
+    emoji: '🏢',
+    title: '회사',
+    to: '/docs/company',
+    description: '회사 문서·문서관리 등 주제별 기록 모음.',
+  },
+  {
+    emoji: '📒',
+    title: '전체 노트',
+    to: '/docs',
+    description: '모든 카테고리를 사이드바 트리에서 탐색합니다.',
   },
 ];
 
-function Feature({Svg, title, description}) {
+function Feature({emoji, title, description, to}) {
   return (
-    <div className={clsx('col col--4')}>
-      <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
-      </div>
-      <div className="text--center padding-horiz--md">
-        <Heading as="h3">{title}</Heading>
-        <p>{description}</p>
-      </div>
+    <div className={clsx('col col--3')}>
+      <Link to={to} className={styles.card}>
+        <div className={styles.cardEmoji}>{emoji}</div>
+        <Heading as="h3" className={styles.cardTitle}>{title}</Heading>
+        <p className={styles.cardDesc}>{description}</p>
+        <span className={styles.cardMore}>바로가기 →</span>
+      </Link>
     </div>
   );
 }
@@ -53,6 +47,8 @@ export default function HomepageFeatures() {
   return (
     <section className={styles.features}>
       <div className="container">
+        <Heading as="h2" className={styles.sectionTitle}>📂 카테고리</Heading>
+        <p className={styles.sectionSub}>폴더를 만들면 새 카테고리가 사이드바에 자동으로 추가됩니다 — 옵시디언처럼.</p>
         <div className="row">
           {FeatureList.map((props, idx) => (
             <Feature key={idx} {...props} />

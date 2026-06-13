@@ -1,11 +1,70 @@
 .features {
-  display: flex;
-  align-items: center;
-  padding: 2rem 0;
+  padding: 3rem 0 4.5rem;
   width: 100%;
 }
 
-.featureSvg {
-  height: 200px;
-  width: 200px;
+.sectionTitle {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0 0 0.4rem;
+}
+
+.sectionSub {
+  text-align: center;
+  color: var(--ifm-color-emphasis-600);
+  margin: 0 0 2rem;
+  font-size: 0.95rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.8rem 1.6rem;
+  border-radius: 16px;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-background-surface-color);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(236, 72, 153, 0.45);
+  box-shadow: 0 14px 34px rgba(236, 72, 153, 0.16);
+  text-decoration: none;
+  color: inherit;
+}
+
+.cardEmoji {
+  width: 54px;
+  height: 54px;
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  border-radius: 14px;
+  margin-bottom: 1rem;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.14), rgba(168, 85, 247, 0.12));
+}
+
+.cardTitle {
+  margin: 0 0 0.4rem;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.cardDesc {
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.cardMore {
+  margin-top: 1rem;
+  color: var(--til-pink);
+  font-weight: 700;
+  font-size: 0.9rem;
 }

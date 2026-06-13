@@ -10,17 +10,18 @@ import styles from './index.module.css';
 function HomepageHeader() {
   const {siteConfig} = useDocusaurusContext();
   return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
+    <header className={clsx(styles.heroBanner)}>
       <div className="container">
-        <Heading as="h1" className="hero__title">
+        <Heading as="h1" className={styles.heroTitle}>
           {siteConfig.title}
         </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
+        <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
         <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/til">
-            TIL 보러가기 📚
+          <Link className="button button--primary button--lg" to="/docs">
+            📒 노트 전체 보기
+          </Link>
+          <Link className="button button--outline button--primary button--lg" to="/docs/TIL">
+            📚 TIL
           </Link>
         </div>
       </div>
@@ -32,8 +33,8 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
+      title={siteConfig.title}
+      description="매일 배운 것(TIL)과 용어를 정리한 개인 기술 문서">
       <HomepageHeader />
       <main>
         <HomepageFeatures />

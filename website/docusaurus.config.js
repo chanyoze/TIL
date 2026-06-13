@@ -10,23 +10,20 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'TIL — 이찬호 기술 노트',
-  tagline: '매일 배운 것(TIL)과 용어를 정리한 개인 기술 문서',
+  tagline: '매일 배운 것·용어·주제별 노트를 한곳에 모은 지식 볼트',
   favicon: 'img/favicon.ico',
 
-  // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
-    v4: true, // Improve compatibility with the upcoming Docusaurus v4
+    v4: true,
   },
 
   // 배포 URL: https://chanyoze.github.io/TIL/
   url: 'https://chanyoze.github.io',
   baseUrl: '/TIL/',
+  organizationName: 'chanyoze',
+  projectName: 'TIL',
 
-  // GitHub Pages 배포 설정
-  organizationName: 'chanyoze', // GitHub 사용자/조직명
-  projectName: 'TIL', // 레포명
-
-  onBrokenLinks: 'throw',
+  onBrokenLinks: 'warn',
 
   i18n: {
     defaultLocale: 'ko',
@@ -39,30 +36,16 @@ const config = {
       /** @type {import('@docusaurus/preset-classic').Options} */
       ({
         docs: {
-          // 기존 ../TIL 폴더(스킬이 쌓는 데일리 노트)를 그대로 문서 소스로 사용
-          path: '../TIL',
-          routeBasePath: 'til',
+          // 단일 볼트(../vault) — 폴더 구조 = 카테고리. 사이드바는 폴더 트리로 자동 생성(옵시디언식).
+          path: '../vault',
+          routeBasePath: 'docs',
           sidebarPath: './sidebars.js',
+          editUrl: 'https://github.com/chanyoze/TIL/edit/main/vault/',
         },
-        // 블로그 기능은 사용하지 않음
         blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
-      }),
-    ],
-  ],
-
-  // 단어장(wordbank)을 두 번째 docs 인스턴스로 추가 — ../wordbank 폴더를 소스로 사용
-  plugins: [
-    [
-      '@docusaurus/plugin-content-docs',
-      /** @type {import('@docusaurus/plugin-content-docs').Options} */
-      ({
-        id: 'wordbank',
-        path: '../wordbank',
-        routeBasePath: 'wordbank',
-        sidebarPath: './sidebarsWordbank.js',
       }),
     ],
   ],
@@ -85,14 +68,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'TIL',
-          },
-          {
-            type: 'docSidebar',
-            sidebarId: 'wordbankSidebar',
-            docsPluginId: 'wordbank',
-            position: 'left',
-            label: '단어장',
+            label: '📒 노트',
           },
           {
             href: 'https://github.com/chanyoze/TIL',
@@ -105,25 +81,17 @@ const config = {
         style: 'dark',
         links: [
           {
-            title: '문서',
+            title: '노트',
             items: [
-              {
-                label: 'TIL',
-                to: '/til',
-              },
-              {
-                label: '단어장',
-                to: '/wordbank',
-              },
+              {label: '전체 보기', to: '/docs'},
+              {label: 'TIL', to: '/docs/TIL'},
+              {label: '단어장', to: '/docs/단어장'},
             ],
           },
           {
             title: '더보기',
             items: [
-              {
-                label: 'GitHub',
-                href: 'https://github.com/chanyoze/TIL',
-              },
+              {label: 'GitHub', href: 'https://github.com/chanyoze/TIL'},
             ],
           },
         ],

@@ -1,0 +1,5 @@
+{
+  "label": "🏢 회사",
+  "position": 3,
+  "link": { "type": "generated-index", "slug": "/company", "description": "회사 관련 문서·기록 모음" }
+}

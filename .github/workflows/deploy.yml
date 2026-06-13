@@ -5,8 +5,7 @@ on:
     branches: [main]
     paths:
       - 'website/**'
-      - 'TIL/**'
-      - 'wordbank/**'
+      - 'vault/**'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 

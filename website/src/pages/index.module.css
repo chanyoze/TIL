@@ -1,23 +1,50 @@
-/**
- * CSS files with the .module.css suffix will be treated as CSS modules
- * and scoped locally.
- */
-
+/* 홈 히어로 — 라이트/다크 배경에 핑크 글로우 + 그라데이션 타이틀 */
 .heroBanner {
-  padding: 4rem 0;
+  padding: 5.5rem 0 4.5rem;
   text-align: center;
   position: relative;
   overflow: hidden;
+  background:
+    radial-gradient(58% 120% at 50% -12%, rgba(236, 72, 153, 0.16), transparent 60%),
+    var(--ifm-background-color);
 }
 
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
+.heroBanner::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(236, 72, 153, 0.55), transparent);
+}
+
+.heroTitle {
+  font-size: clamp(2.6rem, 7vw, 4.4rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.06;
+  margin: 0;
+  background: linear-gradient(120deg, #ec4899 0%, #f472b6 55%, #a855f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.heroSubtitle {
+  font-size: clamp(1rem, 2.2vw, 1.25rem);
+  color: var(--ifm-color-emphasis-700);
+  margin: 0.9rem auto 0;
+  max-width: 38rem;
 }
 
 .buttons {
   display: flex;
+  gap: 12px;
   align-items: center;
   justify-content: center;
+  margin-top: 2.2rem;
+  flex-wrap: wrap;
+}
+
+@media screen and (max-width: 996px) {
+  .heroBanner { padding: 3.2rem 1rem; }
 }
