@@ -4,6 +4,10 @@
 // See: https://docusaurus.io/docs/api/docusaurus-config
 
 import {themes as prismThemes} from 'prism-react-renderer';
+import {createRequire} from 'module';
+
+// ESM config에서 require.resolve 사용 (검색 테마 등록용)
+const require = createRequire(import.meta.url);
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
@@ -15,6 +19,11 @@ const config = {
 
   future: {
     v4: true,
+  },
+
+  // Mermaid 다이어그램 활성화 (```mermaid 코드블록 렌더)
+  markdown: {
+    mermaid: true,
   },
 
   // 배포 URL: https://chanyoze.github.io/TIL/
@@ -47,6 +56,24 @@ const config = {
           customCss: './src/css/custom.css',
         },
       }),
+    ],
+  ],
+
+  themes: [
+    // Mermaid 다이어그램 렌더 테마
+    '@docusaurus/theme-mermaid',
+    // 로컬 검색 (서버 없이 빌드 타임 색인, 한국어+영어)
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        language: ['en', 'ko'],
+        indexDocs: true,
+        indexPages: true,
+        docsRouteBasePath: '/docs',
+        highlightSearchTermsOnTargetPage: true,
+        searchResultLimits: 8,
+      },
     ],
   ],
 

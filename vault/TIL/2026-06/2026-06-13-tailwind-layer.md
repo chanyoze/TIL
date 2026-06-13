@@ -36,6 +36,16 @@ CSS 캐스케이드 레이어(`@layer`)의 우선순위 규칙:
 
 게다가 이 리셋이 든 컴포넌트가 라우터에서 즉시(eager) import 되면, 그 전역 스타일이 **모든 페이지로 새어 나간다.**
 
+```mermaid
+graph TD
+  U["unlayered<br/>* { margin: 0 }"]
+  Util["@layer utilities<br/>.mx-auto (Tailwind)"]
+  Base["@layer base"]
+  U -->|"항상 이김 (specificity 무관)"| Util
+  Util -->|이김| Base
+  U ==>|결과| R["여백·정렬이 0으로 덮임 ❌"]
+```
+
 ## 해결
 
 전역 리셋을 `@layer base`로 감싸면 된다.
