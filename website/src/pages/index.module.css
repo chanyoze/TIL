@@ -167,6 +167,24 @@
   padding: 4px 0;
 }
 
+/* 마감일 + D-day */
+.due {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-500);
+  white-space: nowrap;
+}
+
+.dday {
+  color: var(--til-pink);
+}
+
+.ddayUrgent {
+  color: var(--til-amber);
+}
+
 /* 반응형: 좁은 화면에서는 위아래로 적층, 가운데 정렬 */
 @media (max-width: 900px) {
   .heroInner {

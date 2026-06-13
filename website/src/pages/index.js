@@ -1,3 +1,4 @@
+import {useState, useEffect} from 'react';
 import Link from '@docusaurus/Link';
 import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
@@ -22,6 +23,45 @@ function TodoBlock({label, items}) {
               <span className={styles.todoText}>{t.text}</span>
             </li>
           ))
+        )}
+      </ul>
+    </div>
+  );
+}
+
+// 마감(deadline) — 가까운 순 정렬 + D-day(클라이언트에서만 계산해 hydration 안전)
+function DeadlineBlock({items}) {
+  const [now, setNow] = useState(null);
+  useEffect(() => setNow(Date.now()), []);
+  const sorted = [...(items || [])].sort((a, b) => (a.due || '').localeCompare(b.due || ''));
+  return (
+    <div className={styles.todoBlock}>
+      <div className={styles.todoLabel}>⏰ 마감</div>
+      <ul className={styles.todoList}>
+        {sorted.length === 0 ? (
+          <li className={styles.todoEmpty}>마감 예정 없음</li>
+        ) : (
+          sorted.map((t, i) => {
+            let dday = null;
+            if (now && t.due) {
+              const target = new Date(`${t.due.slice(0, 10)}T23:59:59`).getTime();
+              const d = Math.ceil((target - now) / 86400000);
+              dday = d === 0 ? 'D-DAY' : d > 0 ? `D-${d}` : `D+${-d}`;
+            }
+            const urgent = dday && (dday === 'D-DAY' || /^D-[0-2]$/.test(dday));
+            return (
+              <li key={i} className={t.done ? styles.todoDone : styles.todoItem}>
+                <span className={styles.todoCheck} aria-hidden="true">{t.done ? '✅' : '⬜'}</span>
+                <span className={styles.todoText}>
+                  {t.text}
+                  <span className={styles.due}>
+                    {t.due?.slice(0, 10)}
+                    {dday && <b className={urgent ? styles.ddayUrgent : styles.dday}> · {dday}</b>}
+                  </span>
+                </span>
+              </li>
+            );
+          })
         )}
       </ul>
     </div>
@@ -55,6 +95,7 @@ export default function Home() {
             </div>
             <TodoBlock label="📌 금주" items={todos.week} />
             <TodoBlock label="🔥 금일" items={todos.today} />
+            <DeadlineBlock items={todos.deadlines} />
           </aside>
         </div>
       </main>

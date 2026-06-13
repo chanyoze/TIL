@@ -29,7 +29,7 @@ disable-model-invocation: false
 | `til` | "오늘 배운 것"·날짜 기준 학습 기록 | `vault/TIL/YYYY-MM/YYYY-MM-DD.md` | `raw/til/YYYY-MM-DD.md` |
 | `wordbank` | 용어/단어 + 설명 누적 | `vault/단어장/<분야>.md` (분야 파일에 append) | `raw/wordbank.md` (append) |
 | `note` | 특정 주제를 정리한 글 | `vault/<카테고리경로>/<slug>.md` | `raw/notes/<slug>.md` |
-| `todo` | 금주/금일 할 일(메인 페이지 위젯) | `website/src/data/todos.json` | 없음(상태 데이터, raw 미생성) |
+| `todo` | 금주/금일 할 일 + **마감(deadline) 할 일** (메인 페이지 위젯) | `website/src/data/todos.json` | 없음(상태 데이터, raw 미생성) |
 
 - `note`의 `<카테고리경로>`는 사용자의 주제 분류다(예: `회사/문서관리`). 해당 폴더가 없으면 만들고, 새 카테고리면 `_category_.json`(label 한글, 필요 시 `link.slug` ASCII)도 같이 생성한다 → 사이드바에 자동 추가(옵시디언식).
 - `todo`는 raw+readable 이중구조가 **아니다**(글이 아니라 상태). `website/src/data/todos.json` 한 파일만 갱신하며, 메인 페이지 좌우 레이아웃 오른쪽 카드(📌 금주 / 🔥 금일)에 바로 반영된다.
@@ -77,16 +77,26 @@ disable-model-invocation: false
 {
   "updated": "YYYY-MM-DD",
   "week":  [ { "text": "할 일 내용", "done": false } ],
-  "today": [ { "text": "할 일 내용", "done": false } ]
+  "today": [ { "text": "할 일 내용", "done": false } ],
+  "deadlines": [ { "text": "할 일 내용", "due": "YYYY-MM-DD", "done": false, "event": "" } ]
 }
 ```
 
 - **추가**: "금주 할 일에 X 추가" → `week`에, "금일/오늘 X" → `today`에 `{ "text": "X", "done": false }` push. 범위가 불명확하면 한 번만 되묻는다.
-- **완료**: 사용자가 "X 끝냈어/완료" → 해당 항목 `done: true`로. 항목 텍스트가 부분만 일치해도 가장 가까운 것 1개를 매칭(애매하면 확인).
+- **마감 할 일**: "언제까지 X 해야 해" / "X를 MM/DD까지" → `deadlines`에 `{ "text": "X", "due": "YYYY-MM-DD", "done": false, "event": "" }` push. **+ 구글 캘린더에 등록**(아래 §구글 캘린더 알림 연동). `due`는 필수 — 없으면 한 번 되묻는다. 시각이 있으면 `due`에 `YYYY-MM-DDTHH:mm`까지.
+- **완료**: 사용자가 "X 끝냈어/완료" → 해당 항목 `done: true`로. 항목 텍스트가 부분만 일치해도 가장 가까운 것 1개를 매칭(애매하면 확인). 마감 항목이면 연동된 캘린더 이벤트도 정리할지 묻는다.
 - **삭제/정리**: "X 지워줘", "금일 비워줘" → 해당 항목/배열 제거.
 - **날짜 갱신**: 어떤 변경이든 `updated`를 오늘 날짜(`currentDate`)로 바꾼다.
 - **주간 롤오버**: 새 주가 시작돼 "금주 새로 시작" 류 요청이면 완료된 `week` 항목을 정리하고 미완료만 남긴다(임의 삭제 금지 — 확인 후).
 - JSON 문법 유지(후행 콤마 금지). 편집 후 `npm run build`로 깨지지 않는지 확인 권장.
+
+## 구글 캘린더 알림 연동 (deadline) 📅
+
+마감 할 일(`deadline`)은 **사이트 위젯 표시 + 구글 캘린더 이벤트 등록**으로 처리한다. 알림은 **구글이 발송**한다(Claude는 상주 못 하므로 알림 주체가 될 수 없다).
+
+1. **캘린더 등록** — 연결된 **구글 캘린더 MCP**의 이벤트 생성 도구를 호출: `summary`=할 일 텍스트, 날짜=`due`(종일 또는 지정 시각), `reminders`=하루 전·당일 등(사용자 선호 없으면 1일 전+당일 오전). 만든 이벤트의 링크/ID를 todos.json 해당 항목 `event`에 저장해 추적한다.
+2. **MCP 미연결 시** — 캘린더 등록은 건너뛰고 todos.json `deadlines`에만 기록한 뒤, "캘린더 알림은 구글 캘린더 MCP 셋업 후 가능"이라고 1줄 안내한다(셋업: README/세션 가이드 참조). 사이트 위젯에는 **항상** 기록된다(MCP 유무와 무관).
+3. **완료/삭제 시** — 항목을 정리하면 연동된 캘린더 이벤트도 지울지 확인한다.
 
 ## raw 작성 규칙 (충실)
 
