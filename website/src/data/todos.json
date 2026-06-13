@@ -2,5 +2,7 @@
   "updated": "2026-06-13",
   "week": [],
   "today": [],
-  "deadlines": []
+  "deadlines": [
+    { "text": "문서관리 배포", "due": "2026-06-18", "done": false }
+  ]
 }
