@@ -26,7 +26,7 @@ disable-model-invocation: false
 
 | 카테고리 | 언제 | readable 위치 | raw 위치 |
 |---|---|---|---|
-| `til` | "오늘 배운 것"·날짜 기준 학습 기록 | `vault/TIL/YYYY-MM-DD.md` | `raw/til/YYYY-MM-DD.md` |
+| `til` | "오늘 배운 것"·날짜 기준 학습 기록 | `vault/TIL/YYYY-MM/YYYY-MM-DD.md` | `raw/til/YYYY-MM-DD.md` |
 | `wordbank` | 용어/단어 + 설명 누적 | `vault/단어장.md` (append) | `raw/wordbank.md` (append) |
 | `note` | 특정 주제를 정리한 글 | `vault/<카테고리경로>/<slug>.md` | `raw/notes/<slug>.md` |
 
@@ -51,7 +51,8 @@ disable-model-invocation: false
 - 약어·전문용어는 처음 등장 시 한 줄 풀이. 예시를 1개 이상.
 - raw의 단편적 메모를 **완결된 설명**으로 잇되, 사실을 바꾸지 않는다(추측 추가 금지 — 모르면 "확인 필요"로 남김).
 - Docusaurus 호환 frontmatter 필수:
-  - `til`/`note`: `title`, `sidebar_label`, (til은) `sidebar_position` 또는 날짜.
+  - `til`: 월별 폴더 `vault/TIL/YYYY-MM/`에 두고 frontmatter `title: "YYYY-MM-DD / 내용"`로 **제목 양식 통일**(본문 첫 h1은 생략 → Docusaurus가 title을 h1로 렌더). 새 달이면 `vault/TIL/<YYYY-MM>/_category_.json`(label `📅 YYYY-MM`)도 생성.
+  - `note`: `title`, `sidebar_label`, 필요 시 `sidebar_position`.
   - `wordbank`: 파일 상단 frontmatter는 유지하고 항목만 `## 용어` 형태로 append.
 
 ## raw 작성 규칙 (충실)
@@ -68,8 +69,8 @@ disable-model-invocation: false
 note/                          (= chanyoze/TIL 레포)
 ├── vault/                     ← readable 단일 볼트 (Docusaurus가 /docs 로 서빙, 폴더=카테고리)
 │   ├── intro.md               ← 볼트 시작 문서
-│   ├── TIL/                   ← 날짜 학습기록  (/docs/TIL)
-│   │   └── YYYY-MM-DD.md
+│   ├── TIL/                   ← 날짜 학습기록 (/docs/TIL), 월별 폴더로 세분
+│   │   └── YYYY-MM/YYYY-MM-DD.md   (frontmatter title: "YYYY-MM-DD / 내용")
 │   ├── 단어장.md               ← 용어장 (append, /docs/단어장)
 │   └── <카테고리>/             ← 주제별 (예: 회사/문서관리/, _category_.json 라벨)
 │       └── <slug>.md

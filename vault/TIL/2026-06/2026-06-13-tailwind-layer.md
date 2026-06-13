@@ -1,11 +1,7 @@
 ---
-title: Tailwind v4 유틸리티가 안 먹을 때 — CSS 캐스케이드 레이어 함정
-sidebar_label: Tailwind v4 레이어 함정
+title: "2026-06-13 / Tailwind v4 레이어 함정"
 tags: [tailwind, css, vue]
 ---
-
-# Tailwind v4 유틸리티가 안 먹을 때: CSS 캐스케이드 레이어 함정
-
 > 분명 `mx-auto`, `px-6` 같은 Tailwind 클래스를 줬는데 화면은 왼쪽에 딱 붙어버린다. 빌드도 멀쩡하고 클래스도 분명히 들어가 있는데 왜일까?
 
 ## 한 줄 요약

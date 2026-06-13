@@ -2,7 +2,7 @@
 created: 2026-06-13
 category: note
 tags: [tailwind, css, cascade-layers, docusaurus, vue]
-readable: ../../vault/TIL/tailwind-v4-layer-override.md
+readable: ../../vault/TIL/2026-06/2026-06-13-tailwind-layer.md
 ---
 
 # Tailwind v4 유틸리티 안 먹힘 — 전역 리셋 충돌 (raw)
