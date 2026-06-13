@@ -1,0 +1,164 @@
+/* 토글형 푸터 — 평소 접힘, 누르면 아코디언으로 펼침 */
+.root {
+  position: relative;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+/* 상단 그라데이션 헤어라인 */
+.root::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--til-grad);
+  opacity: 0.85;
+}
+
+.toggleRow {
+  display: flex;
+  justify-content: center;
+  padding: 0.7rem 1rem;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-color-emphasis-800);
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.toggle:hover {
+  transform: translateY(-1px);
+  border-color: var(--til-pink);
+  color: var(--til-pink);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.18);
+}
+
+.toggleOpen {
+  border-color: var(--til-pink);
+  color: var(--til-pink);
+}
+
+.caret {
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+/* 아코디언 본문 — 접힘(max-height 0) → 펼침 */
+.footer {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.35s ease, opacity 0.3s ease, padding 0.35s ease;
+  padding: 0 1rem;
+  background:
+    radial-gradient(60% 120% at 12% 0%, rgba(99, 102, 241, 0.10), transparent 60%),
+    radial-gradient(50% 120% at 95% 10%, rgba(245, 158, 11, 0.08), transparent 60%),
+    var(--ifm-background-surface-color);
+}
+
+.footerOpen {
+  max-height: 520px;
+  opacity: 1;
+  padding: 1.6rem 1rem 1.2rem;
+}
+
+.inner {
+  max-width: 980px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem;
+  justify-content: space-between;
+}
+
+.brand {
+  min-width: 220px;
+}
+
+.brandTitle {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.brandTag {
+  margin: 0.45rem 0 0;
+  font-size: 0.86rem;
+  color: var(--ifm-color-emphasis-600);
+  line-height: 1.5;
+}
+
+.cols {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.4rem;
+}
+
+.colTitle {
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--til-pink);
+  margin-bottom: 0.7rem;
+}
+
+.colList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-700);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.link:hover {
+  color: var(--til-pink);
+  text-decoration: none;
+}
+
+.ext {
+  font-size: 0.78rem;
+  opacity: 0.7;
+}
+
+.copyright {
+  max-width: 980px;
+  margin: 1.4rem auto 0;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--ifm-color-emphasis-300);
+  font-size: 0.8rem;
+  color: var(--ifm-color-emphasis-600);
+  text-align: center;
+}
+
+@media (max-width: 700px) {
+  .inner {
+    gap: 1.6rem;
+  }
+  .cols {
+    gap: 1.6rem;
+  }
+  .footerOpen {
+    max-height: 760px;
+  }
+}

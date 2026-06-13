@@ -22,6 +22,8 @@ concurrency:
 # JS 액션을 Node.js 24로 실행 (Node 20 deprecation 경고 해소 — 전이 액션까지)
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # puppeteer는 로컬 스크린샷 검증 전용 devDependency — 배포 빌드엔 불필요하므로 Chromium 다운로드 스킵
+  PUPPETEER_SKIP_DOWNLOAD: 'true'
 
 jobs:
   build:

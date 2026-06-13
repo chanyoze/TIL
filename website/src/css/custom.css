@@ -64,3 +64,7 @@
 
 /* 코드블록 살짝 둥글게 */
 .theme-code-block, pre { border-radius: 12px !important; }
+
+/* 메인 페이지(homeMain)에서는 navbar·footer 완전 숨김 — 극심플 */
+html:has(.homeMain) .navbar { display: none !important; }
+html:has(.homeMain) [data-footer-root] { display: none !important; }

@@ -32,7 +32,7 @@ export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   const mascot = useBaseUrl('/img/mascot.png');
   return (
-    <Layout title={siteConfig.title} description={siteConfig.tagline}>
+    <Layout title={siteConfig.title} description={siteConfig.tagline} wrapperClassName="homeMain">
       <main className={styles.hero}>
         <div className={styles.tileGrid} aria-hidden="true">
           {TILES.map((_, i) => (

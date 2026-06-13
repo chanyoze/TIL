@@ -1,6 +1,7 @@
 /* 극심플 메인 — 마스코트 바둑판(텀 있음) 위에 그라데이션 문구 + 버튼 2개 */
 .hero {
-  min-height: calc(100vh - var(--ifm-navbar-height));
+  /* 메인은 navbar/footer를 숨기므로 전체 화면 높이 사용 */
+  min-height: 100vh;
   display: grid;
   place-items: center;
   text-align: center;
