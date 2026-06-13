@@ -1,7 +1,7 @@
 ---
 title: "🌐 프론트엔드"
 sidebar_label: "🌐 프론트엔드"
-sidebar_position: 7
+sidebar_position: 6
 ---
 
 # 🌐 프론트엔드

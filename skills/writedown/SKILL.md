@@ -56,7 +56,7 @@ disable-model-invocation: false
 - Docusaurus 호환 frontmatter 필수:
   - `til`: 월별 폴더 `vault/TIL/YYYY-MM/`에 두고 frontmatter `title: "YYYY-MM-DD / 내용"`로 **제목 양식 통일**(본문 첫 h1은 생략 → Docusaurus가 title을 h1로 렌더). 새 달이면 `vault/TIL/<YYYY-MM>/_category_.json`(label `📅 YYYY-MM`)도 생성.
   - `note`: `title`, `sidebar_label`, 필요 시 `sidebar_position`.
-  - `wordbank`: **분야별 파일** `vault/단어장/<분야>.md`에 항목을 `- **용어**: 설명` bullet으로 append(파일 상단 frontmatter 유지). 적합한 분야 파일(cicd·infra·java-build·swing-gui·code-quality·testing·frontend·etc 등)에 넣고, 새 분야면 새 `<slug>.md`(frontmatter `title`/`sidebar_label`에 이모지+분야명, 다음 `sidebar_position`)를 만든다. 단어장은 `vault/단어장/_category_.json`(generated-index, slug `/wordbank`)로 묶인 폴더다. 어느 분야인지 애매하면 한 번만 되묻는다.
+  - `wordbank`: **분야별 파일** `vault/단어장/<분야>.md`에 항목을 `- **용어**: 설명` bullet으로 append(파일 상단 frontmatter 유지). 적합한 분야 파일(cicd·infra·java-build·code-quality·testing·frontend·ai·etc 등)에 넣고, 새 분야면 새 `<slug>.md`(frontmatter `title`/`sidebar_label`에 이모지+분야명, 다음 `sidebar_position`)를 만든다. 단어장은 `vault/단어장/_category_.json`(generated-index, slug `/wordbank`)로 묶인 폴더다. 어느 분야인지 애매하면 한 번만 되묻는다.
 
 ## todo 작성 규칙 (금주/금일 할 일)
 
@@ -94,8 +94,8 @@ note/                          (= chanyoze/TIL 레포)
 │   ├── TIL/                   ← 날짜 학습기록 (/docs/TIL), 월별 폴더로 세분
 │   │   └── YYYY-MM/YYYY-MM-DD.md   (frontmatter title: "YYYY-MM-DD / 내용")
 │   ├── 단어장/                 ← 용어장 (분야별 파일, _category_.json → /docs/wordbank)
-│   │   ├── cicd.md  infra.md  java-build.md  swing-gui.md
-│   │   └── code-quality.md  testing.md  frontend.md  etc.md  (분야별 append)
+│   │   ├── cicd.md  infra.md  java-build.md  code-quality.md
+│   │   └── testing.md  frontend.md  ai.md  etc.md(도구·환경)  (분야별 append)
 │   └── <카테고리>/             ← 주제별 (예: 회사/문서관리/, _category_.json 라벨)
 │       └── <slug>.md
 ├── raw/                       ← raw 버전 (사이트 비게시, 아카이브)

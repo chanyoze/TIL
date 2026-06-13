@@ -1,12 +1,5 @@
 {
   "updated": "2026-06-13",
-  "week": [
-    { "text": "메인 페이지 금주/금일 To-Do 위젯 추가", "done": true },
-    { "text": "writedown 스킬에 todo 기록 기능 통합", "done": true },
-    { "text": "CIP-HP 게시판 Vue 전환 마무리", "done": false }
-  ],
-  "today": [
-    { "text": "메인 좌우 레이아웃 리팩토링", "done": true },
-    { "text": "배포 확인 후 라이브 점검", "done": false }
-  ]
+  "week": [],
+  "today": []
 }

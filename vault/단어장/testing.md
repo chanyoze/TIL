@@ -1,7 +1,7 @@
 ---
 title: "🧪 테스트"
 sidebar_label: "🧪 테스트"
-sidebar_position: 6
+sidebar_position: 5
 ---
 
 # 🧪 테스트
@@ -10,4 +10,3 @@ sidebar_position: 6
 - **단위 테스트 (Unit Test)**: 함수·클래스 같은 작은 단위의 동작을 독립적으로 자동 검증하는 테스트.
 - **순수 함수 (Pure Function)**: 같은 입력에 항상 같은 출력을 내고 화면·파일·전역 상태 같은 부수효과가 없는 함수. 테스트하기 쉬워 CI 검증 대상으로 분리한다.
 - **헤드리스 (Headless)**: 모니터·키보드·마우스가 없는 실행 환경(서버·CI 러너). GUI 작업을 시도하면 예외가 난다.
-- **HeadlessException**: 헤드리스 환경에서 화면·클립보드 등 GUI 기능을 호출할 때 자바가 던지는 예외.
