@@ -72,7 +72,7 @@ const config = {
           },
           {
             to: '/profile',
-            label: '프로필',
+            label: '👤 프로필',
             position: 'left',
           },
           {

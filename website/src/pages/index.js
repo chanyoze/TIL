@@ -19,7 +19,7 @@ export default function Home() {
           ))}
         </div>
         <div className={styles.heroInner}>
-          <p className={styles.kicker}>✍️ 이찬호의 기술 노트</p>
+          <p className={styles.kicker}>✨ Today I Learned · TIL</p>
           <Heading as="h1" className={styles.title}>흩어진 배움을 한곳에</Heading>
           <div className={styles.links}>
             <Link className={styles.btnPrimary} to="/docs">📒 노트</Link>
