@@ -23,6 +23,9 @@
 
   --til-pink: #ec4899;
   --til-pink-2: #a855f7;
+  /* 시그니처 그라데이션 — 코랄→핑크→바이올렛 (핑크 치트키 조합) */
+  --til-grad: linear-gradient(135deg, #fb7185 0%, #ec4899 45%, #a855f7 100%);
+  --til-grad-soft: linear-gradient(135deg, rgba(251,113,133,.14), rgba(168,85,247,.12));
 }
 
 /* ===== 비비드 핑크 (다크) — 근-블랙 배경 + 밝은 핑크 ===== */

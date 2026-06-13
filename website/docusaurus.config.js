@@ -9,8 +9,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'TIL — 이찬호 기술 노트',
-  tagline: '매일 배운 것·용어·주제별 노트를 한곳에 모은 지식 볼트',
+  title: '이찬호 노트',
+  tagline: '배운 건 흘려보내지 않기 — 매일의 기술 기록',
   favicon: 'img/favicon.ico',
 
   future: {
@@ -58,9 +58,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: 'TIL',
+        title: '이찬호 노트',
         logo: {
-          alt: 'TIL Logo',
+          alt: '이찬호 노트',
           src: 'img/logo.svg',
         },
         items: [
@@ -69,6 +69,11 @@ const config = {
             sidebarId: 'tutorialSidebar',
             position: 'left',
             label: '📒 노트',
+          },
+          {
+            to: '/profile',
+            label: '프로필',
+            position: 'left',
           },
           {
             href: 'https://github.com/chanyoze/TIL',
