@@ -35,6 +35,19 @@ disable-model-invocation: false
 - `todo`는 raw+readable 이중구조가 **아니다**(글이 아니라 상태). `website/src/data/todos.json` 한 파일만 갱신하며, 메인 페이지 좌우 레이아웃 오른쪽 카드(📌 금주 / 🔥 금일)에 바로 반영된다.
 - 인자로 명시하지 않으면 내용을 보고 판별한다(단어 1~수개+짧은 뜻 → wordbank, 날짜·"오늘 배움" → til, "할 일·금주·금일·todo·~하기" → todo, 그 외 주제 설명 → note + 어느 카테고리인지 1회 확인). 애매하면 한 번만 되묻는다.
 
+### 공개 범위 (private / draft) — ⚠️ 이 레포는 public
+
+이 레포(chanyoze/TIL)는 **public**이라 `vault/`의 모든 파일이 사이트뿐 아니라 **GitHub 소스에서도 누구나** 본다. 사용자가 "비공개/안 보이게/나만"이라고 하면 아래 둘 중 무엇인지 **반드시 구분**한다(애매하면 한 번 되묻는다).
+
+| 의도 | 처리 | 결과 |
+|---|---|---|
+| **진짜 비공개**(개인정보·회사기밀·나만) | `vault/private/<...>.md`에 저장(raw는 `raw/private/`) | `.gitignore`로 git·GitHub·배포 전부 제외. **로컬 `npm start`에서만** 열람 |
+| **사이트에만 미게시**(초안·정리중, 소스 노출 OK) | 평소 위치 그대로 + frontmatter `draft: true` | 프로덕션 빌드에서 제외. 단 **public repo라 GitHub 소스엔 보임**, 로컬 dev에선 보임 |
+
+- `vault/private/`·`raw/private/`는 이미 `.gitignore` 등록됨. 새 비공개 문서는 이 경로에 두기만 하면 된다(커밋 대상 아님 — `git add` 금지, push해도 안 올라감).
+- "민감 정보 같은데 공개 폴더에 두라"고 하면 **경고 후 private 권유**. 사용자가 명시적으로 공개를 택할 때만 공개 위치에 둔다.
+- `draft`는 `til`/`note`/`wordbank` 어디서든 frontmatter 한 줄로 토글. 공개 준비되면 `draft` 제거.
+
 ---
 
 ## 동작 절차
@@ -93,11 +106,14 @@ note/                          (= chanyoze/TIL 레포)
 │   ├── TIL/                   ← 날짜 학습기록 (/docs/TIL), 월별 폴더로 세분
 │   │   └── YYYY-MM/YYYY-MM-DD.md   (frontmatter title: "YYYY-MM-DD / 내용")
 │   ├── 단어장.md               ← 용어장 (append, /docs/단어장)
+│   ├── private/               ← 🔒 진짜 비공개 (.gitignore, 로컬 전용 / git·사이트 미게시)
+│   │   └── <slug>.md
 │   └── <카테고리>/             ← 주제별 (예: 회사/문서관리/, _category_.json 라벨)
 │       └── <slug>.md
 ├── raw/                       ← raw 버전 (사이트 비게시, 아카이브)
 │   ├── til/YYYY-MM-DD.md
 │   ├── wordbank.md
+│   ├── private/<slug>.md      ← 🔒 비공개 raw (.gitignore)
 │   └── notes/<slug>.md
 └── website/                   ← Docusaurus 앱
     └── src/data/todos.json    ← todo 카테고리만 여기 편집(금주/금일, 메인 페이지 위젯). 그 외 website/는 건드리지 않음
