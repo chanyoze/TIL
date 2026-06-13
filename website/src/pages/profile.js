@@ -83,19 +83,6 @@ export default function Profile() {
           </section>
 
           <section className={styles.section}>
-            <Heading as="h2" className={styles.h2}>🎓 교육</Heading>
-            <div className={styles.card}>
-              <div className={styles.cardTop}>
-                <span className={styles.cardName}>상명대학교 소프트웨어학과 학사</span>
-                <span className={styles.period}>2019.03 – 2023.02</span>
-              </div>
-              <p className={styles.cardDesc}>
-                캡스톤 디자인 경진대회 입상(2022.12) — Word2Vec 기반 자연어 처리와 구글 리뷰 스크래핑을 활용한 카페 추천 웹 서비스.
-              </p>
-            </div>
-          </section>
-
-          <section className={styles.section}>
             <Heading as="h2" className={styles.h2}>🔗 링크</Heading>
             <div className={styles.links}>
               <Link className={styles.link} to="https://github.com/chanyoze">GitHub →</Link>
