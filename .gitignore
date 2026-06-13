@@ -1,11 +1,6 @@
 # 전송용 번들 — settings.json에 API 키/토큰이 있을 수 있어 동기화 저장소에서 제외
 antigravity-sync/
 
-# 진짜 비공개 문서 — git/원격/사이트 어디에도 안 올라감(로컬 npm start에서만 열람)
-# writedown 스킬의 private 위치. public repo라 여기 둔 건 GitHub 소스에도 노출되지 않음.
-/vault/private/
-/raw/private/
-
 # OS / 편집기 노이즈
 Thumbs.db
 .DS_Store
