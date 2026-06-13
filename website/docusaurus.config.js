@@ -90,7 +90,7 @@ const config = {
             items: [
               {label: '전체 보기', to: '/docs'},
               {label: 'TIL', to: '/docs/TIL'},
-              {label: '단어장', to: '/docs/단어장'},
+              {label: '단어장', to: '/docs/wordbank'},
             ],
           },
           {
