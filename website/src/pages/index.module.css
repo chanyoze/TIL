@@ -1,4 +1,4 @@
-/* 극심플 메인 — 중앙 정렬 그라데이션 문구 + 링크 2개 */
+/* 극심플 메인 — 마스코트 바둑판 타일 위에 중앙 그라데이션 문구 */
 .hero {
   min-height: calc(100vh - var(--ifm-navbar-height));
   display: grid;
@@ -8,12 +8,35 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(48% 55% at 50% 36%, rgba(236, 72, 153, 0.15), transparent 70%),
-    radial-gradient(40% 40% at 78% 18%, rgba(168, 85, 247, 0.12), transparent 70%),
+    radial-gradient(48% 55% at 50% 36%, rgba(16, 185, 129, 0.16), transparent 70%),
+    radial-gradient(40% 40% at 78% 18%, rgba(14, 165, 233, 0.13), transparent 70%),
     var(--ifm-background-color);
 }
 
+/* 마스코트 바둑판(타일) — 얼굴이 격자로 반복 (background-image는 index.js에서 인라인 주입) */
+.tile {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-repeat: repeat;
+  background-size: 56px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* 텍스트 가독성을 위한 중앙 스크림 */
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: radial-gradient(38% 40% at 50% 45%, var(--ifm-background-color) 0%, transparent 72%);
+  pointer-events: none;
+}
+
 .heroInner {
+  position: relative;
+  z-index: 1;
   max-width: 42rem;
 }
 
@@ -21,7 +44,7 @@
   font-size: 0.95rem;
   font-weight: 700;
   letter-spacing: 0.01em;
-  color: var(--ifm-color-emphasis-600);
+  color: var(--ifm-color-emphasis-700);
   margin: 0 0 1.3rem;
 }
 
@@ -55,13 +78,13 @@
   color: #fff !important;
   font-weight: 800;
   text-decoration: none;
-  box-shadow: 0 10px 26px rgba(236, 72, 153, 0.28);
+  box-shadow: 0 10px 26px rgba(16, 185, 129, 0.3);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .linkPrimary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 34px rgba(236, 72, 153, 0.38);
+  box-shadow: 0 16px 34px rgba(16, 185, 129, 0.4);
   text-decoration: none;
 }
 
