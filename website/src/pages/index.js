@@ -29,6 +29,26 @@ function TodoBlock({label, items}) {
   );
 }
 
+// 구글 캘린더 "추가 링크"(OAuth 불필요) — 클릭하면 캘린더에 일정 등록
+function gcalUrl(text, due) {
+  if (!due) return null;
+  const hasTime = due.includes('T');
+  const pad = (n) => String(n).padStart(2, '0');
+  const ymd = (d) => `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`;
+  let dates;
+  if (hasTime) {
+    const start = new Date(due);
+    const end = new Date(start.getTime() + 60 * 60 * 1000); // +1시간
+    const fmt = (d) => `${ymd(d)}T${pad(d.getHours())}${pad(d.getMinutes())}00`;
+    dates = `${fmt(start)}/${fmt(end)}`;
+  } else {
+    const start = new Date(`${due.slice(0, 10)}T00:00:00`);
+    const end = new Date(start.getTime() + 24 * 60 * 60 * 1000); // 종일(다음날)
+    dates = `${ymd(start)}/${ymd(end)}`;
+  }
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(text)}&dates=${dates}`;
+}
+
 // 마감(deadline) — 가까운 순 정렬 + D-day(클라이언트에서만 계산해 hydration 안전)
 function DeadlineBlock({items}) {
   const [now, setNow] = useState(null);
@@ -49,16 +69,31 @@ function DeadlineBlock({items}) {
               dday = d === 0 ? 'D-DAY' : d > 0 ? `D-${d}` : `D+${-d}`;
             }
             const urgent = dday && (dday === 'D-DAY' || /^D-[0-2]$/.test(dday));
+            const url = !t.done ? gcalUrl(t.text, t.due) : null;
+            const label = (
+              <>
+                {t.text}
+                <span className={styles.due}>
+                  {t.due?.slice(0, 10)}
+                  {dday && <b className={urgent ? styles.ddayUrgent : styles.dday}> · {dday}</b>}
+                </span>
+              </>
+            );
             return (
               <li key={i} className={t.done ? styles.todoDone : styles.todoItem}>
                 <span className={styles.todoCheck} aria-hidden="true">{t.done ? '✅' : '⬜'}</span>
-                <span className={styles.todoText}>
-                  {t.text}
-                  <span className={styles.due}>
-                    {t.due?.slice(0, 10)}
-                    {dday && <b className={urgent ? styles.ddayUrgent : styles.dday}> · {dday}</b>}
-                  </span>
-                </span>
+                {url ? (
+                  <a
+                    className={styles.calLink}
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    title="📅 구글 캘린더에 추가">
+                    {label}
+                  </a>
+                ) : (
+                  <span className={styles.todoText}>{label}</span>
+                )}
               </li>
             );
           })

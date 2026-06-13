@@ -167,6 +167,25 @@
   padding: 4px 0;
 }
 
+/* 마감 항목 = 구글 캘린더 추가 링크 */
+.calLink {
+  flex: 1;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--ifm-color-emphasis-800) !important;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.calLink:hover {
+  color: var(--til-pink) !important;
+  text-decoration: none;
+}
+
+.calLink:hover .due {
+  color: var(--til-pink);
+}
+
 /* 마감일 + D-day */
 .due {
   display: inline-block;

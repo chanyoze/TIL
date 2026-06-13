@@ -78,25 +78,28 @@ disable-model-invocation: false
   "updated": "YYYY-MM-DD",
   "week":  [ { "text": "할 일 내용", "done": false } ],
   "today": [ { "text": "할 일 내용", "done": false } ],
-  "deadlines": [ { "text": "할 일 내용", "due": "YYYY-MM-DD", "done": false, "event": "" } ]
+  "deadlines": [ { "text": "할 일 내용", "due": "YYYY-MM-DD", "done": false } ]
 }
 ```
 
 - **추가**: "금주 할 일에 X 추가" → `week`에, "금일/오늘 X" → `today`에 `{ "text": "X", "done": false }` push. 범위가 불명확하면 한 번만 되묻는다.
-- **마감 할 일**: "언제까지 X 해야 해" / "X를 MM/DD까지" → `deadlines`에 `{ "text": "X", "due": "YYYY-MM-DD", "done": false, "event": "" }` push. **+ 구글 캘린더에 등록**(아래 §구글 캘린더 알림 연동). `due`는 필수 — 없으면 한 번 되묻는다. 시각이 있으면 `due`에 `YYYY-MM-DDTHH:mm`까지.
-- **완료**: 사용자가 "X 끝냈어/완료" → 해당 항목 `done: true`로. 항목 텍스트가 부분만 일치해도 가장 가까운 것 1개를 매칭(애매하면 확인). 마감 항목이면 연동된 캘린더 이벤트도 정리할지 묻는다.
+- **마감 할 일**: "언제까지 X 해야 해" / "X를 MM/DD까지" → `deadlines`에 `{ "text": "X", "due": "YYYY-MM-DD", "done": false }` push. `due`는 필수 — 없으면 한 번 되묻는다. 시각이 있으면 `due`에 `YYYY-MM-DDTHH:mm`까지. **캘린더 등록은 위젯이 자동 처리**(아래 §구글 캘린더 등록).
+- **완료**: 사용자가 "X 끝냈어/완료" → 해당 항목 `done: true`로. 항목 텍스트가 부분만 일치해도 가장 가까운 것 1개를 매칭(애매하면 확인).
 - **삭제/정리**: "X 지워줘", "금일 비워줘" → 해당 항목/배열 제거.
 - **날짜 갱신**: 어떤 변경이든 `updated`를 오늘 날짜(`currentDate`)로 바꾼다.
 - **주간 롤오버**: 새 주가 시작돼 "금주 새로 시작" 류 요청이면 완료된 `week` 항목을 정리하고 미완료만 남긴다(임의 삭제 금지 — 확인 후).
 - JSON 문법 유지(후행 콤마 금지). 편집 후 `npm run build`로 깨지지 않는지 확인 권장.
 
-## 구글 캘린더 알림 연동 (deadline) 📅
+## 구글 캘린더 등록 (deadline) — 추가 링크 방식 📅
 
-마감 할 일(`deadline`)은 **사이트 위젯 표시 + 구글 캘린더 이벤트 등록**으로 처리한다. 알림은 **구글이 발송**한다(Claude는 상주 못 하므로 알림 주체가 될 수 없다).
+마감 할 일은 **OAuth 없이** 구글 캘린더에 넣는다. 방식: "캘린더 추가 링크(TEMPLATE URL)"를 만들면 사용자가 **클릭→저장 한 번**으로 등록되고, 등록된 일정에 **구글 기본 알림이 붙어** 구글이 알림을 보낸다(Claude는 상주 못 하므로 알림 주체가 아니다).
 
-1. **캘린더 등록** — 연결된 **구글 캘린더 MCP**의 이벤트 생성 도구를 호출: `summary`=할 일 텍스트, 날짜=`due`(종일 또는 지정 시각), `reminders`=하루 전·당일 등(사용자 선호 없으면 1일 전+당일 오전). 만든 이벤트의 링크/ID를 todos.json 해당 항목 `event`에 저장해 추적한다.
-2. **MCP 미연결 시** — 캘린더 등록은 건너뛰고 todos.json `deadlines`에만 기록한 뒤, "캘린더 알림은 구글 캘린더 MCP 셋업 후 가능"이라고 1줄 안내한다(셋업: README/세션 가이드 참조). 사이트 위젯에는 **항상** 기록된다(MCP 유무와 무관).
-3. **완료/삭제 시** — 항목을 정리하면 연동된 캘린더 이벤트도 지울지 확인한다.
+- **메인 위젯이 자동 생성** — `index.js`의 `DeadlineBlock`이 `deadlines`의 `text`+`due`로 **캘린더 추가 링크를 동적으로 만든다**. 그래서 스킬은 todos.json `deadlines`에 `{text, due, done}`만 정확히 기록하면 된다(별도 링크/ID 필드 불필요).
+- **대화로도 즉시 제시 가능** — 사용자가 "지금 캘린더에 바로 넣게 링크 줘"라고 하면 직접 만들어 준다:
+  - 종일: `https://calendar.google.com/calendar/render?action=TEMPLATE&text=<할일>&dates=<YYYYMMDD>/<다음날YYYYMMDD>`
+  - 시각 지정: `dates=<YYYYMMDDTHHmmSS>/<+30~60분 YYYYMMDDTHHmmSS>` (로컬시간)
+  - `text`는 URL 인코딩한다.
+- **완전 자동 등록**(클릭 없이)을 원하면 그때 구글 캘린더 OAuth MCP를 셋업한다(선택 — 단계 많음).
 
 ## raw 작성 규칙 (충실)
 
