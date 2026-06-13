@@ -20,6 +20,10 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+# JS 액션을 Node.js 24로 실행 (Node 20 deprecation 경고 해소 — 전이 액션까지)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -27,12 +31,12 @@ jobs:
       run:
         working-directory: website
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
           cache-dependency-path: website/package-lock.json
       - name: Install dependencies
