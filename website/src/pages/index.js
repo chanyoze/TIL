@@ -4,10 +4,13 @@ import useBaseUrl from '@docusaurus/useBaseUrl';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
-import todos from '@site/src/data/todos.json';
 import styles from './index.module.css';
 
 const TILES = Array.from({length: 480});
+
+// To-Do는 빌드에 박지 않고 런타임에 raw로 불러온다 → todos만 바꿀 땐 재배포 불필요(push만 하면 반영).
+const RAW_TODOS = 'https://raw.githubusercontent.com/chanyoze/TIL/main/data/todos.json';
+const EMPTY_TODOS = {updated: '', week: [], today: [], deadlines: []};
 
 function TodoBlock({label, items}) {
   return (
@@ -106,6 +109,13 @@ function DeadlineBlock({items}) {
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
   const mascot = useBaseUrl('/img/mascot.png');
+  const [todos, setTodos] = useState(EMPTY_TODOS);
+  useEffect(() => {
+    fetch(RAW_TODOS, {cache: 'no-store'})
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => d && setTodos(d))
+      .catch(() => {});
+  }, []);
   return (
     <Layout title={siteConfig.title} description={siteConfig.tagline} wrapperClassName="homeMain">
       <main className={styles.hero}>
@@ -126,7 +136,7 @@ export default function Home() {
           <aside className={styles.todoCard}>
             <div className={styles.todoHead}>
               <span className={styles.todoCardTitle}>🗓️ To-Do</span>
-              <span className={styles.todoUpdated}>{todos.updated} 기준</span>
+              <span className={styles.todoUpdated}>{todos.updated ? `${todos.updated} 기준` : ''}</span>
             </div>
             <TodoBlock label="📌 금주" items={todos.week} />
             <TodoBlock label="🔥 금일" items={todos.today} />
