@@ -5,7 +5,7 @@ import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
 import styles from './index.module.css';
 
-const TILES = Array.from({length: 240});
+const TILES = Array.from({length: 480});
 
 export default function Home() {
   const {siteConfig} = useDocusaurusContext();
@@ -20,9 +20,7 @@ export default function Home() {
         </div>
         <div className={styles.heroInner}>
           <p className={styles.kicker}>✍️ 이찬호의 기술 노트</p>
-          <Heading as="h1" className={styles.title}>
-            배운 건<br />흘려보내지 않기
-          </Heading>
+          <Heading as="h1" className={styles.title}>흩어진 배움을 한곳에</Heading>
           <div className={styles.links}>
             <Link className={styles.btnPrimary} to="/docs">📒 노트</Link>
             <Link className={styles.btnGhost} to="/profile">👤 프로필</Link>

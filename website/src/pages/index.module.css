@@ -16,20 +16,20 @@
 /* 마스코트 바둑판 — 사이에 텀(gap)을 둔 격자 */
 .tileGrid {
   position: absolute;
-  inset: -30px;
+  inset: -60px;
   z-index: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, 44px);
-  gap: 36px;
+  grid-template-columns: repeat(auto-fill, 48px);
+  gap: 40px;
   justify-content: center;
-  align-content: center;
+  align-content: start;
   opacity: 0.13;
   pointer-events: none;
 }
 
 .tileImg {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
 }
 
 /* 텍스트 가독성을 위한 중앙 스크림 */
@@ -45,7 +45,7 @@
 .heroInner {
   position: relative;
   z-index: 1;
-  max-width: 42rem;
+  max-width: 56rem;
 }
 
 .kicker {
@@ -57,10 +57,11 @@
 }
 
 .title {
-  font-size: clamp(2.8rem, 9vw, 5.6rem);
+  font-size: clamp(2rem, 7vw, 4.2rem);
+  white-space: nowrap;
   font-weight: 800;
-  line-height: 1.04;
-  letter-spacing: -0.045em;
+  line-height: 1.08;
+  letter-spacing: -0.04em;
   margin: 0;
   background: var(--til-grad);
   -webkit-background-clip: text;
