@@ -1,6 +1,6 @@
 ---
 name: writedown
-description: 정리가 필요한 내용(오늘 배운 것·용어·주제 메모 등)을 기록할 때 사용한다. 한 번의 입력을 raw(충실 기록 — 기계·검색·AI·아카이브용)와 readable(사람이 읽기 좋게 다듬은 글 — Docusaurus 사이트 게시용) 두 버전으로 파생 저장한다. 기존 til-note(날짜별 학습기록)·wordbank(단어장)를 통합한 단일 지식 입력 스킬. 기록 위치는 `C:\study\note`(= chanyoze/TIL 레포)이며 Docusaurus 사이트(/til, /wordbank)에 자동 반영된다.
+description: 정리가 필요한 내용(오늘 배운 것·용어·주제 메모 등)을 기록할 때 사용한다. 한 번의 입력을 raw(충실 기록 — 기계·검색·AI·아카이브용)와 readable(사람이 읽기 좋게 다듬은 글 — Docusaurus 사이트 게시용) 두 버전으로 파생 저장한다. 기존 til-note(날짜별 학습기록)·wordbank(단어장)를 통합한 단일 지식 입력 스킬. 기록 위치는 `C:\study\note`(= chanyoze/TIL 레포)이며 Docusaurus 사이트(`/docs/TIL`·`/docs/wordbank` 등)에 자동 반영된다.
 when_to_use: 호출 예 — "writedown", "이거 정리해줘", "오늘 배운 거 raw랑 읽기용으로 남겨줘", "이 용어 단어장에 추가하고 정리", "이 주제 글로 다듬어서 기록"
 argument-hint: "[til|wordbank|note|todo] [주제]  (생략 시 내용 보고 자동 판별)"
 user-invocable: true
@@ -14,7 +14,7 @@ disable-model-invocation: false
 | 버전 | 성격 | 위치 | 용도 |
 |---|---|---|---|
 | **raw** | 사용자가 준 내용을 **충실히** 보존(거의 그대로 + 최소 메타) | `raw/…` | 단일 진실·검색·AI 참조·아카이브 |
-| **readable** | 사람이 **읽기 좋게 재구성**(도입·소제목·예시·흐름) | `TIL/` · `wordbank/` | Docusaurus 사이트 게시(읽기용) |
+| **readable** | 사람이 **읽기 좋게 재구성**(도입·소제목·예시·흐름) | `vault/…` (예: `TIL/` · `단어장/<분야>` · `회사/…`) | Docusaurus 사이트(`/docs`) 게시(읽기용) |
 
 > 이 스킬은 기존 `til-note`·`wordbank`를 **대체**한다. 두 스킬이 하던 일(날짜별 학습기록·단어 누적)을 카테고리로 흡수하되, 항상 raw+readable 2층으로 남긴다.
 
@@ -43,8 +43,10 @@ disable-model-invocation: false
 2. **공개 게시 여부 확인** ⚠️ — 이 레포(chanyoze/TIL)는 **public**이라 `vault/`에 넣는 readable은 **사이트뿐 아니라 GitHub 소스에서도 누구나** 보게 된다. 기록 시작 전 **한 번 확인한다**: "이 내용은 공개 사이트(+GitHub 소스)에 그대로 올라가는데 진행할까요?" — 민감해 보이는 내용(개인정보·회사기밀 등)이면 특히 확실히 짚는다. 사용자가 **아니오/비공개**면 vault에 쓰지 말고 어떻게 할지(로컬 보관·다른 위치 등) 지시를 받는다. **공개 처리는 사용자가 직접 컨트롤한다 — 임의로 vault에 올리지 않는다.**
 3. **raw 저장** — `raw/…`에 **충실 버전** 기록. 사용자의 표현을 보존하고, 상단에 frontmatter(생성일·출처·태그)만 덧붙인다. 군더더기 정리·재작성 금지.
 4. **readable 생성** — 같은 내용을 **읽기 좋게 재구성**해 볼트(`vault/…`)에 기록(아래 §readable 작성 규칙). *(2단계에서 공개 OK를 받은 경우에만)*
-5. **상호 링크** — 양쪽 frontmatter에 짝 파일 경로를 적어 추적 가능하게 한다.
-6. **커밋·반영** — 두 파일을 stage → 커밋 → push 하면 Docusaurus 배포 워크플로가 자동으로 사이트를 갱신한다(아래 §커밋). push 전 공개 게시를 한 번 더 확인했는지 점검.
+5. **단어장 자동 연계** 📖 — `til`/`note`면 본문에 처음 등장한 전문용어·약어를 추려 단어장에 없는 것만 추가 제안/반영한다(아래 §단어장 자동 연계).
+6. **상호 링크** — 양쪽 frontmatter에 짝 파일 경로를 적어 추적 가능하게 한다.
+7. **빌드 검증** 🔧 — 저장 후 `cd website && npm run build`를 돌려 frontmatter·`_category_.json`·`todos.json` 깨짐을 확인한다(특히 til frontmatter·todo JSON 문법). 실패하면 고치고 통과시킨 뒤에 커밋한다.
+8. **커밋·반영** — 파일들을 stage → 커밋 → push 하면 Docusaurus 배포 워크플로가 자동으로 사이트를 갱신한다(아래 §커밋). push 전 공개 게시를 한 번 더 확인했는지 점검.
 
 ---
 
@@ -57,6 +59,15 @@ disable-model-invocation: false
   - `til`: 월별 폴더 `vault/TIL/YYYY-MM/`에 두고 frontmatter `title: "YYYY-MM-DD / 내용"`로 **제목 양식 통일**(본문 첫 h1은 생략 → Docusaurus가 title을 h1로 렌더). 새 달이면 `vault/TIL/<YYYY-MM>/_category_.json`(label `📅 YYYY-MM`)도 생성.
   - `note`: `title`, `sidebar_label`, 필요 시 `sidebar_position`.
   - `wordbank`: **분야별 파일** `vault/단어장/<분야>.md`에 항목을 `- **용어**: 설명` bullet으로 append(파일 상단 frontmatter 유지). 적합한 분야 파일(cicd·infra·java-build·code-quality·testing·frontend·ai·etc 등)에 넣고, 새 분야면 새 `<slug>.md`(frontmatter `title`/`sidebar_label`에 이모지+분야명, 다음 `sidebar_position`)를 만든다. 단어장은 `vault/단어장/_category_.json`(generated-index, slug `/wordbank`)로 묶인 폴더다. 어느 분야인지 애매하면 한 번만 되묻는다.
+
+## 단어장 자동 연계 (til·note → wordbank) 📖
+
+`til`/`note`의 readable을 만들 때, 학습기록과 용어집이 **함께 쌓이도록** 새 용어를 줍는다.
+
+1. **후보 추출** — 본문에서 처음 등장한 약어(대문자·CamelCase: `MCP`, `SSR` 등)·전문용어 중 "한 줄 풀이가 필요한 것"을 고른다.
+2. **중복 확인** — `vault/단어장/**`를 grep(또는 Grep 도구)으로 훑어 **이미 있는 용어는 건너뛴다**. 표기 흔들림(대소문자·괄호)도 같은 것으로 본다.
+3. **제안/반영** — 남은 후보를 한 번에 3~5개로 추려 "이 용어들 단어장에 추가할까요?"로 제안한다. 사용자가 OK이거나 명백한 표준 용어면 적합 분야 파일(§wordbank 규칙: cicd·java-build·ai·etc 등)에 `- **용어**: 설명`으로 append.
+4. **경계** — raw는 건드리지 않는다(단어장은 readable 계열). 너무 지엽적이거나 일회성 단어는 넣지 않는다. 분야가 애매하면 한 번만 되묻는다.
 
 ## todo 작성 규칙 (금주/금일 할 일)
 
