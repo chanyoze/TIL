@@ -2,17 +2,17 @@
 @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
-/* ===== 에메랄드 + 잉크 (라이트) ===== */
+/* ===== 인디고 + 앰버 (라이트) ===== */
 :root {
-  --ifm-color-primary: #10b981;
-  --ifm-color-primary-dark: #059669;
-  --ifm-color-primary-darker: #047857;
-  --ifm-color-primary-darkest: #065f46;
-  --ifm-color-primary-light: #34d399;
-  --ifm-color-primary-lighter: #6ee7b7;
-  --ifm-color-primary-lightest: #a7f3d0;
+  --ifm-color-primary: #6366f1;
+  --ifm-color-primary-dark: #4f46e5;
+  --ifm-color-primary-darker: #4338ca;
+  --ifm-color-primary-darkest: #3730a3;
+  --ifm-color-primary-light: #818cf8;
+  --ifm-color-primary-lighter: #a5b4fc;
+  --ifm-color-primary-lightest: #c7d2fe;
 
-  --ifm-background-color: #f8fafc;
+  --ifm-background-color: #ffffff;
   --ifm-background-surface-color: #ffffff;
 
   --ifm-font-family-base: "Pretendard Variable", "Inter", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", sans-serif;
@@ -22,40 +22,41 @@
   --ifm-code-border-radius: 8px;
   --ifm-button-border-radius: 10px;
   --ifm-navbar-link-hover-color: var(--ifm-color-primary);
-  --docusaurus-highlighted-code-line-bg: rgba(16, 185, 129, 0.12);
+  --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.12);
 
-  /* 강조색·시그니처 그라데이션 (에메랄드 → 시안) */
-  --til-pink: #10b981;
-  --til-pink-2: #0ea5e9;
-  --til-grad: linear-gradient(135deg, #34d399 0%, #10b981 45%, #0ea5e9 100%);
-  --til-grad-soft: linear-gradient(135deg, rgba(16, 185, 129, 0.14), rgba(14, 165, 233, 0.12));
+  /* 강조색·시그니처 그라데이션 (인디고 → 바이올렛) + 앰버 포인트 */
+  --til-pink: #6366f1;
+  --til-pink-2: #a855f7;
+  --til-amber: #f59e0b;
+  --til-grad: linear-gradient(135deg, #818cf8 0%, #6366f1 45%, #a855f7 100%);
+  --til-grad-soft: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(168, 85, 247, 0.12));
 }
 
-/* ===== 에메랄드 + 잉크 (다크) ===== */
+/* ===== 인디고 + 앰버 (다크) ===== */
 [data-theme='dark'] {
-  --ifm-color-primary: #34d399;
-  --ifm-color-primary-dark: #10b981;
-  --ifm-color-primary-darker: #059669;
-  --ifm-color-primary-darkest: #047857;
-  --ifm-color-primary-light: #6ee7b7;
-  --ifm-color-primary-lighter: #a7f3d0;
-  --ifm-color-primary-lightest: #d1fae5;
+  --ifm-color-primary: #a5b4fc;
+  --ifm-color-primary-dark: #818cf8;
+  --ifm-color-primary-darker: #6366f1;
+  --ifm-color-primary-darkest: #4f46e5;
+  --ifm-color-primary-light: #c7d2fe;
+  --ifm-color-primary-lighter: #ddd6fe;
+  --ifm-color-primary-lightest: #ede9fe;
 
-  --ifm-background-color: #0f172a;
-  --ifm-background-surface-color: #1e293b;
-  --docusaurus-highlighted-code-line-bg: rgba(52, 211, 153, 0.16);
+  --ifm-background-color: #0b0b12;
+  --ifm-background-surface-color: #15151f;
+  --docusaurus-highlighted-code-line-bg: rgba(165, 180, 252, 0.16);
 
-  --til-pink: #34d399;
+  --til-pink: #a5b4fc;
 }
 
 /* 선택 영역·네비바 디테일 */
-::selection { background: rgba(16, 185, 129, 0.22); }
+::selection { background: rgba(99, 102, 241, 0.22); }
 .navbar { backdrop-filter: saturate(1.4) blur(8px); }
 .navbar__title { font-weight: 800; letter-spacing: -0.02em; }
 
 /* 버튼 — 호버 리프트 */
 .button { font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease; }
-.button--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(16, 185, 129, 0.32); }
+.button--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(99, 102, 241, 0.32); }
 
 /* 사이드바/TOC active 강조 */
 .menu__link--active:not(.menu__link--sublist) { font-weight: 700; }

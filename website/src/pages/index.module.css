@@ -1,4 +1,4 @@
-/* 극심플 메인 — 마스코트 바둑판 타일 위에 중앙 그라데이션 문구 */
+/* 극심플 메인 — 마스코트 바둑판(텀 있음) 위에 그라데이션 문구 + 버튼 2개 */
 .hero {
   min-height: calc(100vh - var(--ifm-navbar-height));
   display: grid;
@@ -8,20 +8,28 @@
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(48% 55% at 50% 36%, rgba(16, 185, 129, 0.16), transparent 70%),
-    radial-gradient(40% 40% at 78% 18%, rgba(14, 165, 233, 0.13), transparent 70%),
+    radial-gradient(46% 52% at 50% 36%, rgba(99, 102, 241, 0.16), transparent 70%),
+    radial-gradient(38% 38% at 80% 16%, rgba(245, 158, 11, 0.12), transparent 70%),
     var(--ifm-background-color);
 }
 
-/* 마스코트 바둑판(타일) — 얼굴이 격자로 반복 (background-image는 index.js에서 인라인 주입) */
-.tile {
+/* 마스코트 바둑판 — 사이에 텀(gap)을 둔 격자 */
+.tileGrid {
   position: absolute;
-  inset: 0;
+  inset: -30px;
   z-index: 0;
-  background-repeat: repeat;
-  background-size: 56px;
-  opacity: 0.12;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 44px);
+  gap: 36px;
+  justify-content: center;
+  align-content: center;
+  opacity: 0.13;
   pointer-events: none;
+}
+
+.tileImg {
+  width: 44px;
+  height: 44px;
 }
 
 /* 텍스트 가독성을 위한 중앙 스크림 */
@@ -30,7 +38,7 @@
   position: absolute;
   z-index: 0;
   inset: 0;
-  background: radial-gradient(38% 40% at 50% 45%, var(--ifm-background-color) 0%, transparent 72%);
+  background: radial-gradient(40% 42% at 50% 45%, var(--ifm-background-color) 0%, transparent 72%);
   pointer-events: none;
 }
 
@@ -62,40 +70,46 @@
 
 .links {
   display: flex;
-  gap: 16px;
+  gap: 14px;
   justify-content: center;
   align-items: center;
   margin-top: 2.8rem;
   flex-wrap: wrap;
 }
 
-.linkPrimary {
+.btnPrimary,
+.btnGhost {
   display: inline-flex;
   align-items: center;
-  padding: 13px 28px;
+  gap: 7px;
+  padding: 13px 30px;
   border-radius: 999px;
-  background: var(--til-grad);
-  color: #fff !important;
   font-weight: 800;
   text-decoration: none;
-  box-shadow: 0 10px 26px rgba(16, 185, 129, 0.3);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
 
-.linkPrimary:hover {
+.btnPrimary {
+  background: var(--til-grad);
+  color: #fff !important;
+  box-shadow: 0 10px 26px rgba(99, 102, 241, 0.3);
+}
+
+.btnPrimary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 16px 34px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 16px 34px rgba(99, 102, 241, 0.42);
   text-decoration: none;
 }
 
-.linkGhost {
-  color: var(--ifm-color-emphasis-700);
-  font-weight: 700;
-  text-decoration: none;
-  padding: 13px 12px;
+.btnGhost {
+  background: transparent;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  color: var(--ifm-color-emphasis-800) !important;
 }
 
-.linkGhost:hover {
-  color: var(--til-pink);
+.btnGhost:hover {
+  border-color: var(--til-pink);
+  color: var(--til-pink) !important;
+  transform: translateY(-2px);
   text-decoration: none;
 }

@@ -21,7 +21,7 @@ export default function Profile() {
           <div className={styles.avatar}>이</div>
           <div>
             <Heading as="h1" className={styles.name}>이찬호</Heading>
-            <p className={styles.role}>기록하는 개발자 · Backend / Frontend</p>
+            <p className={styles.role}>💻 기록하는 개발자 · Backend / Frontend</p>
           </div>
         </header>
 
@@ -32,14 +32,14 @@ export default function Profile() {
         </p>
 
         <section className={styles.section}>
-          <Heading as="h2" className={styles.h2}>기술 스택</Heading>
+          <Heading as="h2" className={styles.h2}>🛠️ 기술 스택</Heading>
           <div className={styles.chips}>
             {STACK.map((s) => <span key={s} className={styles.chip}>{s}</span>)}
           </div>
         </section>
 
         <section className={styles.section}>
-          <Heading as="h2" className={styles.h2}>프로젝트</Heading>
+          <Heading as="h2" className={styles.h2}>📦 프로젝트</Heading>
           <div className={styles.projects}>
             {PROJECTS.map((p) => (
               <div key={p.name} className={styles.proj}>
@@ -54,7 +54,7 @@ export default function Profile() {
         </section>
 
         <section className={styles.section}>
-          <Heading as="h2" className={styles.h2}>링크</Heading>
+          <Heading as="h2" className={styles.h2}>🔗 링크</Heading>
           <div className={styles.links}>
             <Link className={styles.link} to="https://github.com/chanyoze">GitHub →</Link>
             <Link className={styles.link} to="/docs">노트 보기 →</Link>
