@@ -15,7 +15,7 @@ const require = createRequire(import.meta.url);
 const config = {
   title: '이찬호 노트',
   tagline: '배운 건 흘려보내지 않기 — 매일의 기술 기록',
-  favicon: 'img/favicon.ico',
+  favicon: 'img/favicon.png',
 
   future: {
     v4: true,
@@ -87,7 +87,7 @@ const config = {
   themeConfig:
     /** @type {import('@docusaurus/preset-classic').ThemeConfig} */
     ({
-      image: 'img/docusaurus-social-card.jpg',
+      image: 'img/og-card.png',
       colorMode: {
         respectPrefersColorScheme: true,
       },
@@ -95,7 +95,7 @@ const config = {
         title: '이찬호 노트',
         logo: {
           alt: '이찬호 노트',
-          src: 'img/logo.svg',
+          src: 'img/mascot.png',
         },
         items: [
           {
