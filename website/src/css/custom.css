@@ -51,7 +51,11 @@
 
 /* 선택 영역·네비바 디테일 */
 ::selection { background: rgba(99, 102, 241, 0.22); }
-.navbar { backdrop-filter: saturate(1.4) blur(8px); }
+/* navbar 글래스 블러는 데스크톱만. 모바일에선 backdrop-filter가 fixed 자식(모바일 사이드바)의
+   기준 박스를 navbar(60px)로 가둬 메뉴가 안 보이는 버그가 생기므로 제외한다. */
+@media (min-width: 997px) {
+  .navbar { backdrop-filter: saturate(1.4) blur(8px); }
+}
 .navbar__title { font-weight: 800; letter-spacing: -0.02em; }
 
 /* 버튼 — 호버 리프트 */
