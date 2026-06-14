@@ -24,6 +24,13 @@ const config = {
   // Mermaid 다이어그램 활성화 (```mermaid 코드블록 렌더)
   markdown: {
     mermaid: true,
+    // .md = CommonMark(레거시 일반 마크다운 허용: <br>, {}, <details> 등), .mdx = MDX
+    format: 'detect',
+    // 레거시 문서의 깨진 이미지/링크는 빌드 실패 대신 경고만
+    hooks: {
+      onBrokenMarkdownImages: 'warn',
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   // 배포 URL: https://chanyoze.github.io/TIL/

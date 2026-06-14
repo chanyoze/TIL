@@ -5,6 +5,10 @@ antigravity-sync/
 /ExportBlock-*/
 *ExportBlock*.zip
 
+# 회사 업무 원본 자료(대외비) — 발췌·익명화한 내용만 vault/로 들어감. 원본은 절대 커밋 금지.
+/이찬호 개인폴더/
+/cip-hp/
+
 # OS / 편집기 노이즈
 Thumbs.db
 .DS_Store
