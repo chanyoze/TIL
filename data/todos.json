@@ -1,11 +1,8 @@
 {
-  "updated": "2026-06-16",
+  "updated": "2026-06-17",
   "week": [],
   "today": [],
   "deadlines": [
-    { "text": "시스템관리 옵션관리 확인 필요", "due": "2026-06-15", "done": false },
-    { "text": "공유문서등록 확인 필요", "due": "2026-06-15", "done": false },
-    { "text": "문서 조회 쿼리 전부 귀속일자 Desc로 변경", "due": "2026-06-17", "done": false },
     { "text": "문서관리 배포", "due": "2026-06-18", "done": false }
   ]
 }
