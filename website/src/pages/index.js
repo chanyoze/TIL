@@ -111,7 +111,8 @@ export default function Home() {
   const mascot = useBaseUrl('/img/mascot.png');
   const [todos, setTodos] = useState(EMPTY_TODOS);
   useEffect(() => {
-    fetch(RAW_TODOS, {cache: 'no-store'})
+    // 쿼리에 타임스탬프를 붙여 GitHub raw CDN(Fastly ~5분) 엣지 캐시까지 우회한다.
+    fetch(`${RAW_TODOS}?t=${Date.now()}`, {cache: 'no-store'})
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => d && setTodos(d))
       .catch(() => {});
