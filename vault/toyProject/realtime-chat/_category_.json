@@ -1,0 +1,1 @@
+{ "label": "💬 실시간 채팅 + 인프라", "position": 2, "link": { "type": "generated-index", "slug": "/toy/realtime-chat", "description": "WebSocket 실시간 채팅을 만들고 Docker→AWS→k8s로 배포·운영까지 가는 인프라 학습용 토이프로젝트" } }
