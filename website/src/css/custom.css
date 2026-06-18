@@ -88,3 +88,13 @@ html:has(.homeMain) [data-footer-root] { display: none !important; }
   padding-top: 0;
   border-top: none;
 }
+
+/* 잠금 상태(html.gate-unlocked 아님)에서는 잠긴 섹션의 하위 문서 목록과
+   펼치기 토글(캐럿)을 숨겨, 토글로도 목록이 보이지 않게 한다.
+   해제되면(gate-unlocked) 정상 동작으로 복귀. */
+html:not(.gate-unlocked) .theme-doc-sidebar-menu > li.sidebar-locked .menu__list {
+  display: none !important;
+}
+html:not(.gate-unlocked) .theme-doc-sidebar-menu > li.sidebar-locked .menu__caret {
+  display: none !important;
+}

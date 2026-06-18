@@ -12,7 +12,8 @@ import {useLocation} from '@docusaurus/router';
 
 const PASSWORD = '0000';
 const STORAGE_KEY = 'site-gate-unlocked';
-const PROTECTED = /\/docs\/(회사|TIL)(\/|$)/;
+// 잠긴 섹션: 폴더 경로(/docs/회사 …)와 카테고리 인덱스 커스텀 slug(/docs/company …) 모두 포함
+const PROTECTED = /\/docs\/(회사|company|TIL|toyProject|toy|개발노트|devnote)(\/|$)/;
 
 function isProtected(pathname) {
   let decoded = pathname;
@@ -33,9 +34,13 @@ export default function Root({children}) {
 
   useEffect(() => {
     setMounted(true);
-    if (typeof window !== 'undefined' &&
-        window.sessionStorage.getItem(STORAGE_KEY) === '1') {
-      setUnlocked(true);
+    const isUnlocked =
+      typeof window !== 'undefined' &&
+      window.sessionStorage.getItem(STORAGE_KEY) === '1';
+    setUnlocked(isUnlocked);
+    // 해제 여부를 html 클래스로 반영 → 사이드바 CSS가 잠긴 섹션 하위 목록을 가림
+    if (typeof document !== 'undefined') {
+      document.documentElement.classList.toggle('gate-unlocked', isUnlocked);
     }
   }, []);
 
@@ -51,6 +56,7 @@ export default function Root({children}) {
     e.preventDefault();
     if (input === PASSWORD) {
       window.sessionStorage.setItem(STORAGE_KEY, '1');
+      document.documentElement.classList.add('gate-unlocked');
       setUnlocked(true);
       setError(false);
     } else {

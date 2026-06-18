@@ -1,1 +1,1 @@
-{ "label": "📝 개발노트", "position": 5, "link": { "type": "generated-index", "slug": "/devnote", "description": "실무에서 일반화해 정리한 개발 표준·패턴·메모" } }
+{ "label": "📝 개발노트 🔒", "position": 97, "className": "sidebar-locked", "link": { "type": "generated-index", "slug": "/devnote", "description": "실무에서 일반화해 정리한 개발 표준·패턴·메모" } }
