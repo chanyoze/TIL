@@ -1,3 +1,8 @@
+---
+sidebar_label: "4. 검증 규칙"
+sidebar_position: 4
+---
+
 # 검증 규칙 문서
 
 ## 버전 갱신
