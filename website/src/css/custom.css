@@ -75,3 +75,16 @@
   html:has(.homeMain) .navbar { display: none !important; }
 }
 html:has(.homeMain) [data-footer-root] { display: none !important; }
+
+/* 잠긴 섹션(회사·TIL)을 사이드바 하단에 분리선으로 구분 */
+.theme-doc-sidebar-menu > li.sidebar-locked {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+/* 잠긴 항목이 연속되면 그 사이엔 선을 넣지 않음(그룹 위에만 1줄) */
+.theme-doc-sidebar-menu > li.sidebar-locked + li.sidebar-locked {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
