@@ -3,7 +3,7 @@ import {useLocation} from '@docusaurus/router';
 
 // ──────────────────────────────────────────────────────────────
 // 사이트 내 캐주얼 비밀번호 게이트
-//  - 대상 섹션: /docs/회사 , /docs/TIL
+//  - 대상 섹션: /docs/회사 , /docs/TIL , /docs/ai-rnd 등
 //  - 비밀번호: 0000  (클라이언트측 단순 확인 — 실제 보안 아님)
 //  - 세션 단위로 1회 입력하면 해당 세션 동안 유지(sessionStorage)
 //  ※ GitHub 레포가 public이라 원본 .md는 그대로 공개됩니다.
@@ -13,7 +13,7 @@ import {useLocation} from '@docusaurus/router';
 const PASSWORD = '0000';
 const STORAGE_KEY = 'site-gate-unlocked';
 // 잠긴 섹션: 폴더 경로(/docs/회사 …)와 카테고리 인덱스 커스텀 slug(/docs/company …) 모두 포함
-const PROTECTED = /\/docs\/(회사|company|TIL|toyProject|toy|개발노트|devnote)(\/|$)/;
+const PROTECTED = /\/docs\/(회사|company|TIL|toyProject|toy|개발노트|devnote|AI R&D|ai-rnd|준비중)(\/|$)/;
 
 function isProtected(pathname) {
   let decoded = pathname;
