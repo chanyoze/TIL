@@ -1,5 +1,1 @@
-{
-  "label": "⏳ 준비중",
-  "position": 90,
-  "collapsed": true
-}
+{ "label": "🚧 준비중 🔒", "position": 100, "className": "sidebar-locked", "link": { "type": "generated-index", "slug": "/wip", "description": "아직 공개 정리 전인 초안·작업중 문서를 모아두는 잠금 스테이징 영역. 비밀번호 게이트로 가려지며, 정리가 끝나면 알맞은 카테고리로 옮긴다." } }

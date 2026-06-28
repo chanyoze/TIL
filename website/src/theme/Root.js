@@ -13,7 +13,7 @@ import {useLocation} from '@docusaurus/router';
 const PASSWORD = '0000';
 const STORAGE_KEY = 'site-gate-unlocked';
 // 잠긴 섹션: 폴더 경로(/docs/회사 …)와 카테고리 인덱스 커스텀 slug(/docs/company …) 모두 포함
-const PROTECTED = /\/docs\/(회사|company|TIL|toyProject|toy|개발노트|devnote|AI R&D|ai-rnd|준비중)(\/|$)/;
+const PROTECTED = /\/docs\/(회사|company|TIL|toyProject|toy|개발노트|devnote|AI R&D|ai-rnd|준비중|wip)(\/|$)/;
 
 function isProtected(pathname) {
   let decoded = pathname;
