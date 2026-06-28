@@ -1,0 +1,13 @@
+{
+  "useMarkdownLinks": true,
+  "newLinkFormat": "relative",
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "vault/_attachments",
+  "userIgnoreFilters": [
+    "website/",
+    "node_modules/",
+    "build/",
+    ".git/",
+    "antigravity-sync/"
+  ]
+}
