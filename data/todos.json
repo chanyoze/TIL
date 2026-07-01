@@ -1,6 +1,12 @@
 {
-  "updated": "2026-06-24",
-  "week": [],
+  "updated": "2026-07-01",
+  "week": [
+    { "text": "CIP 홈페이지 FE-BE 연동: FAQ 어드민 화면 DB 연동", "done": false },
+    { "text": "CIP 홈페이지 FE-BE 연동: 채용 어드민 화면 DB 연동", "done": false },
+    { "text": "CIP 홈페이지 FE-BE 연동: 문의 어드민 화면 DB 연동(답변 포함)", "done": false },
+    { "text": "CIP 홈페이지 FE-BE 연동: 어드민 대시보드 집계 연동", "done": false },
+    { "text": "CIP 홈페이지 FE-BE 연동: 공개 문의폼·채용·회사소개·솔루션 페이지 연동", "done": false }
+  ],
   "today": [],
   "deadlines": []
 }
