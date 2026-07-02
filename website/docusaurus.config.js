@@ -17,6 +17,18 @@ const config = {
   tagline: '배운 건 흘려보내지 않기 — 매일의 기술 기록',
   favicon: 'img/favicon.png',
 
+  // 사이트 게이트 비밀번호는 "평문"이 아니라 SHA-256 "해시"만 보관한다.
+  //  - 소스/깃헙에는 아래 해시만 노출(평문 0000 은 소스에 없음).
+  //  - 배포(CI)에서 secret SITE_GATE_PW_HASH 로 override 가능(그때는 해시조차 소스에서 사라짐).
+  //  - fallback 해시는 '0000' 의 SHA-256 (env 미설정 시 로컬/기본 동작 유지).
+  //  ⚠️ 정적 사이트라 해시는 결국 브라우저 번들에 담긴다 — 약한 비밀번호는 무차별 대입 가능.
+  //     "진짜" 비공개가 필요하면 서버측 게이트(Cloudflare Access 등) + private 레포로 가야 한다.
+  customFields: {
+    gatePwHash:
+      process.env.SITE_GATE_PW_HASH ||
+      '9af15b336e6a9619928537df30b2e6a2376569fcf9d7e773eccede65606529a0',
+  },
+
   future: {
     v4: true,
   },

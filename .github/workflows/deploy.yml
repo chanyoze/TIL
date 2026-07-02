@@ -44,6 +44,10 @@ jobs:
         run: npm ci
       - name: Build website
         run: npm run build
+        env:
+          # 게이트 비밀번호 해시(선택) — 레포 Secrets 에 등록 시 소스 기본 해시를 override.
+          # 미설정이면 config 의 기본 해시('0000')로 빌드된다.
+          SITE_GATE_PW_HASH: ${{ secrets.SITE_GATE_PW_HASH }}
       - uses: actions/upload-pages-artifact@v3
         with:
           # path는 워크스페이스 루트 기준 (working-directory 무시됨)

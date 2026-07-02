@@ -19,3 +19,9 @@ desktop.ini
 .obsidian/workspace-mobile.json
 .obsidian/cache
 .obsidian/.DS_Store
+
+# 로컬 env (사이트 게이트 해시 override 등) — 커밋 금지
+.env
+.env.local
+website/.env
+website/.env.local

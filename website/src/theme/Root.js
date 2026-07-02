@@ -1,16 +1,25 @@
 import React, {useState, useEffect} from 'react';
 import {useLocation} from '@docusaurus/router';
+import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 
 // ──────────────────────────────────────────────────────────────
 // 사이트 내 캐주얼 비밀번호 게이트
 //  - 대상 섹션: /docs/회사 , /docs/TIL , /docs/ai-rnd 등
-//  - 비밀번호: 0000  (클라이언트측 단순 확인 — 실제 보안 아님)
+//  - 비밀번호는 "평문"이 아니라 SHA-256 "해시"로만 비교한다(소스에 0000 평문 없음).
+//    해시 출처: docusaurus.config.js customFields.gatePwHash
+//    (env SITE_GATE_PW_HASH override 가능 — 기본값은 '0000'의 해시)
 //  - 세션 단위로 1회 입력하면 해당 세션 동안 유지(sessionStorage)
 //  ※ GitHub 레포가 public이라 원본 .md는 그대로 공개됩니다.
-//    이 게이트는 "사이트 화면 안에서의 가림"만 제공합니다.
+//    이 게이트는 "사이트 화면 안에서의 가림"만 제공하며, 정적 사이트 특성상
+//    해시는 브라우저 번들에 담깁니다(약한 비밀번호는 무차별 대입 가능).
 // ──────────────────────────────────────────────────────────────
 
-const PASSWORD = '0000';
+// 입력 문자열의 SHA-256 16진 문자열을 반환(Web Crypto).
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+  return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+}
+
 const STORAGE_KEY = 'site-gate-unlocked';
 // 잠긴 섹션: 폴더 경로(/docs/회사 …)와 카테고리 인덱스 커스텀 slug(/docs/company …) 모두 포함
 const PROTECTED = /\/docs\/(회사|company|TIL|toyProject|toy|개발노트|devnote|AI R&D|ai-rnd|준비중|wip)(\/|$)/;
@@ -27,6 +36,8 @@ function isProtected(pathname) {
 
 export default function Root({children}) {
   const {pathname} = useLocation();
+  const {siteConfig} = useDocusaurusContext();
+  const gatePwHash = siteConfig.customFields?.gatePwHash;
   const [mounted, setMounted] = useState(false);
   const [unlocked, setUnlocked] = useState(false);
   const [input, setInput] = useState('');
@@ -52,9 +63,10 @@ export default function Root({children}) {
   }
 
   // SSR / 첫 클라이언트 렌더는 잠금화면으로 통일(하이드레이션 불일치 방지)
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (input === PASSWORD) {
+    const inputHash = await sha256Hex(input);
+    if (inputHash === gatePwHash) {
       window.sessionStorage.setItem(STORAGE_KEY, '1');
       document.documentElement.classList.add('gate-unlocked');
       setUnlocked(true);
