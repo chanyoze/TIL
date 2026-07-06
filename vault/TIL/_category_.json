@@ -1,5 +1,10 @@
 {
   "label": "📚 TIL 🔒",
   "position": 98,
-  "className": "sidebar-locked"
+  "className": "sidebar-locked",
+  "link": {
+    "type": "generated-index",
+    "slug": "/TIL",
+    "description": "매일 배우고 익힌 것을 날짜별로 기록하는 기술 노트입니다. 아래 월별(YYYY-MM) 폴더를 선택해 들어가세요."
+  }
 }
