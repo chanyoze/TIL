@@ -49,9 +49,11 @@ export default function Root({children}) {
       typeof window !== 'undefined' &&
       window.sessionStorage.getItem(STORAGE_KEY) === '1';
     setUnlocked(isUnlocked);
-    // 해제 여부를 html 클래스로 반영 → 사이드바 CSS가 잠긴 섹션 하위 목록을 가림
+    // 해제 여부를 body 클래스로 반영 → 사이드바 CSS가 잠긴 섹션 하위 목록을 가림.
+    //  ※ <html> 클래스는 Docusaurus가 라우트마다 통째로 재설정(className=…)하며
+    //    직전에 추가한 커스텀 클래스를 지워버리므로, 관리 대상이 아닌 <body>에 부여한다.
     if (typeof document !== 'undefined') {
-      document.documentElement.classList.toggle('gate-unlocked', isUnlocked);
+      document.body.classList.toggle('gate-unlocked', isUnlocked);
     }
   }, []);
 
@@ -68,7 +70,7 @@ export default function Root({children}) {
     const inputHash = await sha256Hex(input);
     if (inputHash === gatePwHash) {
       window.sessionStorage.setItem(STORAGE_KEY, '1');
-      document.documentElement.classList.add('gate-unlocked');
+      document.body.classList.add('gate-unlocked');
       setUnlocked(true);
       setError(false);
     } else {
