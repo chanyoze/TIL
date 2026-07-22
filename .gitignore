@@ -28,3 +28,9 @@ website/.env.local
 
 # 개발 서버 로그 (Obsidian Git 자동커밋 제외)
 website/*.log
+
+# 별도 프로젝트/폴더 (이 레포 소속 아님 — git add -A 오포함 방지)
+/AI-Curation/
+/CV/
+/toyProj/
+/TIL/
