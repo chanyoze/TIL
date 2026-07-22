@@ -1,6 +1,6 @@
 ---
 name: writedown
-description: 정리가 필요한 내용(오늘 배운 것·용어·주제 메모 등)을 기록할 때 사용한다. 한 번의 입력을 raw(충실 기록 — 기계·검색·AI·아카이브용)와 readable(사람이 읽기 좋게 다듬은 글 — Docusaurus 사이트 게시용) 두 버전으로 파생 저장한다. 기존 til-note(날짜별 학습기록)·wordbank(단어장)를 통합한 단일 지식 입력 스킬. 기록 위치는 `C:\study\note`(= chanyoze/TIL 레포)이며 Docusaurus 사이트(`/docs/TIL`·`/docs/wordbank` 등)에 자동 반영된다.
+description: 정리가 필요한 내용(오늘 배운 것·용어·주제 메모 등)을 기록할 때 사용한다. 한 번의 입력을 raw(충실 기록 — 기계·검색·AI·아카이브용)와 readable(사람이 읽기 좋게 다듬은 글 — Docusaurus 사이트 게시용) 두 버전으로 파생 저장한다. 기존 til-note(날짜별 학습기록)·wordbank(단어장)를 통합한 단일 지식 입력 스킬. **2-레포 구조**: raw·비공개 원천은 `C:\RAW-DOC`(= chanyoze/RAW-DOC, **private** 개인 보관함), 공유용 readable은 `C:\study`(= chanyoze/TIL, **public** 사이트 → `/docs/TIL`·`/docs/wordbank` 등에 자동 반영)에 둔다.
 when_to_use: 호출 예 — "writedown", "이거 정리해줘", "오늘 배운 거 raw랑 읽기용으로 남겨줘", "이 용어 단어장에 추가하고 정리", "이 주제 글로 다듬어서 기록"
 argument-hint: "[til|wordbank|note|todo] [주제]  (생략 시 내용 보고 자동 판별)"
 user-invocable: true
@@ -11,25 +11,26 @@ disable-model-invocation: false
 
 정리할 내용을 받아 **두 버전으로 파생**한다. 핵심 원칙: MD는 기계가 읽기 좋은 포맷이고, 사람이 읽기 좋은 글은 따로 다듬어야 한다는 전제.
 
-| 버전 | 성격 | 위치 | 용도 |
-|---|---|---|---|
-| **raw** | 사용자가 준 내용을 **충실히** 보존(거의 그대로 + 최소 메타) | `raw/…` | 단일 진실·검색·AI 참조·아카이브 |
-| **readable** | 사람이 **읽기 좋게 재구성**(도입·소제목·예시·흐름) | `vault/…` (예: `TIL/` · `단어장/<분야>` · `회사/…`) | Docusaurus 사이트(`/docs`) 게시(읽기용) |
+| 버전 | 성격 | 위치 | 공개 | 용도 |
+|---|---|---|---|---|
+| **raw** | 사용자가 준 내용을 **충실히** 보존(거의 그대로 + 최소 메타) | **`C:\RAW-DOC\raw\…`** | **비공개**(private) | 단일 진실·검색·AI 참조·개인 아카이브 |
+| **readable** | 사람이 **읽기 좋게 재구성**(도입·소제목·예시·흐름) | **`C:\study\vault\…`** (예: `TIL/` · `단어장/<분야>` · `회사/…`) | **공개**(사이트) | 공유할 산출물만 — Docusaurus 사이트(`/docs`) 게시 |
 
-> 이 스킬은 기존 `til-note`·`wordbank`를 **대체**한다. 두 스킬이 하던 일(날짜별 학습기록·단어 누적)을 카테고리로 흡수하되, 항상 raw+readable 2층으로 남긴다.
+> **원칙**: raw는 **항상** 만든다(개인 원천, 비공개 RAW-DOC). readable은 **공유할 때만** 만든다(공개 사이트). 비공개로만 둘 내용은 raw(+ 필요 시 RAW-DOC 안에 읽기용 사본)까지만.
+> 이 스킬은 기존 `til-note`·`wordbank`를 **대체**한다. 두 스킬이 하던 일(날짜별 학습기록·단어 누적)을 카테고리로 흡수하되, raw는 RAW-DOC에 남긴다.
 
 ---
 
 ## 카테고리 (자동 판별 + 사용자 지정)
 
-콘텐츠는 **단일 볼트 `vault/`** (Docusaurus 단일 docs 트리, 폴더=카테고리)에 readable을 두고, raw는 `raw/`에 보관한다.
+readable은 공개 사이트 레포 `C:\study`의 **`vault/`**(Docusaurus docs 트리, 폴더=카테고리)에, raw는 비공개 레포 `C:\RAW-DOC`의 **`raw/`**에 둔다. 아래 경로에서 `vault/…`=`C:\study\vault\…`, `raw/…`=`C:\RAW-DOC\raw\…`.
 
-| 카테고리 | 언제 | readable 위치 | raw 위치 |
+| 카테고리 | 언제 | readable 위치 (public C:\study) | raw 위치 (private C:\RAW-DOC) |
 |---|---|---|---|
 | `til` | "오늘 배운 것"·날짜 기준 학습 기록 | `vault/TIL/YYYY-MM/YYYY-MM-DD.md` | `raw/til/YYYY-MM-DD.md` |
 | `wordbank` | 용어/단어 + 설명 누적 | `vault/단어장/<분야>.md` (분야 파일에 append) | `raw/wordbank.md` (append) |
 | `note` | 특정 주제를 정리한 글 | `vault/<카테고리경로>/<slug>.md` | `raw/notes/<slug>.md` |
-| `todo` | 금주/금일 할 일 + **마감(deadline) 할 일** (메인 페이지 위젯) | `data/todos.json` (repo 루트) | 없음(상태 데이터, raw 미생성) |
+| `todo` | 금주/금일 할 일 + **마감(deadline) 할 일** (메인 페이지 위젯) | `data/todos.json` (C:\study 루트) | 없음(상태 데이터, raw 미생성) |
 
 - `note`의 `<카테고리경로>`는 사용자의 주제 분류다(예: `회사/문서관리`). 해당 폴더가 없으면 만들고, 새 카테고리면 `_category_.json`(label 한글, 필요 시 `link.slug` ASCII)도 같이 생성한다 → 사이드바에 자동 추가(옵시디언식).
 - `todo`는 raw+readable 이중구조가 **아니다**(글이 아니라 상태). `data/todos.json`(repo 루트) 한 파일만 갱신하며, 메인 페이지 좌우 레이아웃 오른쪽 카드(📌 금주 / 🔥 금일 / ⏰ 마감)에 반영된다.
@@ -41,13 +42,19 @@ disable-model-invocation: false
 ## 동작 절차
 
 1. **입력 파악** — 사용자가 준 내용 + 카테고리 결정. 정보가 부족하면 1~2개만 간단히 되묻는다(주제·날짜 등).
-2. **공개 수준 선택** ⚠️ — 이 레포(chanyoze/TIL)는 **public**이라 `vault/`에 넣는 readable은 **GitHub 소스에선 무엇이든 그대로 공개**된다. 사이트 화면에서의 노출만 두 단계로 고를 수 있다(아래 §공개 수준). 기록 시작 전 **어디에 둘지 한 번 확인한다**: ① **공개**(잠금 없이 노출) ② **그냥 올림(잠금)**(하단 🔒 + 비밀번호 게이트). 민감해 보이는 내용(개인정보·회사기밀 등)이면 특히 확실히 짚고, **민감 정보는 잠금이어도 GitHub 소스엔 그대로 공개되니 애초에 올리지 않는다.** 사용자가 **아예 올리지 말라**면 vault에 쓰지 말고 로컬 보관 등 지시를 받는다. **공개 수준은 사용자가 직접 컨트롤한다 — 임의로 결정하지 않는다.**
-3. **raw 저장** — `raw/…`에 **충실 버전** 기록. 사용자의 표현을 보존하고, 상단에 frontmatter(생성일·출처·태그)만 덧붙인다. 군더더기 정리·재작성 금지.
-4. **readable 생성** — 같은 내용을 **읽기 좋게 재구성**해 볼트(`vault/…`)에 기록(아래 §readable 작성 규칙). 2단계에서 고른 공개 수준에 맞는 카테고리에 둔다(공개=일반 / 잠금=§공개 수준의 두 처리 적용).
+2. **공개 여부 선택** ⚠️ — 먼저 이 내용을 **공유할지** 정한다. raw는 항상 **비공개 RAW-DOC**에 남기고, readable(공개 사이트)은 **공유할 때만** 만든다.
+   - **비공개(개인)** → RAW-DOC에 raw만(필요 시 RAW-DOC 안 읽기용 사본). 사이트에 안 올라가고 진짜 비공개. 회사기밀(예: OTAT)·개인정보는 여기.
+   - **공유** → readable을 `C:\study\vault`에 올려 사이트 발행. ⚠️ chanyoze/TIL은 **public**이라 GitHub 소스에선 그대로 공개 — 사이트 화면 노출만 두 단계(아래 §공개 수준: ①공개 ②그냥 올림(잠금)). **민감 정보는 잠금이어도 소스가 공개되니 공유 대상에 넣지 않는다**(RAW-DOC에만).
+   - **공개 여부는 사용자가 직접 컨트롤한다 — 임의로 사이트에 올리지 않는다.**
+3. **raw 저장** — `C:\RAW-DOC\raw\…`에 **충실 버전** 기록. 사용자의 표현을 보존하고, 상단에 frontmatter(생성일·출처·태그)만 덧붙인다. 군더더기 정리·재작성 금지.
+4. **readable 생성**(공유 시만) — 같은 내용을 **읽기 좋게 재구성**해 `C:\study\vault\…`에 기록(아래 §readable 작성 규칙). 2단계에서 고른 공개 수준에 맞는 카테고리에 둔다(공개=일반 / 잠금=§공개 수준의 두 처리 적용).
 5. **단어장 자동 연계** 📖 — `til`/`note`면 본문에 처음 등장한 전문용어·약어를 추려 단어장에 없는 것만 추가 제안/반영한다(아래 §단어장 자동 연계).
-6. **상호 링크** — 양쪽 frontmatter에 짝 파일 경로를 적어 추적 가능하게 한다.
-7. **빌드 검증** 🔧 — 저장 후 `cd website && npm run build`를 돌려 frontmatter·`_category_.json`·`todos.json` 깨짐을 확인한다(특히 til frontmatter·todo JSON 문법). 실패하면 고치고 통과시킨 뒤에 커밋한다.
-8. **커밋·반영** — 파일들을 stage → 커밋 → push 하면 Docusaurus 배포 워크플로가 자동으로 사이트를 갱신한다(아래 §커밋). push 전 공개 게시를 한 번 더 확인했는지 점검.
+6. **상호 링크** — 양쪽 frontmatter에 짝 경로를 적어 추적 가능하게 한다. raw·readable이 **다른 레포**라 상대링크는 안 걸리니 **레포 표시 경로**로 적는다(raw엔 `readable: study:vault/…` 또는 사이트 URL, readable엔 `raw: RAW-DOC:raw/…`).
+7. **빌드 검증** 🔧 — readable을 만들었으면 `cd C:\study\website && npm run build`로 frontmatter·`_category_.json`·`todos.json` 깨짐을 확인한다. 실패하면 고치고 통과 후 커밋. (raw만 만든 경우 빌드 불필요.)
+8. **커밋·반영** — **레포별로 나눠** 커밋한다:
+   - raw → `C:\RAW-DOC`에서 commit(+push 시 Obsidian Git이 자동 동기화하기도 함).
+   - readable → `C:\study`에서 commit → push 하면 Docusaurus 배포 워크플로가 사이트를 갱신(아래 §커밋).
+   push 전 공개 대상이 맞는지 한 번 더 점검. (사용자가 "push까지" 명시할 때만 push.)
 
 ---
 
@@ -124,8 +131,8 @@ disable-model-invocation: false
 
 ## raw 작성 규칙 (충실)
 
-- 사용자 입력 원문 우선 보존. 오타·줄바꿈 정도만 정리.
-- frontmatter: `created: YYYY-MM-DD`, `category`, `tags`, `readable: ../<readable 경로>`.
+- 위치: **`C:\RAW-DOC\raw\…`** (private). 사용자 입력 원문 우선 보존, 오타·줄바꿈 정도만 정리.
+- frontmatter: `created: YYYY-MM-DD`, `category`, `tags`, `readable:`(공유했으면 `study:vault/<경로>` 또는 사이트 URL, 아니면 `없음`).
 - 재구성·요약 금지 — raw는 "원천"이다.
 
 ---
@@ -133,7 +140,7 @@ disable-model-invocation: false
 ## 파일 위치 규칙
 
 ```
-note/                          (= chanyoze/TIL 레포)
+C:\study                       (= chanyoze/TIL, public — 사이트 + readable)
 ├── vault/                     ← readable 단일 볼트 (Docusaurus가 /docs 로 서빙, 폴더=카테고리)
 │   ├── intro.md               ← 볼트 시작 문서
 │   ├── TIL/                   ← 날짜 학습기록 (/docs/TIL), 월별 폴더로 세분
@@ -143,13 +150,16 @@ note/                          (= chanyoze/TIL 레포)
 │   │   └── testing.md  frontend.md  ai.md  etc.md(도구·환경)  (분야별 append)
 │   └── <카테고리>/             ← 주제별 (예: 회사/문서관리/, _category_.json 라벨)
 │       └── <slug>.md
-├── raw/                       ← raw 버전 (사이트 비게시, 아카이브)
-│   ├── til/YYYY-MM-DD.md
-│   ├── wordbank.md
-│   └── notes/<slug>.md
 ├── data/
 │   └── todos.json             ← todo(금주/금일/마감) 한 파일. 사이트가 런타임 fetch → 배포 불필요(push만)
 └── website/                   ← Docusaurus 앱 (todo 외 콘텐츠 변경 시 자동 배포)
+
+C:\RAW-DOC                     (= chanyoze/RAW-DOC, private — 개인 보관함, Obsidian Git 동기화)
+├── raw/                       ← raw 버전 (비공개 아카이브)
+│   ├── til/YYYY-MM-DD.md
+│   ├── wordbank.md
+│   └── notes/<slug>.md
+└── <프로젝트>/<폴더>          ← 프로젝트 산출물 정션(예: cip-defg-saas/OTAT). 라이브 링크, 복제 없음
 ```
 
 - `raw/`·새 카테고리 폴더는 처음 사용 시 생성한다.
@@ -158,12 +168,13 @@ note/                          (= chanyoze/TIL 레포)
 
 ---
 
-## 커밋 (note 레포 규칙)
+## 커밋 (레포별)
 
-- 형식: `날짜 / 이름 / 요청자 / 1줄 요약` (이 레포는 **4-part**. 예: `2026-06-13 / 이찬호 / - / writedown: <주제> raw+readable 기록`).
-- raw + readable 두 파일을 함께 stage. `website/`·`node_modules`·로그는 제외.
+- 형식: `날짜 / 이름 / 요청자 / 1줄 요약` (**4-part**. 예: `2026-06-13 / 이찬호 / - / writedown: <주제> raw+readable 기록`). 양 레포 공통.
+- **레포별로 나눠 커밋**: raw → `C:\RAW-DOC`(private), readable → `C:\study`(public). 각 레포에서 해당 파일만 stage(`website/`·`node_modules`·로그 제외).
 - 한글 깨짐 방지: 메시지를 `.git/CMSG.txt`에 UTF-8로 쓰고 `git commit -F`. 첫 줄이 `YYYY-MM-DD /`로 시작하면 githook이 건드리지 않음.
-- push 후 사이트 갱신은 GitHub Actions가 자동 처리(1~2분). 사용자가 "push까지" 명시할 때만 push(아니면 커밋까지).
+- readable push 후 사이트 갱신은 GitHub Actions가 자동(1~2분). RAW-DOC은 Obsidian Git이 자동 동기화하기도 함. 사용자가 "push까지" 명시할 때만 push.
+- ⚠️ `C:\RAW-DOC`엔 프로젝트 산출물이 **정션**돼 있어 `git reset --hard`·`git clean` 등 파괴적 명령 금지(원본 프로젝트 파일 훼손). commit/push/pull만.
 
 ---
 
@@ -171,4 +182,4 @@ note/                          (= chanyoze/TIL 레포)
 
 - 이 스킬이 두 스킬의 역할을 흡수한다. `til` 카테고리 = 구 til-note, `wordbank` 카테고리 = 구 wordbank.
 - 단, 이제는 **항상 raw+readable 2버전**을 남긴다(기존엔 readable 한 버전만).
-- 구 스킬 제거는 사용자 승인 후. (정본은 `C:\study\note\skills\writedown`, 전역 미러는 `~/.claude/skills/writedown` — 수정 시 동기화.)
+- 구 스킬 제거는 사용자 승인 후. (정본은 `C:\study\skills\writedown`, 전역 미러는 `~/.claude/skills/writedown` — 수정 시 둘 다 동기화.)

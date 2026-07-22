@@ -9,5 +9,6 @@
     "build/",
     ".git/",
     "antigravity-sync/"
-  ]
+  ],
+  "defaultViewMode": "preview"
 }
