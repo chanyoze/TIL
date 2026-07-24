@@ -48,7 +48,22 @@
 | 접수전송(send) 시 | STTS_CD=`30` | `20` | [3299](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L3299) |
 | 추가 시 승인선 컬럼 세팅 | `APPRV_C/BD/A_USER_NO/NM` + `APPRV_*_TF='F'` (프로젝트권한 wdlProjAuth에서) | 동일하게 세팅되나 무의미 | [1416-1424](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L1416-L1424) |
 
-→ **SCNT seam 핵심**: 이 자리에서 060_003=T면 SCNT 초기상태(STS_CODE=10/20 + DEM 생성)로 분기. else(비승인) 경로로 두면 SCNT 현장이 "접수/20"에 머물러 승인이 안 걸림.
+→ ~~**SCNT seam 핵심**: 이 자리에서 060_003=T면 SCNT 초기상태(STS_CODE=10/20 + DEM 생성)로 분기. else(비승인) 경로로 두면 SCNT 현장이 "접수/20"에 머물러 승인이 안 걸림.~~
+
+> ### ✅ 검증 완료 (2026-07) — **위 우려는 outdated. §D seam 은 사실상 해소됨**
+> 위 문장은 SCNT 흐름이 완성되기 **전**에 쓴 예측이었다. 현재 코드로 전수 재확인한 결과:
+>
+> | 확인 항목 | 실제 (2026-07 코드) |
+> |---|---|
+> | 접수전송·취소 경로 | SCNT 는 `wbtnSend_onclick`·`wbtnCancel_onclick` **선두 early return 으로 차단**([3397·3446](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml)) → send 경로가 SCNT 엔 **해당 없음** |
+> | `STTS_CD=20` 방치 시 표시 | STATUS Case 가 `060_003='T'→'작성중'` 을 **접수/미접수보다 먼저** 판정 → 정상 |
+> | 편집 가능 여부 | `EDIT_TF` 가 `060_003='T'→'T'` → **편집 허용** 정상 |
+> | 승인 진행 가능 여부 | 팝업이 `fnIsScntRow` 로 정상 진입 → **승인 정상 진행**("승인이 안 걸림"은 사실 아님) |
+>
+> **실제로 남아 있던 갭은 라벨 하나뿐** — 평가서 추가 직후 클라이언트가 STATUS 를 `'접수'` 로 세팅해 **저장·재조회 전까지만** 불일치. → **2026-07 수정 완료**(SCNT 면 `'작성중'` 세팅, 재조회 SQL 값과 일치).
+>
+> ⚠️ **하지 말 것**: SCNT 라고 `STTS_CD` 에 **30~60 을 주면 안 된다.** 소급 판별(STTS 30~60 = 무조건 레거시)이 그 회차를 레거시로 오인해 SCNT 흐름이 깨진다 → **`20` 유지가 정답**.
+> ⚠️ 원안의 *"STS_CODE=10/20 + DEM 생성"* 표현도 현행과 다름 — 실제 상태 컬럼은 **`CFM_STS_CODE`**(REG/DEM/PROG/REJ/CMPL)이고, DEM 생성은 **승인 팝업의 저장(`createDemand`)** 시점이다.
 
 ## E. 승인 액션 서브시스템 (060=T 전제로만 동작)
 
@@ -65,18 +80,106 @@
 
 ## F. 수정/삭제/순서변경 잠금 — `060=T && EDIT_TF=F` (승인 진행중 잠금)
 
+> ### ✅ 조치 완료 (2026-07-24) — 공통 판정 `scwin.fnCheckEditLock` 으로 통일
+> 아래 표는 **조치 전 상태**의 기록이며, 라인번호도 그 시점 기준이라 현행과 어긋난다. 현행은 이 박스를 본다.
+
+### F-0. 재검증 결과 — SQL 은 이미 SCNT 대응 완료, 구멍은 **화면 게이트에만** 있었다
+
+`EDIT_TF` 산출 SQL([SfasRegAtRiskasmtRcptSql.xml](../../src/main/resources/sqlmap/mappers/sfas/SfasRegAtRiskasmtRcptSql.xml) `selectLstMain`, "수정가능여부" Case)은 **회차 궤도별로 이미 정확**했다.
+
+| 판정 순서 | 조건 | EDIT_TF |
+|---|---|---|
+| 1 | `STTS_CD = '30'` | `T` |
+| 2 | `STTS_CD In ('40','50','60')` | 자기 차례 결재자만 `T` |
+| 3 | `CFM_DEM_SN` 있음 + `CFM_STS_CODE In ('DEM','PROG','CMPL')` | **`F`** ← SCNT 잠금 |
+| 4 | `CFM_DEM_SN` 있음 (REG·REJ) | `T` ← 요청취소·반려하면 재편집 허용 |
+| 5 | `SFAS_OPT_060_003 = 'T'` (무라인) | `T` ← 작성중 |
+| 6 | `CHECK_TF = 'F'` | `F` (레거시 미접수) |
+
+**진짜 문제**: 화면 게이트가 전부 아래 모양이라, SCNT 현장(`060 = F`)에서는 `EDIT_TF='F'` 를 받고도 **if 안으로 들어가지 못해 그냥 통과**했다.
+
+```js
+} else if(EDIT_TF == "F") {
+    if(SFAS_OPT_060 == "T") {   // ← SCNT 현장은 060 = F 라 여기서 빠져나감
+        cips.msg.info(scwin.sMsg(...));
+        return false;
+    }
+}                                // ← 아무것도 안 하고 통과 = 잠금 무력화
+```
+
+셀 readOnly(`bEditImpsbl`)는 `EDIT_TF` 만 보므로 정상 동작했다. **그래서 "칸은 잠기는데 추가·삭제·순서변경·일괄수정은 다 되는" 상태**였다.
+
+### F-1. 조치 — 옵션을 보지 않고 `EDIT_TF` 만 본다
+
+| 신설 함수 | 역할 |
+|---|---|
+| `scwin.fnCheckEditLock(anRowIdx)` | 잠금 판정 **단일 지점**. `EDIT_TF != 'F'` 면 `true`, 잠겼으면 안내 후 `false`. **옵션을 보지 않는다** |
+| `scwin.fnEditLockMsg(anRowIdx)` | 안내 문구만 궤도별 분기. SCNT(`fnIsScntRow`)면 `CMPL`→"승인완료 상태…" / 그 외 단계·대기자 안내, 레거시면 기존 `sMsg` (빈 문자열이면 일반 문구로 폴백) |
+
+**배선한 지점 (5곳)** — 모두 `if(!scwin.fnCheckEditLock(...)) return false;` 한 줄로 통일
+
+| 지점 | 함수 |
+|---|---|
+| 추가/삽입 | `cips.dd.event.commonTrigger.addAndIns.onClickBefore` |
+| 삭제 | `scwin.deleteCommonCondition` |
+| 순서변경(up/down) | `scwin.upAndDown_onValidationAfter_callback` |
+| 일괄수정 진입 | `scwin.wbtnBdlUpdAll_onclick` |
+| 일괄수정 대상검증(단건) | `scwin.wbtnBdlUpd_onclick` 의 `rRows.forEach` |
+
+**부수 조치**
+
+- `upAndDown_onValidationAfter_callback` 이 통과 시 `undefined` 를 반환하던 것 → **`true` 명시**. (`cips.js` 규약은 *"false 가 리턴되면 이후 행위 취소"* 라 동작은 같지만 의도가 드러나지 않았음)
+- 일괄수정 다건 경로(*"선택한 내용 중 승인 내역이 있어…"*)는 원래부터 옵션 무관이라 **손대지 않음**.
+- **일괄수정(MAIN) 버튼은 SCNT 현장에서 감춘다** — 아래 F-1-1.
+- **일괄수정 팝업 높이**(060=T:290 / else:225) · **파라미터** · **콜백** · **팝업 파일 자체**는 **전부 미변경**. 버튼을 감춰 도달하지 않으므로 팝업에 SCNT 분기를 넣지 않았다.
+- `D_GB_CD`/`E_GB_CD`(안전팀장·현장소장) 블록도 미변경 — 팝업이 060=F 에서 해당 그룹을 이미 숨겨 `"B"` 가 나올 수 없다.
+
+### F-1-1. 일괄수정(MAIN) — SCNT 에서 버튼 감춤
+
+**팝업 전수 확인 결과**: `SfasPopRegAssesmentApplyAll` 의 `GB_CD="MAIN"` 분기는 나머지 행을 전부 `display:none` 으로 끄고 **사람 지정 3행만** 남긴다.
+
+| 옵션 | 남는 입력행 | 팝업 높이 |
+|---|---|---|
+| `060=T` | 공사팀장 · 안전팀장 · 현장소장 (승인선 지정) | 290 |
+| `060=F` (SCNT·미사용 공통) | **공사팀장 지정(`C_USER`) 1행** | 225 |
+
+SCNT 는 `C_USER_NM` 을 **목록에서도 숨기므로**(`!060 && !060_003`) 지정할 대상이 0개다. → **버튼 자체를 감추는 것**이 정답.
+
+| 지점 | 처리 |
+|---|---|
+| `scwin.optControl` | `wbtnBdlUpd.setStyle("display", bUseOpt060003 ? "none" : "")` — `wbtnRankStdd`·`wcpntGrpGrdCmt` 와 같은 방식 |
+| `scwin.wbtnBdlUpd_onclick` 선두 | `if(bUseOpt060003 === true) return;` — **단축키 `M`([rCustomShortcutKey](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L1051)) 방어**. `wbtnSend`(1)·`wbtnCancel`(2) 과 동일 패턴 |
+
+**메시지는 띄우지 않는다** — 버튼이 안 보이는 게 정상 상태이므로 안내할 대상이 없다. (`{sKey:'M'}` 은 권한 매핑이 아니라 단축키 매핑이므로 `setStyle` 로 감춰도 권한 제어와 충돌하지 않는다.)
+
+⚠️ **조사 중 확인한 죽은 코드**: 호출부 콜백([SfasRegAtRiskasmtRcpt.xml](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml)) 의 `J_GB_CD`·`STAN_MONTH_CD`·`MNG_DATE_*`·`APPRV_CMT_CD`·`Q_USER_CMT_CD`·`R_USER_CMT_CD`·`J_USER_CMT_CD` 분기는 **이 팝업이 반환하지 않는 키**다(팝업 `popChoice.onClickBefore` 반환 객체 전수 확인). 원래부터 죽은 코드이며 이번엔 손대지 않았다.
+
+> 참고 — 이 팝업(MAIN)에는 **현장소장의견·검토의견 같은 의견 항목이 아예 없다.** 혼용(레거시+SCNT) 시 의견 컬럼을 어떻게 보여줄지는 **외곽 그리드**의 문제이고, `APPRV_CMT` 는 이미 presence 기반(`060 || bHasLegacy`)으로 처리돼 있다([SoT §6](../현행/SCNT_구현방식_공유.md)).
+
+### F-2. ⚠️ 의도한 동작 변경 — 승인 미사용 현장의 레거시 잔여 회차
+
+옵션을 보지 않게 되면서, **`060=F && 060_003=F`(승인 미사용) 현장에 남아 있는 레거시 진행중 회차**(`STTS_CD` 40~60)도 이제 **잠긴다**. 이전에는 `060=F` 라 게이트를 통과했다.
+→ **소급 유지 원칙과 일치**하는 방향(회차는 자기가 시작한 방식으로 끝까지 간다)이라 의도적으로 이렇게 두었다. 승인을 껐다고 진행중이던 결재 회차의 잠금이 풀리면 안 된다.
+
+---
+
+<details>
+<summary>조치 전 기록 (라인번호는 2026-07 이전 기준 — 현행과 어긋남)</summary>
+
 | 지점 | 동작 | 참조 |
 |---|---|---|
-| 추가/삽입 전 | 060=T면 `sMsg` 안내 후 차단 | [1363-1366](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L1363-L1366) |
-| 삭제 조건 | `bUpdImpsbl && bUseOpt060` → 차단 | [1815](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L1815), [1824-1831](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L1824-L1831) |
-| 순서변경(up/down) | 060=T면 차단 | [1874-1877](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L1874-L1877) |
-| 일괄수정(BdlUpdAll) 진입 | 060=T면 차단 | [3401-3404](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L3401-L3404) |
-| 일괄수정(Main) 대상 검증 | 060=T면 차단 | [3609-3613](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L3609-L3613) |
-| 일괄수정 팝업 높이 | 060=T=290 / else=225 | [3619-3623](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L3619-L3623) |
-| 일괄수정 파라미터 | `SFAS_OPT_060` 팝업 전달 → `SfasPopRegAssesmentApplyAll`도 060 분기 | [3640](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L3640) |
-| 일괄수정 콜백 | 060=T면 `APPRV_C_USER_*` 세팅 / else `C_USER_*` | [3654-3664](../../src/main/webapp/wqxml/sfas/SfasRegAtRiskasmtRcpt.xml#L3654-L3664) |
+| 추가/삽입 전 | 060=T면 `sMsg` 안내 후 차단 | 1363-1366 |
+| 삭제 조건 | `bUpdImpsbl && bUseOpt060` → 차단 | 1815, 1824-1831 |
+| 순서변경(up/down) | 060=T면 차단 | 1874-1877 |
+| 일괄수정(BdlUpdAll) 진입 | 060=T면 차단 | 3401-3404 |
+| 일괄수정(Main) 대상 검증 | 060=T면 차단 | 3609-3613 |
+| 일괄수정 팝업 높이 | 060=T=290 / else=225 | 3619-3623 |
+| 일괄수정 파라미터 | `SFAS_OPT_060` 팝업 전달 → `SfasPopRegAssesmentApplyAll`도 060 분기 | 3640 |
+| 일괄수정 콜백 | 060=T면 `APPRV_C_USER_*` 세팅 / else `C_USER_*` | 3654-3664 |
 
 → SCNT는 "잠금" 여부를 DEM 진행상태로 판단해야 함. `EDIT_TF`/`sMsg`(APPRV_BD/A_USER_NM 참조)를 SCNT 단계정보 기반으로 교체.
+
+</details>
 
 ## G. 검토의견 필수 게이트 (승인 직전) — 060_001/060_002/092 연동
 
@@ -93,6 +196,7 @@
 
 1. **자동 무력화(별도 작업 불필요)**: A~G의 `060=T` 분기는 060=F가 되면 자동으로 안 탐. 레거시 승인 컬럼·버튼·잠금이 사라짐. ✅
 2. **반드시 SCNT 분기 삽입(seam)**: D(상태부여)·E(승인액션)·F(잠금판단)·G(검토의견게이트)는 else 경로가 "비승인"이라 **SCNT 경로를 새로 넣어야** 함. 안 넣으면 SCNT 현장이 승인 없는 "접수/20"에 방치됨.
+   - **D ✅ 해소**(§D 검증박스) · **F ✅ 조치완료**(§F-1 `fnCheckEditLock`) · E·G 는 승인패널/FE 게이트로 처리 — 진행 현황은 [SoT §6](../현행/SCNT_구현방식_공유.md) 이 단일 기준.
 3. **컬럼 재배치(A/B/C)**: 승인선 3컬럼(APPRV_C/BD/A_USER_NM)·의견 컬럼은 SCNT 승인패널로 이전할지, 그리드에 유지할지 결정 필요.
 4. **SQL 연동**: 버튼 노출 컬럼 `APPRV`/`APPRV_CNC`(SfasRegAtRiskasmtRcptSql 643~710)도 `060='T'` 기준 → SCNT는 이 산출식을 `060_003` 대응으로 확장 or SCNT 패널로 대체.
 
