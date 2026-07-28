@@ -269,11 +269,11 @@ STTS_CD=50 & 현장소장 → APPRV_CMT
 
 | # | 작업 | 비고 |
 |---|---|---|
-| 1 | **USETGT 등록 · 승인라인 정의** | ⭐ 기반 — 없으면 `selectStdStep` 빈 라인 = 승인 자체가 안 돎. 실동작 테스트 전제. 기존 sst 관리화면 활용 |
-| 2 | **§7 항목별 검토의견 FE 게이트** | 확정(승인요청 전 일괄, 060_001 A/B/C). 팝업 `fnValidateSynthOp` 옆 추가. 092=F 현장만 해당 |
-| 3 | 협력사 화면(`SfasRegAtRiskasmtSub`) SCNT 배선 | [TODO_협력화면_SCNT배선](../TO-BE/TODO_협력화면_SCNT배선.md) |
-| 4 | 다른 메뉴 조회/가져오기 화면 SCNT 대응 확인 | 접수화면 외 SCNT 회차 오표시 점검(F-2 파급) |
-| 5 | **옵션 admin + SQL 일괄수정** | §2.2 — **최대 리스크**(15~20파일). **맨 마지막** |
+| ~~-~~ | ~~USETGT 등록 · 승인라인 정의~~ | ✅ **완료** — 이미 프로비저닝(전 현장 4단계 기본라인 `LINE_SN 463`) |
+| ~~-~~ | ~~§7 항목별 검토의견 FE 게이트~~ | ✅ **완료(2026-07-28)** — 팝업 `fnValidatePerItemCmt`. 런타임 미검증 |
+| 1 | 협력사 화면(`SfasRegAtRiskasmtSub`) SCNT 배선 | [TODO_협력화면_SCNT배선](../TO-BE/TODO_협력화면_SCNT배선.md) |
+| 2 | 다른 메뉴 조회/가져오기 화면 SCNT 대응 확인 | 접수화면 외 SCNT 회차 오표시 점검(F-2 파급) |
+| 3 | **옵션 admin + SQL 일괄수정** | §2.2 — **최대 리스크**(15~20파일). **맨 마지막** |
 
 ---
 
@@ -304,6 +304,7 @@ STTS_CD=50 & 현장소장 → APPRV_CMT
   - **변형2 미채택**: "승인완료 직전 차단"은 레거시(검토하며 작성)에 더 가깝지만, "최종 단계 판별 + 완료시점 차단" 배선이 복잡하고 종합의견과 타이밍이 갈려 UX 불일치. SCNT 승인자가 회사·현장마다 달라 실무 일반화 불가 → 단순·명확한 변형1로 통일.
   - **차이**: 레거시는 승인자가 승인 중 작성 → SCNT는 작성자/검토자가 **승인요청 전 미리** 작성(종합의견과 동일 방식).
   - 실데이터: SCNT 두 현장(A0001·GC001) 다 092=T(종합의견)라 이 경로는 아직 미발현. 092=F+060_003=T 조합 시 발현.
+  - **✅ 구현 완료 (2026-07-28)** — [SfasPopRegRiskAssessmentConfirm.xml](../../src/main/webapp/wqxml/sfas/SfasPopRegRiskAssessmentConfirm.xml): oOptConfig 에 `sOpt060001`(A/B/C) 추가 · `fnValidatePerItemCmt`(092=F 이고 060_001≠A 이면 wdlCont 각 항목에 공사(`wdlConstrRvw`)·안전(`wdlSafRvw`) 검토의견 존재 확인, C 면 `PRIORITY='O'` 만) · `fnHasItemCmt` 헬퍼 · `fnRunAction` request 분기에 `fnValidateSynthOp` 다음으로 배선. 팝업 open 시 `fireEventCt("retrieve")` 가 검토의견 리스트를 로드하므로 FE 검증 안전. 문법검증(JS/XML) 통과, **런타임 미검증**(092=F+060_003=T 현장 배포 후 확인).
 
 ### 아직 확정 안 된 것
 
