@@ -19,3 +19,10 @@ sidebar_position: 3
 - **Maven Central**: Java/JVM 생태계의 중앙 의존성 저장소. Gradle·Maven이 라이브러리(jar)를 자동 다운로드하는 기본 출처.
 - **Maven 표준 디렉토리 레이아웃**: `src/main/java/`(소스), `src/main/resources/`(리소스), `src/test/java/`(테스트)로 구성하는 규약. Gradle도 동일하게 사용하며, 이 구조를 따르면 빌드 도구가 소스를 자동 인식한다.
 - **JRE**: Java Runtime Environment. 컴파일된 `.class` 파일을 실행만 시키는 환경. JDK에 내장되며, 일반 사용자가 "자바 설치"라고 부르는 것이 보통 이것.
+- **HttpMessageConverter**: HTTP 요청/응답 본문과 자바 객체를 서로 변환하는 Spring 인터페이스. JSON은 Jackson 구현체(`MappingJackson2HttpMessageConverter`)가 담당하며, Spring은 **Content-Type을 보고 어느 컨버터를 쓸지 고른다**. 멀티파트에서는 요청 전체가 아니라 개별 파트의 Content-Type을 본다.
+- **BOM**: Bill of Materials. 라이브러리 버전들을 한곳에 모아 선언한 명세. `dependencyManagement`로 import하면 개별 의존성에서 버전을 생략할 수 있다. BOM 해석이 실패하면 **버전이 하나도 배정되지 않아** 공개 저장소 라이브러리까지 함께 실패한다.
+- **APT**: Annotation Processing Tool. 컴파일 중에 애노테이션을 읽어 소스 코드를 생성하는 자바 기능. Lombok·MapStruct가 이 위에서 동작하므로, APT가 꺼져 있으면 생성 클래스가 없어 **컴파일은 되지만 런타임에 빈이 없다**.
+- **MapStruct**: 객체 간 매핑 코드를 컴파일 시점에 생성하는 라이브러리. `@Mapper` 인터페이스만 선언하면 구현체(`XxxImpl`)가 자동 생성된다. 리플렉션을 쓰지 않아 런타임 비용이 없다.
+- **Buildship**: Eclipse의 Gradle 통합 플러그인. `.classpath`에 jar를 나열하는 대신 Gradle이 계산한 클래스패스를 **컨테이너로 동적 주입**한다. 그래서 `.classpath`에 jar 항목이 안 보이는 것이 정상이다. 단 `gradlew eclipse` 태스크는 실행하지 않으므로 APT 설정 파일은 생성되지 않는다.
+- **jasypt**: Java Simplified Encryption. 설정 파일의 값을 암호화해 보관하는 라이브러리. `ENC(...)`로 감싼 값을 기동 시 마스터 비밀번호(보통 환경변수로 주입)로 복호화한다. 키가 없으면 복호화 실패가 **프로퍼티 바인딩 오류로 포장되어** 엉뚱한 항목 이름으로 나타난다.
+- **truststore**: "이 인증서는 신뢰한다"를 모아둔 파일(자바에서는 `KeyStore`). TLS 통신에서 상대 서버의 인증서를 검증할 때 쓴다. 형식(JKS/PKCS12)이 코드가 기대하는 것과 다르면 "Invalid keystore format"이 난다 — 최신 JDK의 `keytool` 기본값은 PKCS12다.
