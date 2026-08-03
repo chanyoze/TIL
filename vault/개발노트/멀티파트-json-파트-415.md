@@ -348,7 +348,39 @@ MockPart part = new MockPart("member", json.getBytes(StandardCharsets.UTF_8));
 | 설정 후 + 필수값 누락 | **400** — `@Valid` 유지 |
 | Jackson 교체 위치 / 앞쪽 컨버터 순서 | 유지 |
 
-마지막 줄이 중요하다. 누군가 나중에 `add(0, ...)`으로 바꾸면 **즉시 실패하는 회귀 방지 장치**가 된다.
+마지막 줄이 중요하다. 누군가 나중에 `add(0, ...)`으로 바꾸면 이 테스트가 즉시 실패한다.
+
+⚠️ **다만 테스트를 남길지는 별개의 결정이다.** 이 사례에서는 Swagger UI와 Postman으로 실동작을 확인한 뒤 테스트를 남기지 않기로 했다. 그러면 순서 제약을 지키는 것은 **주석뿐**이 된다. 실동작 확인은 *지금*을 보증하지만, 테스트가 막던 것은 *다음 사람의 수정*이라 성격이 다르다.
+
+테스트를 두지 않기로 했다면 최소한 아래 한 가지는 반드시 해야 한다.
+
+### 실행 순서를 명시적으로 고정하기
+
+`extendMessageConverters`는 등록된 **모든** `WebMvcConfigurer`를 차례로 호출한다(`WebMvcConfigurerComposite`). 그리고 그 목록은 `@Order`로 정렬된다.
+
+여기 함정이 있다. 나중에 공통 모듈이나 다른 설정이 Jackson 컨버터를 손대는 configurer를 추가하고 **그것이 우리 뒤에 실행되면**, 그쪽 코드가 `instanceof MappingJackson2HttpMessageConverter`로 우리 확장판을 찾아 평범한 컨버터로 되돌린다. **우리 확장판도 그 타입이기 때문이다.**
+
+```java
+@Order(Ordered.LOWEST_PRECEDENCE)   // 항상 마지막에 실행 → 교체가 덮이지 않는다
+@Configuration
+public class WebMvcConfig implements WebMvcConfigurer {
+```
+
+이걸 빠뜨리면 **415가 조용히 부활한다.** 컴파일도 기동도 정상이고, 오류는 외부 연계에서만 난다 — 이 노트에 반복해서 나오는 "조용한 실패"와 정확히 같은 부류다.
+
+### 문서 계층도 실제 전송으로 확인한다
+
+스펙에 `encoding`이 들어갔는지만 보면 부족하다. **문서 도구가 그 값을 실제로 쓰는지**를 봐야 한다. 브라우저 개발자도구의 Network에서 나간 요청의 원문을 확인하면 된다.
+
+```
+------WebKitFormBoundaryXXXX
+Content-Disposition: form-data; name="member"; filename="blob"
+Content-Type: application/json          ← encoding 이 적용된 결과
+```
+
+> 파트에 `filename="blob"`이 붙는 것은 encoding을 지정하면 Swagger UI가 그 파트를 파일처럼 전송하기 때문이다. 서버는 파트 헤더의 Content-Type만 보므로 처리에는 영향이 없다.
+
+이 줄이 **없어도 요청은 성공한다** — 서버 계층 조치가 받아주기 때문이다. 그래서 이 확인은 기능 검증이 아니라 **문서 정확성 검증**이다. 둘을 구분해야 "무엇이 아직 안 됐는지"를 정확히 말할 수 있다.
 
 ## 같이 정리할 것 두 가지
 
