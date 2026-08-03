@@ -1,8 +1,9 @@
 ---
 sidebar_label: "멀티파트 JSON 파트 415"
 sidebar_position: 7
-tags: [spring, multipart, requestpart, httpmessageconverter, gradle, jasypt, mapstruct, 로컬환경]
+tags: [spring, multipart, requestpart, httpmessageconverter, springdoc, gradle, jasypt, mapstruct, git-revert, 로컬환경]
 raw: RAW-DOC:raw/notes/2026-07-30-multipart-json-part-415-조치기록.md
+raw2: RAW-DOC:raw/notes/2026-08-03-multipart-json-part-415-2차조치.md
 ---
 
 # 멀티파트 요청에서 JSON 파트가 415를 내는 이유
@@ -132,7 +133,11 @@ Swagger UI는 OpenAPI 스펙을 읽어 요청을 조립한다. 스펙에 `encodi
 
 바꿔 말하면 이 방법은 **"클라이언트가 헤더를 붙이게 만드는" 우회**이고, 통제 가능한 클라이언트가 Swagger뿐일 때만 완결된다.
 
-### 채택한 방법 — `byte[]`로 받아 직접 역직렬화
+### 1차 조치 — `byte[]`로 받아 직접 역직렬화 (뒤에 철회)
+
+> ⚠️ **이 방법으로 먼저 조치했다가 "너무 복잡하다"는 피드백을 받고 되돌렸다.**
+> 최종 채택안은 아래 [2차 조치](#2차-조치--컨버터가-파트를-수용하게-만들기)다.
+> 원리 자체는 유효하고 판단 근거로 남길 가치가 있어 지우지 않았다.
 
 ```java
 // before
@@ -192,6 +197,159 @@ private <T> T readJsonPart(byte[] abJson, Class<T> aClass, String asPartName) {
 
 ⚠️ 대신 **검증 실패 시 응답 본문 형태가 바뀐다.** 기존에는 `MethodArgumentNotValidException` 핸들러가, 이제는 공통 예외 핸들러가 응답을 만든다. 정상 경로는 동일하지만 **오류 응답은 계약 변경**이므로 API 소비자에게 알려야 한다.
 
+---
+
+## 2차 조치 — 컨버터가 파트를 수용하게 만들기
+
+1차 조치는 동작했지만 **"컨트롤러가 복잡해진다"** 는 피드백을 받았다. 타당한 지적이다. 파싱 헬퍼·`ObjectMapper`/`Validator` 주입·수동 검증이 엔드포인트마다 따라붙고, `@Valid`가 죽어 오류 응답 계약까지 바뀐다.
+
+그래서 **415가 나는 지점 자체를 없애는 쪽**으로 다시 조치했다.
+
+### 되돌리기 — 공유 브랜치라면 `revert`
+
+1차 조치는 이미 공유 브랜치에 push됐고 그 위에 다른 사람의 커밋이 올라와 있었다. 이 조건에서 히스토리 재작성(reset+force push, rebase)은 **타인의 커밋을 날리거나 그 브랜치를 받아둔 전원이 로컬을 손봐야 한다.** `revert`가 거의 항상 정답이다.
+
+`revert`는 기존 커밋을 지우지 않고 **반대 방향 패치를 담은 새 커밋을 맨 위에 쌓는다.** 두 커밋이 서로 다른 파일을 건드렸다면 충돌도 없다.
+
+```bash
+git pull --ff-only            # 뒤처져 있으면 push가 거부된다
+git revert -n <되돌릴 커밋>    # -n: 커밋 메시지를 직접 쓰기 위해 분리
+git commit -m "..."
+
+# 검증은 눈으로 보지 말고 diff로 — 비어야 정상
+git diff <조치 이전 커밋> HEAD -- <해당 파일>
+```
+
+> IDE(Eclipse/EGit)의 **Revert Commit**은 누르는 순간 **커밋까지 자동 생성**한다. 스테이징만 되는 게 아니다. 메시지 규칙이 있다면 Git Staging의 **Amend**로 고친다(push 전에만).
+
+### 문제를 어디서 없앨 것인가
+
+앞에서 본 대로 415는 "파트에 Content-Type이 없음 → `octet-stream`으로 간주 → DTO로 바꿀 변환기 없음"에서 온다. 1차 조치는 **파라미터 타입을 바꿔** 변환기 선택을 회피했다. 2차 조치는 **변환기 쪽을 넓혀** `octet-stream`도 JSON으로 읽게 한다.
+
+```java
+@Configuration
+public class AppWebMvcConfig implements WebMvcConfigurer {
+
+    @Override
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+        for (int i = 0; i < converters.size(); i++) {
+            if (converters.get(i) instanceof MappingJackson2HttpMessageConverter c) {
+                converters.set(i, new OctetStreamTolerantJsonConverter(c.getObjectMapper()));
+                break;                       // ← set(i, ...) 이지 add(0, ...) 이 아니다
+            }
+        }
+    }
+
+    static class OctetStreamTolerantJsonConverter extends MappingJackson2HttpMessageConverter {
+        OctetStreamTolerantJsonConverter(ObjectMapper objectMapper) {
+            super(objectMapper);
+            setSupportedMediaTypes(List.of(
+                    MediaType.APPLICATION_JSON,
+                    new MediaType("application", "*+json"),
+                    MediaType.APPLICATION_OCTET_STREAM));   // ← 415를 없애는 한 줄
+        }
+
+        @Override
+        public boolean canWrite(Class<?> clazz, MediaType mediaType) {
+            if (mediaType != null && MediaType.APPLICATION_OCTET_STREAM.equalsTypeAndSubtype(mediaType)) {
+                return false;                // 읽기만 확장, 쓰기는 원래대로
+            }
+            return super.canWrite(clazz, mediaType);
+        }
+    }
+}
+```
+
+**컨트롤러는 한 줄도 안 바뀐다.** `@RequestPart @Valid DTO` 원형이 살아 있고, 따라서 `@Valid`도 오류 응답 계약도 그대로다 — 1차 조치의 유일한 부작용이 사라진다.
+
+### 반드시 지켜야 할 두 가지
+
+이걸 틀리면 **415는 고쳐지지만 다른 기능이 깨진다.**
+
+**1. 맨 앞에 끼워넣지 말고 제자리에서 교체한다**
+
+기본 컨버터 등록 순서는 이렇다(`WebMvcConfigurationSupport.addDefaultHttpMessageConverters`).
+
+```
+ByteArray → String → Resource → ResourceRegion → Form → … → Jackson
+```
+
+앞쪽 컨버터들은 **대상 타입**으로 먼저 매칭된다(ByteArray는 `byte[]`만, String은 `String`만). Jackson을 `add(0, ...)`으로 맨 앞에 두면 `@RequestPart byte[]`나 파일 다운로드가 Jackson으로 넘어가 깨진다. **기존 Jackson이 있던 인덱스에 그대로 교체**해야 한다.
+
+**2. `canWrite`에서 `octet-stream`을 제외한다**
+
+지원 형식에 넣기만 하면 `octet-stream`이 **응답 협상 후보**가 된다. `Accept: application/octet-stream` 요청에 JSON 본문이 실려 나갈 수 있다. 그런데 이미 등록된 인스턴스에는 `canWrite`를 덧씌울 수 없으므로 — **서브클래싱이 강제된다.** 이게 이 방식의 실제 비용이다.
+
+### 대가
+
+적용 범위 안의 **모든 엔드포인트**에서 `@RequestBody DTO`에 `octet-stream`을 보내면 이전엔 415였는데 이제 JSON 파싱을 시도한다(실패 시 400). **잘못된 Content-Type을 조용히 받아주는 방향의 완화**이고, 이게 유일한 비용이다.
+
+그래서 **어느 범위에 넣느냐가 판단의 전부**다. 공통 모듈에 넣으면 그 모듈을 쓰는 모든 서비스가 폭발 반경에 들어간다. 서비스 하나에만 넣으면 거기서 멈춘다.
+
+> 적용 전에 **공통 모듈이 Jackson 컨버터를 이미 커스터마이징하는지** 확인해야 한다. `extendMessageConverters`/`configureMessageConverters`/`Jackson2ObjectMapperBuilderCustomizer`를 grep해 0건이면 교체로 잃는 설정이 없다. `ObjectMapper`는 기존 인스턴스에서 넘겨받으므로 그쪽 설정은 어차피 보존된다.
+
+### 문서 계층도 같이 — 다만 자동으로
+
+앞에서 "문서 계층만으로는 부족하다"고 했지만, **불필요하다는 뜻은 아니다.** 서버가 받아주더라도 Swagger UI가 헤더를 안 붙이면 문서와 실제가 어긋난 채로 남는다.
+
+엔드포인트마다 `@Encoding`을 손으로 붙이면 파라미터 레벨 `@Schema`와 충돌하므로, **문서 생성 시점에 일괄 주입**하는 편이 안전하다.
+
+```java
+@Bean
+public GlobalOperationCustomizer multipartJsonPartEncodingCustomizer() {
+    return (operation, handlerMethod) -> {
+        // multipart 요청 본문의 비파일 @RequestPart 파트에
+        // encoding.<파트>.contentType = application/json 을 채운다
+        // 이미 지정된 파트는 건드리지 않는다 → 개별 @Encoding 선언이 우선
+    };
+}
+```
+
+> `OperationCustomizer`가 아니라 **`GlobalOperationCustomizer`** 로 선언해야 설정 파일에 정의한 API 그룹 전체에 적용된다.
+
+여기서 **판별 로직이 코드의 절반**을 차지한다. 무턱대고 모든 비파일 파트에 `application/json`을 붙이면 `@RequestPart("siteCode") String` 같은 단순값 파트까지 JSON으로 표시돼 **문서가 거짓이 된다.**
+
+```java
+if (partType.isArray())          partType = partType.getComponentType();
+else if (Collection.class...)    partType = 제네릭 첫 인자;
+
+if (MultipartFile | Part | Resource) return false;      // 파일 파트
+return !BeanUtils.isSimpleValueType(partType);          // String·숫자·enum·byte[] 제외
+```
+
+### 두 방식 비교
+
+| | 1차: `byte[]` + 직접 파싱 | 2차: 컨버터 확장 |
+|---|---|---|
+| 컨트롤러 | 엔드포인트마다 수정 | **무변경** |
+| `@Valid` | 수동 대체 필요 | **유지** |
+| 오류 응답 계약 | **바뀜** (통보 필요) | 안 바뀜 |
+| 영향 범위 | 해당 엔드포인트만 | 적용 범위 전체 (완화) |
+| 되돌리기 | 기존 파일 수정분 revert | **파일 삭제로 끝** |
+
+**되돌리기 난이도까지 조치 방식의 평가 항목이다.** 1차는 기존 파일 본문을 60여 줄 고쳐 revert가 필요했고, 2차는 파일 추가뿐이라 지우면 원상복구된다.
+
+### 검증 — 문서 도구와 무관함을 증명하기
+
+"Swagger에서만 고쳐진 것 아니냐"는 의심은 **테스트로 답할 수 있다.** `MockMvc`는 HTTP 요청을 직접 조립하므로 Swagger·springdoc이 전혀 개입하지 않는다.
+
+```java
+MockPart part = new MockPart("member", json.getBytes(StandardCharsets.UTF_8));
+// ← Content-Type 을 일부러 붙이지 않음
+```
+
+같은 요청을 **설정 전/후 컨버터 목록으로 각각** 태워 보면 결과가 갈린다.
+
+| 조건 | 결과 |
+|---|---|
+| 설정 전 + 파트 CT 없음 | **415** — 버그 재현 |
+| 설정 후 + 파트 CT 없음 | **200**, 한글 보존 |
+| 설정 후 + 파트 CT `application/json` | **200** — 기존 클라이언트 무영향 |
+| 설정 후 + 필수값 누락 | **400** — `@Valid` 유지 |
+| Jackson 교체 위치 / 앞쪽 컨버터 순서 | 유지 |
+
+마지막 줄이 중요하다. 누군가 나중에 `add(0, ...)`으로 바꾸면 **즉시 실패하는 회귀 방지 장치**가 된다.
+
 ## 같이 정리할 것 두 가지
 
 **`consumes`에서 `application/json` 제거**
@@ -220,11 +378,16 @@ consumes = MediaType.MULTIPART_FORM_DATA_VALUE
 
 | 방안 | 판정 |
 |---|---|
-| 공통 모듈의 Jackson 변환기에 `octet-stream` 지원 추가 | 기각. 그 모듈을 쓰는 **모든 서비스**에서 Jackson이 모든 octet-stream 본문을 자기 담당으로 주장한다. 메서드 두 개를 위해 플랫폼 전체를 폭발 반경에 넣는 것 |
-| `@Encoding`만 적용 | 단독 불충분(위 참조) |
+| **공통 모듈**의 Jackson 변환기에 `octet-stream` 지원 추가 | 기각. 그 모듈을 쓰는 **모든 서비스**에서 Jackson이 모든 octet-stream 본문을 자기 담당으로 주장한다. 메서드 두 개를 위해 플랫폼 전체를 폭발 반경에 넣는 것 |
+| **서비스 하나**의 Jackson 변환기에 `octet-stream` 지원 추가 | **2차 조치로 채택.** 위와 같은 기법이지만 범위가 다르다 |
+| `@Encoding`만 적용 | 단독 불충분(위 참조). 2차 조치에서 서버 조치와 **함께** 적용 |
 | `@RequestPart String` + 파싱 | charset 리스크 |
 | 공통 모듈에 옵트인 커스텀 애노테이션 + `HandlerMethodArgumentResolver` | 케이스가 두 곳뿐이라 보류. 공통 모듈 수정은 버전업 → 배포 → 각 서비스 의존성 갱신 사이클 비용이 붙는다 |
-| 공통 모듈 springdoc 설정에 비파일 `@RequestPart` 자동 encoding `OperationCustomizer` | **유력**. 문서 생성만 바꿔 런타임 리스크가 0이고, 앞으로 생길 동일 케이스를 일괄 해결한다. 다음 정기 릴리스 후보 |
+| 비파일 `@RequestPart` 자동 encoding `OperationCustomizer` | **2차 조치로 채택**(서비스 로컬). 공통 모듈로 올리는 것은 여전히 후보 |
+
+⚠️ 위 표의 첫 두 줄을 눈여겨볼 만하다. **같은 기법인데 범위만 다르고 판정이 반대다.**
+
+1차 조치 때는 "Jackson 변환기 확장 = 기각"이라고만 적어뒀다가, 2차 조치를 검토할 때 스스로 만든 기록에 막힐 뻔했다. **기각 사유는 반드시 적용 범위와 함께 적어야 한다** — 범위가 빠지면 기법 자체가 금지된 것처럼 읽힌다.
 
 ## 대안 하나 — 애초에 JSON 파트를 쓰지 않는 방법
 
@@ -247,10 +410,12 @@ consumes = MediaType.MULTIPART_FORM_DATA_VALUE
 
 **판단 기준은 통제 불가능한 클라이언트가 이미 붙어 있는지**다.
 
-- 이미 JSON 파트 규격으로 연동이 끝났다 → `byte[]` 방식. 규격을 지키므로 클라이언트 수정이 0이다
+- 이미 JSON 파트 규격으로 연동이 끝났다 → 파트를 그대로 받는 방식. 규격을 지키므로 클라이언트 수정이 0이다
 - 아직 연동 전이거나 규격 협의가 가능하다 → **`@ModelAttribute`가 낫다.** 코드가 더 적고, `@Valid`가 살고, 오류 응답 계약도 그대로다
 
 새 API를 설계하는 중이라면 처음부터 후자를 고려할 만하다.
+
+> 이 사례에서는 **"연동 규격을 상대와 다시 협의하지 않는다"** 는 결정이 나와 `@ModelAttribute`가 후보에서 빠졌다. 기술적으로는 가장 단순한 답이었지만, **기술 외적 제약이 선택지를 지우는 것이 정상이다.** 그 제약을 먼저 확인하지 않으면 구현해놓고 되돌리게 된다 — 실제로 한 번 그랬다.
 
 ---
 
@@ -401,10 +566,36 @@ IDE 실행 구성(Boot Dashboard 등)은 IDE가 컴파일한 출력 디렉터리
 
 **오류·경고가 없었던 이유**: 인터페이스는 존재하니 컴파일은 통과하고, 구현체는 **런타임에만** 필요하다.
 
-**조치 두 가지**
+**조치 세 가지**
 
-1. **빌드 도구로 실행한다** — `gradlew bootRun`. Gradle은 APT를 정상 수행하므로 문제를 우회한다. 가장 간단하다
-2. **IDE 쪽 APT를 설정한다** — `gradlew cleanEclipse eclipse`로 `.factorypath`와 APT 설정을 생성한 뒤 IDE 새로고침. 단 `cleanEclipse`가 IDE 메타데이터를 지우므로 **IDE에서 프로젝트를 닫고** 실행하는 편이 안전하다
+1. **빌드 도구로 실행한다** — `gradlew bootRun`. Gradle은 APT를 정상 수행하므로 문제를 우회한다. 가장 간단하지만 IDE 실행 기능을 포기하는 것이다
+2. **IDE 쪽 APT를 수동 생성한다** — `gradlew eclipse`로 `.factorypath`와 APT 설정을 만든 뒤 IDE 새로고침 + 전체 Clean(APT는 전체 재빌드 때 돈다)
+3. **빌드 스크립트에 동기화 훅을 건다** — 아래. **유일한 영구 해결책이다**
+
+### 2번은 왜 임시방편인가
+
+이 함정은 한 번 고쳐도 **조용히 재발한다.** 세 가지 이유가 있다.
+
+- **개인 PC에만 적용된다.** `.factorypath`·`.settings`는 보통 `.gitignore` 대상이라 다른 사람은 새 clone에서 똑같이 겪는다
+- **조용히 썩는다.** `.factorypath`에는 프로세서 jar의 **절대경로와 버전**이 박힌다. 프로세서를 BOM에서 버전 없이 받는 구조라면 BOM이 올라가는 순간 없는 파일을 가리키게 되고, **APT가 소리 없이 멈춘다.** 컴파일은 통과하고 런타임에만 빈이 없다고 죽는다 — 처음 증상과 똑같이
+- **덮어써진다.** IDE의 Gradle 새로고침·재import·`cleanEclipse` 중 아무거나 하면 날아간다
+
+⚠️ 그리고 `gradlew eclipse`는 `.classpath`도 다시 쓴다. Gradle IDE 플러그인으로 프로젝트를 가져온 상태라면 **의존성 컨테이너 항목이 사라지고 jar 직접 나열 방식으로 바뀐다.** 실행 전에 백업해두고, APT 파일만 남긴 뒤 `.classpath`는 되돌리는 편이 안전하다.
+
+### 3번 — 빌드 스크립트 한 줄
+
+Gradle의 `EclipseModel`에는 **IDE가 프로젝트를 동기화할 때 실행할 태스크**를 지정하는 API가 있다.
+
+```gradle
+eclipse {
+    synchronizationTasks 'eclipseClasspath'   // 동기화 때마다 자동 실행
+    // autoBuildTasks 'someTask'              // 자동 빌드 때 실행할 것이 있다면
+}
+```
+
+이러면 `.factorypath`를 만드는 로직이 **import·새로고침 때마다 현재 의존성 버전으로 재생성된다.** 절대경로가 썩는 문제도, 팀원이 따로 조치해야 하는 문제도 같이 사라진다.
+
+> 이 사례에서 흥미로웠던 점: 빌드 스크립트에 `.factorypath` 생성 로직이 **이미 들어 있었다.** 누군가 만들어뒀는데 **실행 트리거만 빠져 있던** 것이다. 증상만 보고 개인 PC를 고치면 그 사실을 영영 모른다. **"왜 이 로직이 있는데 안 돌지?"를 한 번 물어보면 임시방편과 영구 해결이 갈린다.**
 
 ⚠️ **`build`와 `bootRun`은 다르다.** `build`는 컴파일·테스트·아카이브까지만 하고 **서버를 띄우지 않는다.** 서버 실행은 `application` 그룹의 `bootRun`이다.
 
@@ -478,3 +669,19 @@ ZzzSmokeTest               > initializationError   ← DefaultCacheAwareContextL
 > **오류가 수천 개라도 원인은 하나일 수 있고, 오류가 한 개라도 원인은 두 층일 수 있다.**
 
 빨간줄 수천 개는 BOM 하나였고, 415 한 개는 문서 계층과 서버 계층 두 곳에 걸쳐 있었다. **오류 개수를 원인 개수의 힌트로 쓰지 않는 것**이 두 상황 모두에서 옳았다.
+
+## 되돌리기 쉬움도 설계 평가 항목이다
+
+이 노트가 1차와 2차로 나뉜 이유이기도 하다.
+
+같은 문제를 두 번 고쳤는데, 첫 번째는 **기존 파일 본문을 60여 줄 수정**했고 두 번째는 **파일 몇 개를 추가**했을 뿐이다. 동작은 둘 다 정상이었지만 철회 비용이 전혀 달랐다.
+
+| | 기존 파일 수정 | 파일 추가 |
+|---|---|---|
+| 철회 방법 | `revert` 커밋 + 검증 | 파일 삭제 |
+| 공유 브랜치에 push된 뒤 | 타인 커밋과의 관계를 따져야 함 | 무관 |
+| 리뷰어가 봐야 할 것 | 변경 전후 대조 | 새 파일 전체 |
+
+**"코드가 몇 줄인가"보다 "잘못됐을 때 몇 분에 되돌리는가"가 실무에서 더 자주 문제가 된다.** 특히 남의 코드가 이미 위에 쌓인 공유 브랜치에서는 그렇다.
+
+그리고 되돌린 뒤에 남는 기록도 중요하다 — **기각 사유는 적용 범위와 함께 적어야 한다.** "이 기법은 기각"이라고만 써두면, 범위만 바꾸면 성립하는 같은 기법을 다음에 스스로 막는다.

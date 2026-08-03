@@ -26,3 +26,6 @@ sidebar_position: 3
 - **Buildship**: Eclipse의 Gradle 통합 플러그인. `.classpath`에 jar를 나열하는 대신 Gradle이 계산한 클래스패스를 **컨테이너로 동적 주입**한다. 그래서 `.classpath`에 jar 항목이 안 보이는 것이 정상이다. 단 `gradlew eclipse` 태스크는 실행하지 않으므로 APT 설정 파일은 생성되지 않는다.
 - **jasypt**: Java Simplified Encryption. 설정 파일의 값을 암호화해 보관하는 라이브러리. `ENC(...)`로 감싼 값을 기동 시 마스터 비밀번호(보통 환경변수로 주입)로 복호화한다. 키가 없으면 복호화 실패가 **프로퍼티 바인딩 오류로 포장되어** 엉뚱한 항목 이름으로 나타난다.
 - **truststore**: "이 인증서는 신뢰한다"를 모아둔 파일(자바에서는 `KeyStore`). TLS 통신에서 상대 서버의 인증서를 검증할 때 쓴다. 형식(JKS/PKCS12)이 코드가 기대하는 것과 다르면 "Invalid keystore format"이 난다 — 최신 JDK의 `keytool` 기본값은 PKCS12다.
+- **OpenAPI**: REST API의 엔드포인트·파라미터·응답 형식을 기계가 읽을 수 있게 기술하는 표준 명세(구 Swagger 명세). 이 명세를 읽어 문서 화면을 그리고 요청을 조립해 주는 도구가 Swagger UI다. **명세를 읽는 것은 문서 도구뿐이므로, 명세만 고쳐도 외부 클라이언트의 요청 형식은 바뀌지 않는다.**
+- **springdoc**: Spring 애플리케이션의 컨트롤러 애노테이션을 스캔해 OpenAPI 명세를 자동 생성하는 라이브러리. `@Encoding`·`@Content`·`@Schema` 같은 애노테이션을 읽으며, `OperationCustomizer` 빈으로 생성 결과를 후처리할 수 있다(모든 API 그룹에 적용하려면 `GlobalOperationCustomizer`).
+- **콘텐츠 협상 (Content Negotiation)**: 클라이언트의 `Accept` 헤더와 서버가 만들 수 있는 형식을 대조해 응답 형식을 정하는 절차. 요청 쪽에서는 `Content-Type`을 보고 어떤 `HttpMessageConverter`로 본문을 읽을지 고른다. 컨버터의 지원 형식 목록을 넓히면 **읽기뿐 아니라 응답 협상 후보까지 늘어나므로** 쓰기 쪽은 따로 막아야 할 수 있다.

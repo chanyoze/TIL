@@ -20,3 +20,4 @@ sidebar_position: 1
 - **GitHub Pages**: 저장소의 정적 파일(HTML 등)을 무료로 웹 호스팅해 주는 기능. 다운로드/문서 페이지에 사용.
 - **GitHub Releases**: 버전 태그에 맞춰 빌드 산출물(zip 등)을 첨부·배포하는 기능. `/latest/download/` 고정 링크를 제공한다.
 - **재현성 (Reproducibility)**: 사람·PC·환경이 달라도 동일한 빌드 결과가 나오는 성질. toolchain·Wrapper·의존성 고정으로 확보한다.
+- **revert (git)**: 기존 커밋을 지우지 않고 **반대 방향 패치를 담은 새 커밋을 쌓아** 효과만 상쇄하는 명령. 히스토리를 재작성하는 `reset`+force push와 달리 다른 사람의 커밋과 로컬 저장소를 흔들지 않아, **이미 공유 브랜치에 push된 커밋을 되돌릴 때의 기본 선택지**다. 되돌린 것을 다시 살리려면 revert 커밋을 또 revert하면 된다.
