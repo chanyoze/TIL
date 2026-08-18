@@ -1,21 +1,8 @@
 {
   "updated": "2026-08-19",
-  "week": [
-    { "text": "하네스 엔지니어링·바이브 코딩 면접 Q&A 정리 (포폴 About의 AI R&D 문장 대비)", "done": false },
-    { "text": "포트폴리오 인쇄 미세조정 — Ctrl+P로 4.6 페이지 수·After 코드블록 결합 확인", "done": false },
-    { "text": "CIP-HP Vue SPA 이어가기 (7/22 이후 중단 — admin 프로토타입까지 완료 상태)", "done": false },
-    { "text": "면접 복기 기록 — 실제로 나온 질문·막힌 지점을 STUDY-GUIDE에 반영", "done": false }
-  ],
+  "week": [],
   "today": [
-    { "text": "면접 대비 문서 3편 정독 (핵심 스크립트 → 숫자 암기표 → 예상 질문)", "done": false },
-    { "text": "30초·2분 설명 안 보고 소리 내어 말해보기", "done": false },
-    { "text": "STUDY-GUIDE §13 반성회 + INTERVIEW-PREP Q12 읽기 — \"아쉬운 점은?\" 대비 (RAW-DOC)", "done": false },
-    { "text": "모의 면접 1회 — Claude가 면접관 역할로 Q 던지고 꼬리질문까지", "done": false },
-    { "text": "자가 점검 체크리스트 15항목 통과 확인 (막히는 항목만 되짚기)", "done": false }
+    { "text": "모의 면접 준비 — Claude가 면접관 역할로 Q 던지고 꼬리질문까지", "done": false }
   ],
-  "deadlines": [
-    { "text": "아리닷에이아이 면접", "due": "2026-08-20", "done": false },
-    { "text": "라이브 데모 URL 200 확인 — 죽었으면 Docker 기동 + 터널 재발급 + README 두 곳 갱신", "due": "2026-08-20", "done": false },
-    { "text": "모의 면접 마치기 (면접 전날까지)", "due": "2026-08-19", "done": false }
-  ]
+  "deadlines": []
 }
