@@ -1,0 +1,1 @@
+{ "label": "📊 Binance 운영 대시보드 (2026-08)", "position": 4, "link": { "type": "generated-index", "slug": "/toy/binance-ops", "description": "Binance 실시간 수집 파이프라인 + 운영 대시보드. 데이터에 구멍이 생기면 스스로 감지해 메우는 자가 치유 설계와, 그 테스트를 다시 테스트한 변이 검증. TypeScript · PostgreSQL · Next.js (2026-08)" } }
