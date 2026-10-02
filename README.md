@@ -27,7 +27,7 @@ vault/             ← 게시용 문서(readable). 폴더=카테고리, Docusaur
 raw/               ← 원본 보관(archival). 사이트 비게시
 data/todos.json    ← To-Do 데이터. 사이트가 런타임 fetch → 변경 시 재배포 불필요
 website/           ← Docusaurus 앱
-skills/writedown/  ← 입력 스킬 정본(SKILL.md)
+(writedown 스킬 정본은 2026-09-01 부터 private 저장소 RAW-DOC 의 skills/writedown)
 ```
 
 ## 📝 writedown 스킬 (구 til-note · wordbank 통합)
