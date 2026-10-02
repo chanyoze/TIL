@@ -22,28 +22,27 @@
 vault/             ← 게시용 문서(readable). 폴더=카테고리, Docusaurus가 /docs로 서빙
   intro.md           시작하기(볼트 소개 + 로드맵)
   TIL/YYYY-MM/       날짜별 학습기록 (제목 양식 "YYYY-MM-DD / 내용")
-  단어장/<분야>.md    분야별 용어집 (CI/CD·Java·AI·프론트엔드·…)
+  단어장/<분야>.md    분야별 용어집 (2026-09-11 신규 작성 중단, 기존 문서만 유지)
   회사/ · 토이프로젝트/  주제별 노트
-raw/               ← 원본 보관(archival). 사이트 비게시
 data/todos.json    ← To-Do 데이터. 사이트가 런타임 fetch → 변경 시 재배포 불필요
 website/           ← Docusaurus 앱
 (writedown 스킬 정본은 2026-09-01 부터 private 저장소 RAW-DOC 의 skills/writedown)
 ```
 
-## 📝 writedown 스킬 (구 til-note · wordbank 통합)
+## 📝 writedown 스킬 (구 til-note 통합)
 
-입력 하나를 **raw(원본 보관) + readable(사이트 게시용)** 두 버전으로 갈라 기록하는 통합 지식 입력 스킬. 기존 `til-note`(날짜별 학습기록)·`wordbank`(단어장)를 흡수해 단일화했다.
+입력 하나를 **raw(원본 보관) + readable(사이트 게시용)** 두 버전으로 갈라 기록하는 통합 지식 입력 스킬. raw 는 private 저장소 RAW-DOC(`raw/`)에, readable 은 이 저장소 `vault/` 에 남는다.
 
 | 카테고리 | 역할 | 위치 |
 |---|---|---|
 | `til` | 오늘 배운 것 (월별) | `vault/TIL/YYYY-MM/` |
-| `wordbank` | 분야별 용어 | `vault/단어장/<분야>.md` |
 | `note` | 주제별 글 | `vault/<카테고리>/<slug>.md` |
 | `todo` | 금주/금일/마감 할 일 | `data/todos.json` |
 
+> `wordbank`(단어장)는 2026-09-11 폐지. 용어 설명은 `note` 안에 쓴다.
+
 **부가 동작**
 - 🔒 **공개 게시 확인** — public이라 기록 전 "공개돼도 되는지" 1회 확인 (민감정보 거름)
-- 📖 **단어장 자동 연계** — TIL/note 작성 시 새 용어를 단어장 후보로 추출(중복 자동 체크)
 - 🔧 **빌드 검증** — 커밋 전 `npm run build`로 깨짐 점검
 - 📅 **마감 → 구글 캘린더** — 마감 항목 클릭으로 캘린더 등록(OAuth 없이)
 
