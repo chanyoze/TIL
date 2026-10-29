@@ -2,6 +2,8 @@
 sidebar_label: "WebSquare·전자정부 SI 스택 정리"
 sidebar_position: 2
 tags: [websquare, egovframe, spring, oracle, mybatis, si]
+date: 2026-06-14
+kind: 갱신
 ---
 
 # WebSquare 기반 전자정부 SI 스택 정리

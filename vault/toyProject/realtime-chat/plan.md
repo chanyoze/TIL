@@ -2,6 +2,8 @@
 sidebar_label: "기획 · 로드맵"
 sidebar_position: 1
 tags: [websocket, docker, kubernetes, aws, infra, roadmap]
+date: 2026-06-17
+kind: 동결
 ---
 
 # 실시간 채팅 + 인프라 풀코스 — 기획과 로드맵

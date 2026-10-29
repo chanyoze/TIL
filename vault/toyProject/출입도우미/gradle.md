@@ -2,6 +2,8 @@
 sidebar_label: "1. Gradle 빌드 표준화"
 sidebar_position: 1
 tags: [gradle, ci-cd, build]
+date: 2026-06-13
+kind: 동결
 ---
 
 # Gradle 마이그레이션 (1단계 · 빌드 표준화)

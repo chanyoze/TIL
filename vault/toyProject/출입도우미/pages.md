@@ -2,6 +2,8 @@
 sidebar_label: "5. GitHub Pages 배포"
 sidebar_position: 5
 tags: [github-pages, deploy]
+date: 2026-06-13
+kind: 동결
 ---
 
 # 배포 페이지 (5단계 · GitHub Pages)

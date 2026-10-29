@@ -1,3 +1,8 @@
+---
+date: 2026-06-14
+kind: 동결
+---
+
 # 출입도우미 리팩토링 정리
 
 > **프로젝트:** Seongbuk-Senior-Club-Entrance-Helper (성북노인종합복지관 출입도우미)

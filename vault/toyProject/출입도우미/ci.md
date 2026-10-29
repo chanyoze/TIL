@@ -2,6 +2,8 @@
 sidebar_label: "3. CI · GitHub Actions"
 sidebar_position: 3
 tags: [ci, github-actions]
+date: 2026-06-13
+kind: 동결
 ---
 
 # CI — 지속적 통합 (3단계 · GitHub Actions)

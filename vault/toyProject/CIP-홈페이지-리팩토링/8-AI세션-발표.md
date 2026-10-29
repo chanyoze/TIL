@@ -3,6 +3,8 @@ sidebar_label: "8. AI 세션 합동 발표 (2026-08)"
 sidebar_position: 8
 tags: [presentation, migration, ai, playwright, testing, jacoco, pit]
 raw: ../../../raw/notes/cip-hp-ai세션-발표.md
+date: 2026-08-19
+kind: 동결
 ---
 
 # AI 세션 합동 발표 — 준비 기록 (2026-08-19)

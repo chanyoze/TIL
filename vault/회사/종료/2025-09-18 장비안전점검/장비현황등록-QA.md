@@ -2,6 +2,8 @@
 sidebar_label: "장비현황등록 QA"
 sidebar_position: 1
 tags: [장비안전점검, QA, 화면설계]
+date: 2026-06-14
+kind: 동결
 ---
 
 # 장비현황등록 — 1차 QA 정리

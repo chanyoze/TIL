@@ -4,6 +4,8 @@ sidebar_position: 7
 tags: [spring, multipart, requestpart, httpmessageconverter, springdoc, gradle, jasypt, mapstruct, git-revert, 로컬환경]
 raw: RAW-DOC:raw/notes/2026-07-30-multipart-json-part-415-조치기록.md
 raw2: RAW-DOC:raw/notes/2026-08-03-multipart-json-part-415-2차조치.md
+date: 2026-07-30
+kind: 동결
 ---
 
 # 멀티파트 요청에서 JSON 파트가 415를 내는 이유

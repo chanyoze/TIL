@@ -2,6 +2,8 @@
 sidebar_label: "4. CD · Releases"
 sidebar_position: 4
 tags: [cd, release]
+date: 2026-06-13
+kind: 동결
 ---
 
 # CD — 지속적 배포 (4단계 · GitHub Actions → Releases)

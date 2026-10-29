@@ -3,6 +3,8 @@ sidebar_label: "01. erd-sync 스킬"
 sidebar_position: 1
 slug: /ai-rnd/erd-sync
 tags: [skill, erd, oracle, vuerd, db-sync, claude-code]
+date: 2026-06-25
+kind: 갱신
 ---
 
 # erd-sync — ERD ↔ DB 대조·반영 스킬

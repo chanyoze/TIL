@@ -2,6 +2,8 @@
 sidebar_label: "Oracle 프로시저 Named Notation"
 sidebar_position: 5
 tags: [oracle, plsql, procedure, named-notation]
+date: 2026-06-14
+kind: 갱신
 ---
 
 # Oracle 프로시저 Named Notation & 모듈화 INSERT 패턴

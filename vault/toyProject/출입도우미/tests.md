@@ -2,6 +2,8 @@
 sidebar_label: "2. JUnit 테스트"
 sidebar_position: 2
 tags: [test, junit, ci-cd]
+date: 2026-06-13
+kind: 동결
 ---
 
 # 테스트 (2단계 · JUnit 5)

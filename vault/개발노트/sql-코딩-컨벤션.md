@@ -2,6 +2,8 @@
 sidebar_label: "SQL 코딩 컨벤션"
 sidebar_position: 1
 tags: [sql, oracle, mybatis, convention]
+date: 2026-06-14
+kind: 갱신
 ---
 
 # 사내 SQL 코딩 컨벤션
