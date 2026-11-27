@@ -75,28 +75,3 @@
   html:has(.homeMain) .navbar { display: none !important; }
 }
 html:has(.homeMain) [data-footer-root] { display: none !important; }
-
-/* 잠긴 섹션(회사·TIL)을 사이드바 하단에 분리선으로 구분 */
-.theme-doc-sidebar-menu > li.sidebar-locked {
-  margin-top: 0.45rem;
-  padding-top: 0.45rem;
-  border-top: 1px solid var(--ifm-color-emphasis-300);
-}
-/* 잠긴 항목이 연속되면 그 사이엔 선을 넣지 않음(그룹 위에만 1줄) */
-.theme-doc-sidebar-menu > li.sidebar-locked + li.sidebar-locked {
-  margin-top: 0;
-  padding-top: 0;
-  border-top: none;
-}
-
-/* 잠금 상태(body.gate-unlocked 아님)에서는 잠긴 섹션의 하위 문서 목록과
-   펼치기 토글(캐럿)을 숨겨, 토글로도 목록이 보이지 않게 한다.
-   해제되면(gate-unlocked) 정상 동작으로 복귀.
-   ※ 마커는 <html>이 아니라 <body>에 둔다 — Docusaurus가 라우트마다
-     <html> className 을 재설정하며 커스텀 클래스를 지우기 때문. */
-body:not(.gate-unlocked) .theme-doc-sidebar-menu > li.sidebar-locked .menu__list {
-  display: none !important;
-}
-body:not(.gate-unlocked) .theme-doc-sidebar-menu > li.sidebar-locked .menu__caret {
-  display: none !important;
-}

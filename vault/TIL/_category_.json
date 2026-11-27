@@ -1,7 +1,6 @@
 {
-  "label": "📚 TIL 🔒",
+  "label": "📚 TIL",
   "position": 98,
-  "className": "sidebar-locked",
   "link": {
     "type": "generated-index",
     "slug": "/TIL",

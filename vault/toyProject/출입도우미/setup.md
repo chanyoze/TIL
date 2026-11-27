@@ -42,7 +42,7 @@ kind: 동결
 
 ## 메모 · 주의사항
 
-- **커밋 신원:** 이 저장소는 전역 설정 `agadou / iloory64@gmail.com`로 커밋됨. README의 `이찬호 / chanyoze`와 다름 → 맞추려면 `git config user.name/email` (이 저장소 한정).
+- **커밋 신원:** 이 저장소는 전역 설정(다른 이름 · 이메일)으로 커밋됨. README의 `이찬호 / chanyoze`와 다름 → 맞추려면 `git config user.name/email` (이 저장소 한정).
 - **`docs/` 폴더는 Phase 5(GitHub Pages) 예약석.** 진행 문서는 여기 `진행기록/`에 둔다.
 - **JNativeHook**은 백신이 키로거로 오인할 수 있어 후킹 등록 실패 시 자동 비활성 폴백됨(앱은 정상 구동). CI의 자동 테스트로는 검증 불가 → 수동 확인 영역.
 - ~~build.ps1의 JDK 경로 하드코딩~~ → Gradle toolchain으로 해소(완료).
