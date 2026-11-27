@@ -1,21 +1,21 @@
 ---
+title: "erd-sync — ERD ↔ DB 대조·반영 스킬"
 sidebar_label: "01. erd-sync 스킬"
 sidebar_position: 1
 slug: /ai-rnd/erd-sync
 tags: [skill, erd, oracle, vuerd, db-sync, claude-code]
 date: 2026-06-25
 kind: 갱신
+raw: RAW-DOC:raw/notes/erd-sync-skill-plan.md
 ---
 
-# erd-sync — ERD ↔ DB 대조·반영 스킬
-
-> ERD 설계 문서(vuerd)와 실제 Oracle DB의 어긋남(drift)을 자동 대조·반영하는 Claude Code 커스텀 스킬. (내부 제품/스키마 식별자 유지, 고객·인명 제거)
+> ERD 설계 문서(vuerd)와 실제 Oracle DB의 어긋남(drift)을 자동 대조·반영하는 Claude Code 커스텀 스킬. (도메인 코드 · 테이블 이름은 그대로 두고, DB 인스턴스 · 저장소 이름은 일반화했다)
 >
 > **상태: 구현 완료(2026-06-25)** — 아래 [구현 완료](#구현-완료-2026-06-25) 절에 실제 설계·검증 결과 정리. 그 앞 절들은 최초 기획(2026-06-19)이며, 일부는 구현하며 바뀌었다.
 
 ## 배경 / 동기
 
-`ref-erd\<카테고리>\*.vuerd.json` 형태로 ERD(ERD-Editor / vuerd v3) 설계 문서를 관리한다. 실제 운영 DB(SKPMIS / PMIS4, Oracle, readonly MCP)와 시간이 지나며 어긋난다(drift). 문서관리(DCMT) ERD를 SKPMIS DB와 **수동으로 대조**해 테이블 누락·컬럼 차이·타입/NOT NULL 차이를 찾아냈고, 이 반복 작업을 **스킬로 자동화**한다.
+`ERD저장소\<카테고리>\*.vuerd.json` 형태로 ERD(ERD-Editor / vuerd v3) 설계 문서를 관리한다. 실제 DB(운영 · 개발 Oracle, 조회 전용 MCP 로 접속)와 시간이 지나며 어긋난다(drift). 문서관리(DCMT) ERD를 운영 DB와 **수동으로 대조**해 테이블 누락·컬럼 차이·타입/NOT NULL 차이를 찾아냈고, 이 반복 작업을 **스킬로 자동화**한다.
 
 ## 무엇을 할지
 
@@ -61,7 +61,7 @@ ERD 파일 1개와 대상 DB를 받아서:
 
 ### 이후 확장 (2차+)
 - PK / FK / 인덱스 / 컬럼순서 / 코멘트 텍스트까지 대조
-- `ref-erd` **전체 카테고리 일괄 드리프트 대시보드**
+- ERD 저장소 **전체 카테고리 일괄 드리프트 대시보드**
 - 타임스탬프 드리프트 스냅샷(변화 추적)
 - **alias-dict 연동**: 새 컬럼 한글 코멘트 → 영문 별칭·명명규칙 린트
 - **writedown 연동**: 대조 리포트를 raw/readable로 기록
@@ -84,10 +84,10 @@ ERD 파일 1개와 대상 DB를 받아서:
 ## 사용 방법
 
 ```
-/erd-sync <ERD파일경로 또는 카테고리폴더> <DB: skpmis|pmis4>
+/erd-sync <ERD파일경로 또는 카테고리폴더> <DB: 운영|개발 접속이름>
 ```
 
-예) `/erd-sync "ref-erd\340. 문서관리 (DCMT)" skpmis`
+예) `/erd-sync "ERD저장소\340. 문서관리 (DCMT)" <DB접속이름>`
 
 실행 시 자동 흐름:
 

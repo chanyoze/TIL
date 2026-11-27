@@ -1,14 +1,15 @@
 ---
+title: "멀티파트 요청에서 JSON 파트가 415를 내는 이유"
 sidebar_label: "멀티파트 JSON 파트 415"
 sidebar_position: 7
 tags: [spring, multipart, requestpart, httpmessageconverter, springdoc, gradle, jasypt, mapstruct, git-revert, 로컬환경]
-raw: RAW-DOC:raw/notes/2026-07-30-multipart-json-part-415-조치기록.md
-raw2: RAW-DOC:raw/notes/2026-08-03-multipart-json-part-415-2차조치.md
+raw:
+  - RAW-DOC:raw/notes/2026-07-30-multipart-json-part-415-조치기록.md
+  - RAW-DOC:raw/notes/2026-08-03-multipart-json-part-415-2차조치.md
+source: RAW-DOC:회사/종료/2026-07-30 saas-api 멀티파트 415 조치/multipart-json 이슈 조치 공유문서.md
 date: 2026-07-30
 kind: 동결
 ---
-
-# 멀티파트 요청에서 JSON 파트가 415를 내는 이유
 
 파일과 JSON을 한 번에 받는 API — 이미지 몇 장과 등록 정보를 같이 보내는 흔한 형태 — 를 만들면 이런 오류를 만날 수 있다.
 
@@ -533,8 +534,6 @@ Failed to bind properties under 'some.external.api.id' to java.lang.String
 jasypt:
   encryptor:
     password: ${JASYPT_PASSWORD}          # 환경변수로 주입
-    algorithm: PBEWithMD5AndDES
-    iv-generator-classname: org.jasypt.iv.NoIvGenerator
 ```
 
 환경변수가 없으면 복호화가 실패하고, 그게 바인딩 오류로 포장되어 나온다.
@@ -546,7 +545,7 @@ jasypt:
 ```bash
 java -cp jasypt-1.9.3.jar org.jasypt.intf.cli.JasyptPBEStringDecryptionCLI \
   input="<ENC 안의 내용>" password="<받은 비밀번호>" \
-  algorithm=PBEWithMD5AndDES ivGeneratorClassName=org.jasypt.iv.NoIvGenerator
+  algorithm=<설정 파일에 적힌 알고리즘>
 ```
 
 ⚠️ **틀린 비밀번호도 증상이 같다**(동일한 바인딩 오류). 기동이 안 되면 값부터 재확인한다.

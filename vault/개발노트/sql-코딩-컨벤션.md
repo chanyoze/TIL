@@ -1,4 +1,5 @@
 ---
+title: "Oracle 전통 문법 SQL 코딩 컨벤션"
 sidebar_label: "SQL 코딩 컨벤션"
 sidebar_position: 1
 tags: [sql, oracle, mybatis, convention]
@@ -6,158 +7,34 @@ date: 2026-06-14
 kind: 갱신
 ---
 
-# 사내 SQL 코딩 컨벤션
+회사에서 MyBatis 매퍼 XML 에 SQL 을 쓸 때 맞추는 형식이다. ANSI 표준 조인 대신 **Oracle 전통 문법**(`From` 에 콤마로 나열 · `Where` 에서 조인 · 아우터 조인은 `(+)`)을 쓰고, 키워드는 첫 글자만 대문자로 쓴다. 처음에는 AI 에게 SQL 을 시킬 때 붙이는 지시문으로 썼던 것을, 규칙만 남겨 사람이 읽는 문서로 다시 정리했다. (예시의 테이블 · 컬럼 이름은 설명용이다.)
 
-> 이 문서는 모든 SQL 쿼리 작성 시 **100% 엄격하게 준수**되어야 합니다.
-> ANSI 표준 문법이 아닌, **Oracle 기반의 전통적 문법**을 우선합니다.
+## 규칙 한눈에
 
-## 역할 정의
+| 항목 | 규칙 | 예 |
+|---|---|---|
+| 키워드 · 함수 대소문자 | 첫 글자만 대문자(Title Case). 전부 대문자는 쓰지 않는다 | `Select` `Group By` `Is Null` `Nvl` `To_Char` |
+| 메인 절 | `Select` · `From` · `Where` · `Group By` · `Order By` 는 같은 깊이 | |
+| 컬럼 | 메인 절보다 한 탭(4칸) 들여쓴다 | |
+| 쉼표 | 항상 줄 끝. 앞쪽 쉼표는 쓰지 않는다 | `a.DOC_ID DOC_SN,` |
+| `From` | 줄을 바꾸고 한 탭 들여 테이블을 나열한다. 테이블과 별칭은 한 칸 | `TB_DOC a,` |
+| `Where` | 항상 `Where 1 = 1` 로 시작하고, 이어지는 `And` · `Or` 는 `Where` 와 같은 깊이 | |
+| 비교 연산자 | `=` 앞뒤 한 칸씩만. 줄 맞춤용 공백은 넣지 않는다 | `a.USE_YN = 'Y'` |
+| 조인 | ANSI 조인 키워드(`INNER JOIN` 등)를 쓰지 않는다. 아우터 조인은 `(+)` | `a.CP_ID = c.COMPANY_ID(+)` |
+| 별칭 | `AS` 를 쓰지 않는다. 테이블 별칭은 소문자 한 글자, 컬럼 별칭은 UPPER_SNAKE_CASE | `a.DOC_TITLE DOC_TITLE` |
+| 바인딩 | MyBatis `#{변수명}` | `#{SESSION_COMPANY_ID}` |
+| 주석 | `Select` 컬럼 끝에 공백 두 칸 + `--` 한글명 | `a.REG_DT REG_DATE,  -- 등록일자` |
+| `Case` | 소괄호로 감싸고, 닫는 괄호 뒤 한 칸 + 별칭, 그 뒤 두 칸 + 주석 | 아래 예시 |
+| `Order By` | 줄을 바꾸고 한 탭 들여 정렬 컬럼을 나열한다 | |
 
-당신은 엔터프라이즈 환경의 **수석 데이터베이스 아키텍트**입니다.
-앞으로 모든 SQL 쿼리를 작성할 때, 아래 컨벤션을 빠짐없이 적용하세요.
+서브쿼리의 괄호는 메인 절과 같은 깊이에 두고, 안쪽 쿼리는 통째로 한 탭 들여쓴다.
 
----
-
-## 1. SQL 키워드 및 함수명 대소문자 규칙 (Title Case)
-
-- 주요 SQL 키워드와 내장 함수는 **첫 글자만 대문자, 나머지는 소문자(Title Case)** 로 작성합니다.
-- **전체 대문자 사용 금지.**
-- 예시 키워드: `Select`, `From`, `Where`, `And`, `Or`, `Group By`, `Order By`, `Union All`, `Null`, `Is Null`
-- 예시 함수: `Max`, `Min`, `Decode`, `To_Char`, `To_Date`, `Nvl`, `Nvl2`, `Rownum`
-
----
-
-## 2. 들여쓰기(Indentation) 및 정렬 규칙
-
-- `Select`, `From`, `Where`, `Group By`, `Order By` 등 **메인 절은 동일한 깊이(Level)** 에 둡니다.
-- 컬럼명은 메인 절보다 **한 탭(또는 4칸) 들여쓰기** 합니다.
-- 쉼표(`,`)는 **항상 라인의 맨 끝**에 위치합니다. (앞쪽 쉼표 사용 금지)
-- 서브쿼리의 괄호 `(` 와 `)` 는 메인 절과 동일한 깊이에 위치하며, 내부 쿼리는 전체적으로 한 탭 들여쓰기 합니다.
-
----
-
-## 3. From 절 규칙
-
-- `From` 키워드 **다음 줄에서 줄바꿈** 후, **탭 한 번** 들여쓰기하여 테이블을 나열합니다.
-- 테이블명과 테이블 별칭(Alias) 사이는 **한 칸 공백**으로 구분합니다.
-- 테이블 사이는 콤마(`,`)로 구분하며, 콤마는 라인 맨 끝에 위치합니다.
-
-```sql
-From
-    TB_DCMT a,
-    TB_USER b,
-    TB_CP_COMPANY c
-```
-
----
-
-## 4. 조건절 (Where 절) 규칙
-
-- Where 절의 시작은 무조건 **`Where 1 = 1`** 로 시작합니다.
-- 다음 조건들은 `And` 또는 `Or` 로 시작하며, **`Where` 키워드와 동일한 깊이(동일선상)** 에 위치합니다.
-- 비교 연산자 `=` 의 **앞뒤는 각각 한 칸 공백**만 둡니다. (정렬용 추가 공백 금지)
-
-```sql
-Where 1 = 1
-And a.COMPANY_ID = b.COMPANY_ID
-And a.USE_YN = 'Y'
-```
-
----
-
-## 5. 조인 (Join) 규칙
-
-- `INNER JOIN`, `LEFT OUTER JOIN` 등 **ANSI 표준 조인 키워드를 절대 사용하지 않습니다.**
-- `From` 절에 테이블을 콤마(`,`)로 나열하고, `Where` 절에서 조인 조건을 명시합니다.
-- 아우터 조인(Outer Join)이 필요한 경우 **Oracle 방식인 `(+)` 기호**를 사용합니다.
-
-```sql
-From
-    TB_COMPANY a,
-    TB_USER b,
-    TB_CP_COMPANY c
-Where 1 = 1
-And a.COMPANY_ID = b.COMPANY_ID
-And a.CP_COMPANY_ID = c.COMPANY_ID(+)
-```
-
----
-
-## 6. Alias (별칭) 규칙
-
-- **`AS` 키워드는 절대 사용하지 않고**, **한 칸 공백(Space)** 으로 구분합니다. (테이블/컬럼 별칭 모두 동일)
-- **테이블 Alias:** 소문자 알파벳 단일 문자(`a`, `b`, `c`, `m`, `x` 등)를 사용합니다.
-- **컬럼 Alias:** 반드시 **전체 대문자와 언더바(UPPER_SNAKE_CASE)** 형태로 작성합니다.
-  - 예: `DOC_NO`, `JOIN_KEY`, `CFM_BTN_SHOW_TF`
+## 종합 예시
 
 ```sql
 Select
-    a.DCMT_ID DOC_SN,
-    a.DCMT_TITLE DOC_TITLE
-From
-    TB_DCMT a
-```
-
----
-
-## 7. 변수 바인딩
-
-- **MyBatis/iBatis 형식의 변수 바인딩 `#{변수명}`** 을 사용합니다.
-
-```sql
-Where 1 = 1
-And a.COMPANY_ID = #{SESSION_COMPANY_ID}
-```
-
----
-
-## 8. 주석 (Comments)
-
-- `Select` 절에서 컬럼에 대한 **논리적 설명(한글명)** 을 라인 맨 끝에 추가합니다.
-- 컬럼(또는 쉼표) 뒤에 **스페이스 2칸**을 띄우고 `--` 주석을 작성합니다.
-
-```sql
-Select
-    a.DCMT_ID DOC_SN,  -- 문서순번
-    a.DCMT_TITLE DOC_TITLE,  -- 문서제목
-    a.REG_DT REG_DATE  -- 등록일자
-```
-
----
-
-## 9. Case 문 규칙
-
-- `Case` 문은 반드시 **소괄호 `()` 로 감싸며**, `Case`, `When`, `Else`, `End` 키워드는 **Title Case** 를 유지합니다.
-- **닫는 괄호 뒤에 한 칸 띄우고 컬럼 Alias**, 그 뒤에 **스페이스 2칸 후 주석**을 붙입니다.
-
-```sql
-(Case
-    When a.STS_CODE = 10 Then 'T'
-    Else 'F'
- End) CFM_BTN_SHOW_TF,  -- 승인버튼표시여부
-```
-
----
-
-## 10. Order By 절 규칙
-
-- `Order By` 키워드 **다음 줄에서 줄바꿈** 후, **탭 한 번** 들여쓰기하여 정렬 컬럼을 나열합니다.
-- 여러 컬럼인 경우 콤마는 라인 맨 끝에 위치합니다.
-
-```sql
-Order By
-    a.REG_DT Desc,
-    a.DCMT_ID Asc
-```
-
----
-
-## ✅ 종합 예시
-
-```sql
-Select
-    a.DCMT_ID DOC_SN,  -- 문서순번
-    a.DCMT_TITLE DOC_TITLE,  -- 문서제목
+    a.DOC_ID DOC_SN,  -- 문서순번
+    a.DOC_TITLE DOC_TITLE,  -- 문서제목
     b.USER_NM REG_USER_NM,  -- 등록자명
     Nvl(c.CP_COMPANY_NM, '-') CP_COMPANY_NM,  -- 협력사명
     (Case
@@ -166,7 +43,7 @@ Select
      End) CFM_BTN_SHOW_TF,  -- 승인버튼표시여부
     To_Char(a.REG_DT, 'YYYY-MM-DD') REG_DATE  -- 등록일자
 From
-    TB_DCMT a,
+    TB_DOC a,
     TB_USER b,
     TB_CP_COMPANY c
 Where 1 = 1
@@ -176,5 +53,14 @@ And a.COMPANY_ID = #{SESSION_COMPANY_ID}
 And a.USE_YN = 'Y'
 Order By
     a.REG_DT Desc,
-    a.DCMT_ID Asc
+    a.DOC_ID Asc
 ```
+
+## 몇 가지 규칙이 주는 것
+
+- **`Where 1 = 1`** — 모든 조건이 `And` 로 시작하게 만든다. MyBatis 동적 SQL 에서 조건을 붙였다 뗐다 할 때 첫 조건만 다르게 처리할 필요가 없다.
+- **연산자 앞뒤 한 칸, 정렬용 공백 금지** — 줄 맞춤 공백을 넣으면 한 줄만 바뀌어도 diff 가 여러 줄로 번진다.
+
+## 배운 것
+
+- AI 에게 주던 지시문에는 "당신은 수석 아키텍트다", "100% 엄격히 준수" 같은 문장이 붙어 있었다. 규칙 자체는 그 문장이 없어도 똑같이 전달된다. 사람과 AI 가 같이 읽는 규칙은 **표와 예시 하나**로 충분했다.

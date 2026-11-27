@@ -1,4 +1,5 @@
 ---
+title: "Oracle 프로시저 Named Notation & 모듈화 INSERT 패턴"
 sidebar_label: "Oracle 프로시저 Named Notation"
 sidebar_position: 5
 tags: [oracle, plsql, procedure, named-notation]
@@ -6,10 +7,8 @@ date: 2026-06-14
 kind: 갱신
 ---
 
-# Oracle 프로시저 Named Notation & 모듈화 INSERT 패턴
-
 > 파라미터가 많은 INSERT/공통 처리를 **프로시저로 모듈화**할 때,
-> 호출부 가독성을 살리는 **Named Notation** 패턴. (가짜 스키마로 일반화한 노트)
+> 호출부 가독성을 살리는 **Named Notation** 패턴. (예시의 테이블 · 값은 설명용으로 바꾼 것이다)
 
 ## 1. Positional vs Named Notation
 
@@ -17,12 +16,12 @@ kind: 갱신
 
 ```sql
 -- Positional: 순서로만 매칭 → 가독성 최악
-My_Proc(30212, 'GC001', NULL, NULL, 100, ...);
+My_Proc(1001, 'A001', NULL, NULL, 100, ...);
 
 -- Named: 파라미터명 => 값  → 자기설명적
 My_Proc(
-    P_COMPANY_ID  => 30212,
-    P_PROJ_CODE   => 'GC001',
+    P_COMPANY_ID  => 1001,
+    P_PROJ_CODE   => 'A001',
     P_REG_SN      => 100
 );
 ```
@@ -86,8 +85,8 @@ End;
 
 ```sql
 Sample_Conn_Insert(
-    P_COL_1ST => 30212,    -- COL_1ST: TB_SAMPLE.COMPANY_ID
-    P_COL_2ND => 'GC001'   -- COL_2ND: TB_SAMPLE.PROJ_CODE
+    P_COL_1ST => 1001,    -- COL_1ST: TB_SAMPLE.COMPANY_ID
+    P_COL_2ND => 'A001'   -- COL_2ND: TB_SAMPLE.PROJ_CODE
 );
 ```
 

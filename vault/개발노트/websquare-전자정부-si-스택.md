@@ -1,12 +1,11 @@
 ---
+title: "WebSquare 기반 전자정부 SI 스택 정리"
 sidebar_label: "WebSquare·전자정부 SI 스택 정리"
 sidebar_position: 2
 tags: [websquare, egovframe, spring, oracle, mybatis, si]
 date: 2026-06-14
 kind: 갱신
 ---
-
-# WebSquare 기반 전자정부 SI 스택 정리
 
 > 공공/SI 환경에서 흔히 쓰는 **WebSquare + 전자정부 표준프레임워크 + Spring + Oracle** 조합을
 > 신입 관점에서 한 장에 정리한 노트. (특정 회사·고객 무관한 일반 구조)
