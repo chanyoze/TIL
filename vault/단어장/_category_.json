@@ -1,0 +1,10 @@
+{
+  "label": "📖 단어장",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "slug": "/wordbank",
+    "title": "📖 단어장",
+    "description": "분야별로 정리한 용어집입니다. 아래 카테고리에서 골라보세요."
+  }
+}

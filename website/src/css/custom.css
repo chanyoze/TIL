@@ -1,0 +1,102 @@
+/* 웹폰트 — Pretendard(한글) + Inter(라틴) + JetBrains Mono(코드) */
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* ===== 인디고 + 앰버 (라이트) ===== */
+:root {
+  --ifm-color-primary: #6366f1;
+  --ifm-color-primary-dark: #4f46e5;
+  --ifm-color-primary-darker: #4338ca;
+  --ifm-color-primary-darkest: #3730a3;
+  --ifm-color-primary-light: #818cf8;
+  --ifm-color-primary-lighter: #a5b4fc;
+  --ifm-color-primary-lightest: #c7d2fe;
+
+  --ifm-background-color: #ffffff;
+  --ifm-background-surface-color: #ffffff;
+
+  --ifm-font-family-base: "Pretendard Variable", "Inter", -apple-system, BlinkMacSystemFont, "Malgun Gothic", "맑은 고딕", sans-serif;
+  --ifm-font-family-monospace: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ifm-heading-font-weight: 800;
+  --ifm-code-font-size: 92%;
+  --ifm-code-border-radius: 8px;
+  --ifm-button-border-radius: 10px;
+  --ifm-navbar-link-hover-color: var(--ifm-color-primary);
+  --docusaurus-highlighted-code-line-bg: rgba(99, 102, 241, 0.12);
+
+  /* 강조색·시그니처 그라데이션 (인디고 → 바이올렛) + 앰버 포인트 */
+  --til-pink: #6366f1;
+  --til-pink-2: #a855f7;
+  --til-amber: #f59e0b;
+  --til-grad: linear-gradient(135deg, #818cf8 0%, #6366f1 45%, #a855f7 100%);
+  --til-grad-soft: linear-gradient(135deg, rgba(99, 102, 241, 0.14), rgba(168, 85, 247, 0.12));
+}
+
+/* ===== 인디고 + 앰버 (다크) ===== */
+[data-theme='dark'] {
+  --ifm-color-primary: #a5b4fc;
+  --ifm-color-primary-dark: #818cf8;
+  --ifm-color-primary-darker: #6366f1;
+  --ifm-color-primary-darkest: #4f46e5;
+  --ifm-color-primary-light: #c7d2fe;
+  --ifm-color-primary-lighter: #ddd6fe;
+  --ifm-color-primary-lightest: #ede9fe;
+
+  --ifm-background-color: #0b0b12;
+  --ifm-background-surface-color: #15151f;
+  --docusaurus-highlighted-code-line-bg: rgba(165, 180, 252, 0.16);
+
+  --til-pink: #a5b4fc;
+}
+
+/* 선택 영역·네비바 디테일 */
+::selection { background: rgba(99, 102, 241, 0.22); }
+/* navbar 글래스 블러는 데스크톱만. 모바일에선 backdrop-filter가 fixed 자식(모바일 사이드바)의
+   기준 박스를 navbar(60px)로 가둬 메뉴가 안 보이는 버그가 생기므로 제외한다. */
+@media (min-width: 997px) {
+  .navbar { backdrop-filter: saturate(1.4) blur(8px); }
+}
+.navbar__title { font-weight: 800; letter-spacing: -0.02em; }
+
+/* 버튼 — 호버 리프트 */
+.button { font-weight: 700; transition: transform 0.15s ease, box-shadow 0.15s ease; }
+.button--primary:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(99, 102, 241, 0.32); }
+
+/* 사이드바/TOC active 강조 */
+.menu__link--active:not(.menu__link--sublist) { font-weight: 700; }
+.table-of-contents__link--active { font-weight: 700; }
+
+/* 코드블록 살짝 둥글게 */
+.theme-code-block, pre { border-radius: 12px !important; }
+
+/* 메인 페이지(homeMain)에서는 navbar·footer 숨김 — 극심플 */
+/* 단, 모바일(≤996px)은 navbar를 남겨야 햄버거·메뉴를 쓸 수 있다(navbar를 숨기면 메뉴도 같이 사라짐) */
+@media (min-width: 997px) {
+  html:has(.homeMain) .navbar { display: none !important; }
+}
+html:has(.homeMain) [data-footer-root] { display: none !important; }
+
+/* 잠긴 섹션(회사·TIL)을 사이드바 하단에 분리선으로 구분 */
+.theme-doc-sidebar-menu > li.sidebar-locked {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--ifm-color-emphasis-300);
+}
+/* 잠긴 항목이 연속되면 그 사이엔 선을 넣지 않음(그룹 위에만 1줄) */
+.theme-doc-sidebar-menu > li.sidebar-locked + li.sidebar-locked {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: none;
+}
+
+/* 잠금 상태(body.gate-unlocked 아님)에서는 잠긴 섹션의 하위 문서 목록과
+   펼치기 토글(캐럿)을 숨겨, 토글로도 목록이 보이지 않게 한다.
+   해제되면(gate-unlocked) 정상 동작으로 복귀.
+   ※ 마커는 <html>이 아니라 <body>에 둔다 — Docusaurus가 라우트마다
+     <html> className 을 재설정하며 커스텀 클래스를 지우기 때문. */
+body:not(.gate-unlocked) .theme-doc-sidebar-menu > li.sidebar-locked .menu__list {
+  display: none !important;
+}
+body:not(.gate-unlocked) .theme-doc-sidebar-menu > li.sidebar-locked .menu__caret {
+  display: none !important;
+}

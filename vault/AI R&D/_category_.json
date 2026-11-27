@@ -1,0 +1,6 @@
+{
+  "label": "🔬 AI R&D 🔒",
+  "position": 98,
+  "className": "sidebar-locked",
+  "link": { "type": "generated-index", "slug": "/ai-rnd", "description": "AI 활용·자동화 도구·커스텀 스킬 연구개발 메모" }
+}

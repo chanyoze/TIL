@@ -1,0 +1,1 @@
+{ "label": "🔭 NewsLens — AI 미디어 큐레이션 (가제, 2026-06-29~)", "position": 3, "link": { "type": "generated-index", "slug": "/toy/newslens", "description": "외신 AI·테크 뉴스를 LLM으로 한국어 번역·요약·태깅하고 RAG 검색·SSE 알림을 제공하는 미디어 큐레이션 플랫폼. 팀원 「AI 미디어 큐레이션」 베이스 + 이찬호 「실시간 채팅+인프라」 병합. 2026-06-29 ~" } }

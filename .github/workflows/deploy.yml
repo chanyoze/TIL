@@ -1,0 +1,65 @@
+name: Deploy Docusaurus to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'website/**'
+      - 'vault/**'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# 동시에 한 배포만 진행 (진행 중 배포는 끊지 않음)
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+# JS 액션을 Node.js 24로 실행 (Node 20 deprecation 경고 해소 — 전이 액션까지)
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  # puppeteer는 로컬 스크린샷 검증 전용 devDependency — 배포 빌드엔 불필요하므로 Chromium 다운로드 스킵
+  PUPPETEER_SKIP_DOWNLOAD: 'true'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: website
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: website/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Build website
+        run: npm run build
+        env:
+          # 게이트 비밀번호 해시(선택) — 레포 Secrets 에 등록 시 소스 기본 해시를 override.
+          # 미설정이면 config 의 기본 해시('0000')로 빌드된다.
+          SITE_GATE_PW_HASH: ${{ secrets.SITE_GATE_PW_HASH }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          # path는 워크스페이스 루트 기준 (working-directory 무시됨)
+          path: website/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

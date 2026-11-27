@@ -1,0 +1,273 @@
+/* 극심플 메인 — 마스코트 바둑판(텀 있음) 위에 그라데이션 문구 + 버튼 2개 */
+.hero {
+  /* 메인은 navbar/footer를 숨기므로 전체 화면 높이 사용 */
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(46% 52% at 50% 36%, rgba(99, 102, 241, 0.16), transparent 70%),
+    radial-gradient(38% 38% at 80% 16%, rgba(245, 158, 11, 0.12), transparent 70%),
+    var(--ifm-background-color);
+}
+
+/* 마스코트 바둑판 — 사이에 텀(gap)을 둔 격자 */
+.tileGrid {
+  position: absolute;
+  inset: -60px;
+  z-index: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 48px);
+  gap: 40px;
+  justify-content: center;
+  align-content: start;
+  opacity: 0.13;
+  pointer-events: none;
+}
+
+.tileImg {
+  width: 48px;
+  height: 48px;
+}
+
+/* 텍스트 가독성을 위한 중앙 스크림 */
+.hero::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: radial-gradient(40% 42% at 50% 45%, var(--ifm-background-color) 0%, transparent 72%);
+  pointer-events: none;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 68rem;
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4.5rem);
+}
+
+/* 왼쪽: 문구 + 버튼 (좌측 정렬) */
+.left {
+  text-align: left;
+}
+
+.kicker {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--ifm-color-emphasis-700);
+  margin: 0 0 1.3rem;
+}
+
+.title {
+  font-size: clamp(2rem, 5.5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  margin: 0;
+  background: var(--til-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.links {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 2.8rem;
+  flex-wrap: wrap;
+}
+
+/* 오른쪽: 금주/금일 To-Do 카드 */
+.todoCard {
+  text-align: left;
+  background: var(--ifm-card-background-color, var(--ifm-background-surface-color));
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 20px;
+  padding: 1.4rem 1.5rem 1.6rem;
+  box-shadow: 0 18px 44px rgba(99, 102, 241, 0.16);
+  backdrop-filter: blur(6px);
+}
+
+.todoHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 0.9rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px dashed var(--ifm-color-emphasis-300);
+}
+
+.todoCardTitle {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.todoUpdated {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-600);
+}
+
+.todoBlock + .todoBlock {
+  margin-top: 1.1rem;
+}
+
+.todoLabel {
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--til-pink);
+  margin-bottom: 0.5rem;
+}
+
+.todoList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.todoItem,
+.todoDone {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  padding: 4px 0;
+}
+
+.todoCheck {
+  flex: 0 0 auto;
+  font-size: 0.85rem;
+  line-height: 1.55;
+}
+
+.todoDone .todoText {
+  color: var(--ifm-color-emphasis-500);
+  text-decoration: line-through;
+  text-decoration-color: var(--ifm-color-emphasis-400);
+}
+
+.todoEmpty {
+  list-style: none;
+  font-size: 0.88rem;
+  color: var(--ifm-color-emphasis-500);
+  padding: 4px 0;
+}
+
+/* 마감 항목 = 구글 캘린더 추가 링크 */
+.calLink {
+  flex: 1;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: var(--ifm-color-emphasis-800) !important;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.calLink:hover {
+  color: var(--til-pink) !important;
+  text-decoration: none;
+}
+
+.calLink:hover .due {
+  color: var(--til-pink);
+}
+
+/* 마감일 + D-day */
+.due {
+  display: inline-block;
+  margin-left: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ifm-color-emphasis-500);
+  white-space: nowrap;
+}
+
+.dday {
+  color: var(--til-pink);
+}
+
+.ddayUrgent {
+  color: var(--til-amber);
+}
+
+/* 마감 항목에 붙는 참고 문서 링크 (todos.json 의 doc 필드) */
+.docLink {
+  flex: none;
+  margin-left: 6px;
+  font-size: 0.85rem;
+  line-height: 1;
+  text-decoration: none;
+  opacity: 0.55;
+  transition: opacity 0.15s ease;
+}
+
+.docLink:hover {
+  opacity: 1;
+  text-decoration: none;
+}
+
+/* 반응형: 좁은 화면에서는 위아래로 적층, 가운데 정렬 */
+@media (max-width: 900px) {
+  .heroInner {
+    grid-template-columns: 1fr;
+    max-width: 34rem;
+    gap: 2.4rem;
+  }
+  .left {
+    text-align: center;
+  }
+  .links {
+    justify-content: center;
+  }
+}
+
+.btnPrimary,
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 30px;
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btnPrimary {
+  background: var(--til-grad);
+  color: #fff !important;
+  box-shadow: 0 10px 26px rgba(99, 102, 241, 0.3);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 34px rgba(99, 102, 241, 0.42);
+  text-decoration: none;
+}
+
+.btnGhost {
+  background: transparent;
+  border: 2px solid var(--ifm-color-emphasis-300);
+  color: var(--ifm-color-emphasis-800) !important;
+}
+
+.btnGhost:hover {
+  border-color: var(--til-pink);
+  color: var(--til-pink) !important;
+  transform: translateY(-2px);
+  text-decoration: none;
+}
