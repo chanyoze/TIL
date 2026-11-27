@@ -1,6 +1,10 @@
 ---
 title: "2026-06-13 / Tailwind v4 레이어 함정"
+sidebar_label: "06-13 Tailwind v4 레이어 함정"
 tags: [tailwind, css, vue]
+raw: RAW-DOC:raw/notes/tailwind-v4-layer-override.md
+date: 2026-06-13
+kind: 동결
 ---
 > 분명 `mx-auto`, `px-6` 같은 Tailwind 클래스를 줬는데 화면은 왼쪽에 딱 붙어버린다. 빌드도 멀쩡하고 클래스도 분명히 들어가 있는데 왜일까?
 
