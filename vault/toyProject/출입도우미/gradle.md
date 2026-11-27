@@ -47,9 +47,9 @@ raw: RAW-DOC:raw/toyProject/CI-CD/gradle.md
 
 ## 5. 검증 결과
 
-- `gradlew clean build` ✅ — JNativeHook이 Maven Central에서 받아져 컴파일·jar 생성
-- `gradlew jpackageImage` ✅ — `build/jpackage/출입도우미/출입도우미.exe` (76.5 MB, 내장 JRE 포함) = build.ps1과 동일 결과물
-- ⚠ 작업 중 함정: `.gitignore`에서 옛 패턴을 지웠더니 build.ps1이 남긴 잔재(`bin/`·`dist/`·`staging/`)가 커밋에 딸려갈 뻔 → 디스크에서 정리 후 깨끗한 커밋만 push.
+- `gradlew clean build` — JNativeHook이 Maven Central에서 받아져 컴파일·jar 생성
+- `gradlew jpackageImage` — `build/jpackage/출입도우미/출입도우미.exe` (76.5 MB, 내장 JRE 포함) = build.ps1과 동일 결과물
+- 작업 중 함정: `.gitignore`에서 옛 패턴을 지웠더니 build.ps1이 남긴 잔재(`bin/`·`dist/`·`staging/`)가 커밋에 딸려갈 뻔 → 디스크에서 정리 후 깨끗한 커밋만 push.
 
 ## 6. 핵심 개념 (배경지식)
 

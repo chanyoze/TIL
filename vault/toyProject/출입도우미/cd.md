@@ -10,7 +10,7 @@ raw: RAW-DOC:raw/toyProject/CI-CD/cd.md
 
 > 빌드된 exe를 자동으로 GitHub **Releases**에 올린다. 사용자는 Releases에서 받아 쓴다.
 > 작업일: 2026-05-25 · 브랜치: `feature/cd` · 이전 단계: [ci.md](ci.md)
-> ⚠ **현재 상태:** 설계 고려사항(장단점) 정리 단계. 선택 확정 후 `release.yml` 구현 예정.
+> **현재 상태:** 설계 고려사항(장단점) 정리 단계. 선택 확정 후 `release.yml` 구현 예정.
 
 ## 1. 왜 하나
 
@@ -165,7 +165,7 @@ git push origin --delete v1.1.0    # 원격(GitHub) 태그 삭제
 4. **Release title** 입력 (예: `v1.2.0`). 설명은 비워도 되고, **"Generate release notes"** 누르면 자동 작성
 5. 맨 아래 **"Publish release"** 클릭
    - → GitHub이 태그를 만들고, 그 순간 **Release 워크플로가 발동**한다
-6. ⚠️ 방금 만든 릴리스는 **처음엔 zip이 없다.** 워크플로가 끝나면(~1-2분) `EntranceHelper.zip`이 **자동으로 첨부**된다 — 바로 안 보여도 정상.
+6. 방금 만든 릴리스는 **처음엔 zip이 없다.** 워크플로가 끝나면(~1-2분) `EntranceHelper.zip`이 **자동으로 첨부**된다 — 바로 안 보여도 정상.
 
 ### 8.3 확인
 1. 상단 **"Actions"** 탭 → **"Release"** 실행이 🟡(진행) → 🟢(성공). (~1-2분)

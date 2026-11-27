@@ -16,7 +16,7 @@ kind: 동결
 
 ---
 
-## 1. Git 초기화 + 원격 연결 — ⚠ unrelated history 함정
+## 1. Git 초기화 + 원격 연결 — unrelated history 함정
 
 - 처음엔 로컬 폴더가 **git 저장소가 아니었음.** `git init -b main` 후 첫 커밋(`3342a83`) 생성.
 - 원격을 확인하니 이미 히스토리가 있었음 → 무작정 push하면 덮어쓸 위험.
