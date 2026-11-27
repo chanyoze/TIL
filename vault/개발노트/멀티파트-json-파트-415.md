@@ -6,7 +6,6 @@ tags: [spring, multipart, requestpart, httpmessageconverter, springdoc, gradle, 
 raw:
   - RAW-DOC:raw/notes/2026-07-30-multipart-json-part-415-조치기록.md
   - RAW-DOC:raw/notes/2026-08-03-multipart-json-part-415-2차조치.md
-source: RAW-DOC:회사/종료/2026-07-30 saas-api 멀티파트 415 조치/multipart-json 이슈 조치 공유문서.md
 date: 2026-07-30
 kind: 동결
 ---

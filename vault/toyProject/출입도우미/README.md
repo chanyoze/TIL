@@ -53,5 +53,5 @@ Seongbuk-Senior-Club-Entrance-Helper-2/
 
 ## 참고
 
-- `refactoring.md` 안의 일부 파일 링크는 **Gradle 마이그레이션 이전 경로**(`src/app/`) 기준이라, 현재 위치(`src/main/java/app/`)와 다를 수 있다. (회고 문서라 당시 기준 그대로 둠)
-- Docker는 이 프로젝트에서 쓰지 않으며, 별도 컴패니언 프로젝트로 다룰 예정 → `refactoring.md` 7장 참고.
+- `refactoring.md` 의 패키지 구조(`src/app/`)는 Gradle 마이그레이션 이전 기준이다. 지금 위치는 `src/main/java/app/` 다.
+- Docker는 이 프로젝트에서 쓰지 않으며, 별도 컴패니언 프로젝트로 다룰 예정 → `refactoring.md` 의 "Docker 를 쓰지 않은 이유" 참고.
