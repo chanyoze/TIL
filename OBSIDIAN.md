@@ -1,33 +1,33 @@
-# 옵시디언 + Docusaurus 공존 가이드
+# Obsidian 으로 이 저장소 열기
 
-이 저장소(`chanyoze/TIL`)는 **같은 마크다운 파일**을 두 입구로 쓴다.
+이 저장소(`C:\study`, `chanyoze/TIL`)는 **공개 사이트용 보관함**이다. `vault/` 아래 마크다운만 Docusaurus 로 빌드돼 GitHub Pages 에 나가고, 저장소 자체도 공개다. Obsidian 은 이 마크다운을 로컬에서 고치고 찾아보는 입구로 쓴다.
 
-- **Docusaurus (GitHub Pages)** — 공개 발행 담당. `vault/`를 사이트로 배포. (변경 없음)
-- **Obsidian** — 로컬 편집·백링크·그래프·검색 담당. `vault/` + `raw/`를 한 화면에서 본다.
+## 보관함은 두 개다
 
-## 처음 한 번만 (각 PC에서)
+| 보관함 | 경로 | 담는 것 | 공개 |
+|---|---|---|---|
+| 이 저장소 | `C:\study` | 사이트에 올리려고 다시 쓴 글(readable) — `vault/` | 공개 |
+| RAW-DOC | `C:\RAW-DOC` (`chanyoze/RAW-DOC`) | 원문(raw), 회사 작업 산출물, 개인 스킬 | 비공개 |
 
-1. Obsidian 설치 → **"폴더를 보관소로 열기(Open folder as vault)"** → **이 레포 폴더**(`C:\study\note`) 선택.
-2. 끝. `.obsidian/` 설정이 이미 커밋돼 있어 링크·제외·첨부 설정이 자동 적용된다.
+- 두 보관함은 Obsidian 에서 **각각 따로** 연다(보관함 전환). 한 화면에 합치지 않는다.
+- 두 보관함 사이의 연결은 글 frontmatter 의 `raw: RAW-DOC:…` · `source: RAW-DOC:…` 표기로만 남는다. 이건 출처를 적어 둔 글자일 뿐이라 Obsidian 에서 눌러 열리지 않는다. RAW-DOC 쪽에서는 `readable: study:vault/…` 로 이 저장소의 글을 가리킨다.
+- 무엇을 공개해도 되는지, raw 와 readable 을 어떻게 나눠 쓰는지는 `writedown` 스킬의 공개 기준을 따른다. 회사 산출물 원문은 이 저장소에 두지 않는다.
 
-## 이미 맞춰둔 설정 (`.obsidian/app.json`)
+## 처음 한 번 (PC 마다)
 
-- **위키링크 끔 / 표준 상대경로 링크** (`useMarkdownLinks: true`, `newLinkFormat: relative`)
-  → 옵시디언에서 만든 링크가 **Docusaurus에서도 그대로 작동**한다. (`[[ ]]` 쓰면 빌드가 깨지니 쓰지 말 것)
-- **제외 폴더**: `website/`, `node_modules/`, `build/`, `.git/`, `antigravity-sync/` (인덱싱 노이즈 차단)
-- **첨부 폴더**: `vault/_attachments` (루트 오염 방지)
+1. Obsidian → **폴더를 보관함으로 열기** → `C:\study` 선택.
+2. `.obsidian/app.json` 이 커밋돼 있어 링크 · 제외 · 첨부 설정은 그대로 적용된다.
+3. 원문을 볼 일이 있으면 `C:\RAW-DOC` 을 별도 보관함으로 연다.
 
-## 역할 분담
+## 맞춰 둔 설정 (`.obsidian/app.json`)
 
-| 작업 | 도구 |
-|---|---|
-| 구조적 기록(raw+readable), 단어장, 할일, 발행 | **writedown (Claude)** — 지금처럼 |
-| 빠른 메모·수정, 문서 연결(백링크), 그래프 탐색, 검색 | **Obsidian** (로컬) |
+- **위키링크 끔, 상대경로 마크다운 링크** (`useMarkdownLinks: true`, `newLinkFormat: relative`) — Obsidian 에서 만든 링크가 Docusaurus 에서도 그대로 동작한다.
+- **제외 폴더**: `website/`(사이트 코드 · 빌드 산출물), `.git/`.
+- **첨부 폴더**: `vault/_attachments` — 붙여 넣은 이미지가 여기에 생긴다.
 
-옵시디언에서 파일을 고치면 그냥 마크다운이 바뀌는 것이라, 다음 커밋·배포에 자연히 반영된다.
+## 지킬 것
 
-## 주의
-
-- **위키링크 금지** — 문서 간 링크는 `[텍스트](./파일.md)` 형식만. (Docusaurus 호환)
-- `.obsidian/workspace.json`·캐시는 PC별이라 `.gitignore` 처리됨(공유 설정만 커밋).
-- 이 파일(`OBSIDIAN.md`)은 레포 루트에 있어 **사이트에는 발행되지 않는다**(Docusaurus는 `vault/`만 서빙).
+- **위키링크(`[[ ]]`) 금지.** 글 사이 링크는 `[텍스트](./파일.md)` 같은 상대경로만 쓴다. 위키링크는 사이트 빌드에서 깨진다.
+- 사이드바 라벨과 순서는 폴더의 `_category_.json` 과 글의 `sidebar_position` 으로 정한다.
+- `.obsidian/workspace.json` 과 캐시는 PC 마다 달라 `.gitignore` 로 뺐다. 공유 설정만 커밋한다.
+- 이 파일은 저장소 루트에 있어 사이트에는 나가지 않는다(사이트는 `vault/` 만 쓴다). 저장소가 공개라 GitHub 에서는 보인다.

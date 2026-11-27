@@ -5,10 +5,7 @@
   "attachmentFolderPath": "vault/_attachments",
   "userIgnoreFilters": [
     "website/",
-    "node_modules/",
-    "build/",
-    ".git/",
-    "antigravity-sync/"
+    ".git/"
   ],
   "defaultViewMode": "preview"
 }
