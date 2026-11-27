@@ -1,9 +1,9 @@
 ---
-date: 2026-06-14
+title: "환경 구축 (Setup) — Git 연결 · JDK 설치 · 로컬 빌드 검증"
+sidebar_label: "환경 구축 (Setup) — Git 연결 · JDK 설치 · 로컬 빌드 검증"
+date: 2026-05-24
 kind: 동결
 ---
-
-# 환경 구축 (Setup) — Git 연결 · JDK 설치 · 로컬 빌드 검증
 
 > CI/CD 작업의 **0단계(전제조건)**. 작업일: 2026-05-24.
 > 코드 리팩토링은 [refactoring.md](refactoring.md), 다음 단계는 [gradle.md](gradle.md) 참고.

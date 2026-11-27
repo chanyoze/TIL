@@ -1,13 +1,12 @@
 ---
+title: "AI 세션 합동 발표 — 준비 기록 (2026-08-19)"
 sidebar_label: "8. AI 세션 합동 발표 (2026-08)"
 sidebar_position: 8
 tags: [presentation, migration, ai, playwright, testing, jacoco, pit]
-raw: ../../../raw/notes/cip-hp-ai세션-발표.md
+raw: RAW-DOC:raw/notes/cip-hp-ai세션-발표.md
 date: 2026-08-19
 kind: 동결
 ---
-
-# AI 세션 합동 발표 — 준비 기록 (2026-08-19)
 
 8주간의 CIP 홈페이지 마이그레이션을 사내 AI 세션에서 발표하기 위해 만든 덱과 대본, 그리고 **그것을 어떻게 구성했는지**의 기록. 발표 자체보다 **"무엇을 증명했다고 말할 수 있는가"** 를 정하는 데 시간을 더 썼다.
 

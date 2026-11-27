@@ -1,12 +1,12 @@
 ---
+title: "CI — 지속적 통합 (3단계 · GitHub Actions)"
 sidebar_label: "3. CI · GitHub Actions"
 sidebar_position: 3
 tags: [ci, github-actions]
-date: 2026-06-13
+date: 2026-05-25
 kind: 동결
+raw: RAW-DOC:raw/toyProject/CI-CD/ci.md
 ---
-
-# CI — 지속적 통합 (3단계 · GitHub Actions)
 
 > push/PR마다 **자동으로 빌드+테스트**를 돌려 깨진 코드를 일찍 잡는다.
 > 작업일: 2026-05-25 · 브랜치: `feature/ci` · 이전 단계: [tests.md](tests.md)

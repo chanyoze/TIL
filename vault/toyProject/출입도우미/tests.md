@@ -1,12 +1,12 @@
 ---
+title: "테스트 (2단계 · JUnit 5)"
 sidebar_label: "2. JUnit 테스트"
 sidebar_position: 2
 tags: [test, junit, ci-cd]
-date: 2026-06-13
+date: 2026-05-25
 kind: 동결
+raw: RAW-DOC:raw/toyProject/CI-CD/tests.md
 ---
-
-# 테스트 (2단계 · JUnit 5)
 
 > 순수 로직에 단위 테스트를 붙여 CI(3단계)가 자동 검증할 토대 마련.
 > 작업일: 2026-05-25 · 브랜치: `feature/tests` · 이전 단계: [gradle.md](gradle.md)
@@ -60,7 +60,7 @@ CI는 PR/푸시마다 "자동으로 돌릴 검증"이 있어야 의미가 있다
 
 **② 터미널**
 ```powershell
-cd C:\study\Seongbuk-Senior-Club-Entrance-Helper-2
+cd <저장소 폴더>
 .\gradlew test --rerun-tasks   # 변경 없으면 UP-TO-DATE로 건너뛰므로 강제 재실행
 ```
 통과 → `BUILD SUCCESSFUL` / 실패 → 깨진 테스트명 + 리포트 경로 출력.

@@ -1,12 +1,12 @@
 ---
+title: "CD — 지속적 배포 (4단계 · GitHub Actions → Releases)"
 sidebar_label: "4. CD · Releases"
 sidebar_position: 4
 tags: [cd, release]
-date: 2026-06-13
+date: 2026-05-25
 kind: 동결
+raw: RAW-DOC:raw/toyProject/CI-CD/cd.md
 ---
-
-# CD — 지속적 배포 (4단계 · GitHub Actions → Releases)
 
 > 빌드된 exe를 자동으로 GitHub **Releases**에 올린다. 사용자는 Releases에서 받아 쓴다.
 > 작업일: 2026-05-25 · 브랜치: `feature/cd` · 이전 단계: [ci.md](ci.md)
@@ -89,7 +89,7 @@ CI(3단계)는 "코드가 통과하는지"를 본다. CD는 한 발 더 나가 *
 ### 방법 A — 터미널 (권장, 가장 확실)
 1. 새 PowerShell 창(또는 Antigravity 하단 터미널)에서 프로젝트로 이동:
    ```powershell
-   cd C:\study\Seongbuk-Senior-Club-Entrance-Helper-2
+   cd <저장소 폴더>
    ```
 2. v2 최신 상태로 (태그는 "지금 위치한 커밋"에 붙으므로 v2 최신이어야 함):
    ```powershell
@@ -178,4 +178,4 @@ git push origin --delete v1.1.0    # 원격(GitHub) 태그 삭제
 - **태그 삭제:** 저장소 메인 → 파일 목록 위 **"Tags"**(커밋 수 옆) → 해당 태그 → **Delete**
 - 같은 버전을 다시 내려면: 릴리스 + 태그를 둘 다 삭제한 뒤 **8.2부터** 다시.
 
-> 참고: 웹에서 publish 했는데 Actions에 "Release" 실행이 안 뜨면 알려줘 — 드물게 웹 태그가 push 이벤트를 안 쏘는 경우가 있는데, 그땐 워크플로 트리거에 `release: [published]`를 보강하면 된다.
+> 참고: 웹에서 publish 했는데 Actions에 "Release" 실행이 안 뜨면 — 드물게 웹 태그가 push 이벤트를 안 쏘는 경우가 있는데, 그땐 워크플로 트리거에 `release: [published]`를 보강하면 된다.

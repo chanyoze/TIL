@@ -1,12 +1,12 @@
 ---
+title: "Gradle 마이그레이션 (1단계 · 빌드 표준화)"
 sidebar_label: "1. Gradle 빌드 표준화"
 sidebar_position: 1
 tags: [gradle, ci-cd, build]
-date: 2026-06-13
+date: 2026-05-25
 kind: 동결
+raw: RAW-DOC:raw/toyProject/CI-CD/gradle.md
 ---
-
-# Gradle 마이그레이션 (1단계 · 빌드 표준화)
 
 > `build.ps1`(수동 PowerShell 빌드) → 표준 **Gradle 빌드**로 전환.
 > 작업일: 2026-05-25 · 브랜치: `feature/gradle` · 커밋: `9f4203d`

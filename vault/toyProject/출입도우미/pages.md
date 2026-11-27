@@ -1,12 +1,12 @@
 ---
+title: "배포 페이지 (5단계 · GitHub Pages)"
 sidebar_label: "5. GitHub Pages 배포"
 sidebar_position: 5
 tags: [github-pages, deploy]
-date: 2026-06-13
+date: 2026-05-25
 kind: 동결
+raw: RAW-DOC:raw/toyProject/CI-CD/pages.md
 ---
-
-# 배포 페이지 (5단계 · GitHub Pages)
 
 > 복지관 직원이 GitHub 코드 화면 대신, **깔끔한 웹페이지에서 버튼 한 번으로** 최신 exe(zip)를 받게 한다.
 > 작업일: 2026-05-25 · 브랜치: `feature/pages` · 이전 단계: [cd.md](cd.md)
